@@ -9,14 +9,14 @@ type SearchItemProps = {
 // Component
 const SearchItem = ({ result }: SearchItemProps) => {
   // Derived state
-  const { type, poster, title, subTitle, data } = result;
+  const { id, type, poster, title, subTitle } = result;
 
   // Render
   return (
     <div className="relative">
       <span
         className={
-          `absolute -top-0 -left-2 -rotate-12 z-10 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium` +
+          `absolute -top-0 -left-2 -rotate-12 z-10 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium shadow` +
           (type === 'movie'
             ? ` bg-red-100 text-red-800`
             : type === 'tv'
@@ -30,7 +30,7 @@ const SearchItem = ({ result }: SearchItemProps) => {
       </span>
 
       <Link
-        to={`/${type}/${data.id}`}
+        to={`/${type}/${id}`}
         className="group block w-full aspect-w-2 aspect-h-3 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden"
       >
         {poster && (
