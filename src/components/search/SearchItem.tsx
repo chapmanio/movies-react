@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { PlusSmIcon } from '@heroicons/react/solid';
+
 import type { SearchResult } from '../../lib/search';
 
 // Types
@@ -16,18 +18,34 @@ const SearchItem = ({ result }: SearchItemProps) => {
     <div className="relative">
       <span
         className={
-          `absolute -top-0 -left-2 -rotate-12 z-10 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium shadow` +
+          `absolute top-2 left-2 pointer-events-none z-10 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium shadow text-white` +
           (type === 'movie'
-            ? ` bg-red-100 text-red-800`
+            ? ` bg-blue-600`
             : type === 'tv'
-            ? ` bg-blue-100 text-blue-800`
+            ? ` bg-fuchsia-600`
             : type === 'person'
-            ? ` bg-green-100 text-green-800`
+            ? ` bg-green-600`
             : ``)
         }
       >
         {type === 'movie' ? 'Movie' : type === 'tv' ? 'TV Show' : type === 'person' ? 'Person' : ''}
       </span>
+
+      <button
+        type="button"
+        className={
+          `absolute -top-3 -right-3 z-10 inline-flex items-center p-1 border border-transparent rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
+          (type === 'movie'
+            ? ` text-blue-800 bg-blue-100 hover:bg-blue-200 focus:ring-blue-500`
+            : type === 'tv'
+            ? ` text-fuchsia-800 bg-fuchsia-100 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
+            : type === 'person'
+            ? ` text-green-800 bg-green-100 hover:bg-green-200 focus:ring-green-500`
+            : ``)
+        }
+      >
+        <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
+      </button>
 
       <Link
         to={`/${type}/${id}`}

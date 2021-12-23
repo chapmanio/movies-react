@@ -13,14 +13,11 @@ import {
   formatSearchTvShow,
   SearchResult,
 } from '../../lib/search';
-import {
-  ApiResponse,
-  getTrending,
-  searchAll,
-  searchMovie,
-  searchPerson,
-  searchTv,
-} from '../../lib/api';
+import type { ApiResponse } from '../../lib/api';
+import { searchMovie } from '../../lib/api/movie';
+import { searchPerson } from '../../lib/api/person';
+import { searchAll, getTrending } from '../../lib/api/search';
+import { searchTv } from '../../lib/api/tvShow';
 
 // Types
 type Tab = 'all' | 'movie' | 'tv' | 'person';
@@ -189,7 +186,7 @@ const Home = () => {
     <>
       <form
         onSubmit={handleSearch}
-        className="max-w-4xl mx-auto bg-indigo-700 sm:flex rounded-xl py-4 px-4 sm:py-9 sm:px-12 mt-16"
+        className="max-w-4xl mx-auto bg-indigo-600 sm:flex rounded-xl py-4 px-4 sm:py-9 sm:px-12 mt-16"
       >
         <div className="min-w-0 flex-1">
           <label htmlFor="search" className="sr-only">

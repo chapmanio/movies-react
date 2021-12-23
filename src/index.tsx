@@ -2,8 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Layout from './components/Layout';
+import HomeLayout from './components/layouts/Home';
 import Home from './components/pages/Home';
+import DetailsLayout from './components/layouts/Details';
+import Movie from './components/pages/Movie';
+import TvShow from './components/pages/TvShow';
+import Person from './components/pages/Person';
+import NotFound from './components/pages/NotFound';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -13,9 +18,23 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<HomeLayout />}>
           <Route index element={<Home />} />
         </Route>
+
+        <Route path="movie" element={<DetailsLayout />}>
+          <Route path=":id" element={<Movie />} />
+        </Route>
+
+        <Route path="tv" element={<DetailsLayout />}>
+          <Route path=":id" element={<TvShow />} />
+        </Route>
+
+        <Route path="person" element={<DetailsLayout />}>
+          <Route path=":id" element={<Person />} />
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
