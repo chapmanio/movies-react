@@ -30,7 +30,7 @@ export const formatRuntime = (runtime?: number) => {
     return undefined;
   }
 
-  const hours = Math.round(runtime / 60);
+  const hours = runtime > 60 ? Math.round(runtime / 60) : 0;
   const minutes = runtime - hours * 60;
 
   const formattedHours = hours > 0 ? `${hours}h` : undefined;

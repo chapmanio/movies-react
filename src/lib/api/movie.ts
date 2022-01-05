@@ -37,7 +37,7 @@ export const getMovie = async ({ id }: GetArgs): Promise<MovieResponse> => {
   return await response.json();
 };
 
-export const getCredits = async ({ id }: GetArgs): Promise<CreditsResponse> => {
+export const getMovieCredits = async ({ id }: GetArgs): Promise<CreditsResponse> => {
   const response = await fetch(`/api/movie/${id}/credits`);
 
   if (!response.ok) {

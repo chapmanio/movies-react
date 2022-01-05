@@ -1,3 +1,5 @@
+import type { ShowResponse } from 'moviedb-promise/dist/request-types';
+
 // Types
 type ApiPending = {
   status: 'pending';
@@ -14,6 +16,10 @@ type ApiError = {
 };
 
 export type ApiResponse<T> = ApiPending | ApiSuccess<T> | ApiError;
+
+export interface ExtShowResponse extends ShowResponse {
+  tagline?: string;
+}
 
 // Helpers
 export const buildHttpError = async (response: Response): Promise<Error> => {

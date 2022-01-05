@@ -6,7 +6,7 @@ import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/
 import Rating from '../details/Rating';
 
 import type { ApiResponse } from '../../lib/api';
-import { getCredits, getMovie } from '../../lib/api/movie';
+import { getMovieCredits, getMovie } from '../../lib/api/movie';
 import { formatRuntime, formatShortDate, formatYear } from '../../lib/dates';
 
 const Movie = () => {
@@ -48,7 +48,7 @@ const Movie = () => {
     let isCancelled = false;
 
     if (movie.status === 'resolved') {
-      getCredits({
+      getMovieCredits({
         id: parseInt(id || '0'),
       })
         .then((data) => {
@@ -185,7 +185,7 @@ const Movie = () => {
 
       <div className="px-4 mx-auto mt-12 max-w-7xl sm:px-6 lg:px-8">
         <div className="pb-5 border-b border-gray-200">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">Top Billed Cast</h3>
+          <h3 className="text-lg font-medium leading-6 text-gray-900">Top billed cast</h3>
         </div>
 
         {credits.status !== 'rejected' ? (
