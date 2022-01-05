@@ -1,16 +1,16 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-import { api } from '../../utils/api';
+import { api } from '../../../utils/api';
 
-const getMovie = async (request: VercelRequest, response: VercelResponse) => {
+const getCredits = async (request: VercelRequest, response: VercelResponse) => {
   const { id } = request.query;
 
   try {
-    const movies = await api.movieInfo({
+    const credits = await api.movieCredits({
       id: (id || '').toString(),
     });
 
-    return response.status(200).json(movies);
+    return response.status(200).json(credits);
   } catch (error) {
     // TODO: Handle error
     console.error(error);
@@ -19,4 +19,4 @@ const getMovie = async (request: VercelRequest, response: VercelResponse) => {
   }
 };
 
-export default getMovie;
+export default getCredits;

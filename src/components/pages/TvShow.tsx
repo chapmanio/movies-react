@@ -44,7 +44,9 @@ const TvShow = () => {
     <div
       className="bg-cover bg-no-repeat bg-[right_-200px_top] h-96"
       style={{
-        backgroundImage: `url(https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${tvShow.data.backdrop_path})`,
+        backgroundImage: tvShow.data.backdrop_path
+          ? `url(https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${tvShow.data.backdrop_path})`
+          : undefined,
       }}
     >
       <div className="h-full bg-theme-tv">

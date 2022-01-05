@@ -7,8 +7,8 @@ import type {
   TvResult,
   TvResultsResponse,
 } from 'moviedb-promise/dist/request-types';
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
+
+import { formatShortMonthDate } from './dates';
 
 // Types
 export type SearchResult = {
@@ -20,21 +20,13 @@ export type SearchResult = {
 };
 
 // Helpers
-const formatDate = (isoString?: string) => {
-  if (!isoString) {
-    return undefined;
-  }
-
-  return format(parseISO(isoString), 'do MMM yyyy');
-};
-
 const formatMovie = (movie: MovieResult): SearchResult => {
   return {
     id: movie.id ?? 0,
     type: 'movie',
     poster: movie.poster_path,
     title: movie.title || 'Unknown title',
-    subTitle: formatDate(movie.release_date),
+    subTitle: formatShortMonthDate(movie.release_date),
   };
 };
 
@@ -44,7 +36,7 @@ const formatTvShow = (tvShow: TvResult): SearchResult => {
     type: 'tv',
     poster: tvShow.poster_path,
     title: tvShow.name || 'Unknown name',
-    subTitle: formatDate(tvShow.first_air_date),
+    subTitle: formatShortMonthDate(tvShow.first_air_date),
   };
 };
 

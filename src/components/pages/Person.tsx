@@ -41,7 +41,14 @@ const Person = () => {
   return person.status === 'pending' ? (
     <p>Loading</p>
   ) : person.status === 'resolved' ? (
-    <div className="h-96">
+    <div
+      className="bg-cover bg-no-repeat bg-[right_-200px_top] h-96"
+      style={{
+        backgroundImage: person.data.profile_path
+          ? `url(https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${person.data.profile_path})`
+          : undefined,
+      }}
+    >
       <div className="h-full bg-theme-person">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div></div>

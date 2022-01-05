@@ -6,6 +6,7 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import NavLink from './links/NavLink';
 import AccountLink from './links/AccountLink';
 import MobileLink from './links/MobileLink';
+import Footer from './Footer';
 
 const DetailsLayout = () => {
   // Local state
@@ -61,13 +62,13 @@ const DetailsLayout = () => {
   return (
     <>
       <nav className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
             <div className="flex flex-1">
-              <div className="flex-shrink-0 flex items-center">
+              <div className="flex items-center flex-shrink-0">
                 <Link
                   to="/"
-                  className="text-2xl md:text-4xl font-bold text-gray-900 sm:tracking-tight"
+                  className="text-2xl font-bold text-gray-900 md:text-4xl sm:tracking-tight"
                 >
                   Movies
                 </Link>
@@ -79,18 +80,18 @@ const DetailsLayout = () => {
             <form
               method="get"
               action="/"
-              className="max-w-xs w-full ml-2 sm:ml-6 lg:max-w-lg self-center"
+              className="self-center w-full max-w-xs ml-2 sm:ml-6 lg:max-w-lg"
             >
               <label htmlFor="search" className="sr-only">
                 Search
               </label>
-              <div className="relative rounded-md text-gray-400 focus-within:text-gray-600">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <SearchIcon className="h-5 w-5" />
+              <div className="relative text-gray-400 rounded-md focus-within:text-gray-600">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <SearchIcon className="w-5 h-5" />
                 </div>
                 <input
                   id="search"
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                  className="block w-full pl-10 border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Search"
                   type="search"
                   name="search"
@@ -99,11 +100,11 @@ const DetailsLayout = () => {
             </form>
 
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
-              <div className="ml-3 relative">
+              <div className="relative ml-3">
                 <div>
                   <button
                     type="button"
-                    className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="flex items-center max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     id="user-menu-button"
                     aria-expanded={showSubNav}
                     aria-haspopup="true"
@@ -111,7 +112,7 @@ const DetailsLayout = () => {
                   >
                     <span className="sr-only">Open user menu</span>
                     <img
-                      className="h-8 w-8 rounded-full"
+                      className="w-8 h-8 rounded-full"
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt=""
                     />
@@ -136,7 +137,7 @@ const DetailsLayout = () => {
 
                   <button
                     type="button"
-                    className="block py-2 px-4 text-sm text-gray-700"
+                    className="block px-4 py-2 text-sm text-gray-700"
                     role="menuitem"
                     tabIndex={-1}
                     id="user-menu-item-1"
@@ -146,10 +147,10 @@ const DetailsLayout = () => {
                 </div>
               </div>
             </div>
-            <div className="-mr-2 ml-2 flex items-center sm:hidden">
+            <div className="flex items-center ml-2 -mr-2 sm:hidden">
               <button
                 type="button"
-                className="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 aria-controls="mobile-menu"
                 aria-expanded={showMobileNav}
                 ref={mobileNavRef}
@@ -173,7 +174,7 @@ const DetailsLayout = () => {
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
                   <img
-                    className="rounded-full h-10 w-10"
+                    className="w-10 h-10 rounded-full"
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt=""
                   />
@@ -204,6 +205,8 @@ const DetailsLayout = () => {
       </nav>
 
       <Outlet />
+
+      <Footer />
     </>
   );
 };

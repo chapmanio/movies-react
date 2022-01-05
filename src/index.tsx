@@ -13,29 +13,32 @@ import NotFound from './components/pages/NotFound';
 import reportWebVitals from './reportWebVitals';
 
 import './styles/index.css';
+import ScrollToTop from './components/assets/ScrollToTop';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomeLayout />}>
-          <Route index element={<Home />} />
-        </Route>
+      <ScrollToTop>
+        <Routes>
+          <Route path="/" element={<HomeLayout />}>
+            <Route index element={<Home />} />
+          </Route>
 
-        <Route path="movie" element={<DetailsLayout />}>
-          <Route path=":id" element={<Movie />} />
-        </Route>
+          <Route path="movie" element={<DetailsLayout />}>
+            <Route path=":id" element={<Movie />} />
+          </Route>
 
-        <Route path="tv" element={<DetailsLayout />}>
-          <Route path=":id" element={<TvShow />} />
-        </Route>
+          <Route path="tv" element={<DetailsLayout />}>
+            <Route path=":id" element={<TvShow />} />
+          </Route>
 
-        <Route path="person" element={<DetailsLayout />}>
-          <Route path=":id" element={<Person />} />
-        </Route>
+          <Route path="person" element={<DetailsLayout />}>
+            <Route path=":id" element={<Person />} />
+          </Route>
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ScrollToTop>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

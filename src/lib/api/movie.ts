@@ -1,4 +1,8 @@
-import type { MovieResponse, MovieResultsResponse } from 'moviedb-promise/dist/request-types';
+import type {
+  CreditsResponse,
+  MovieResponse,
+  MovieResultsResponse,
+} from 'moviedb-promise/dist/request-types';
 
 import { buildHttpError } from '../api';
 
@@ -25,6 +29,16 @@ export const searchMovie = async ({ query, page }: SearchArgs): Promise<MovieRes
 
 export const getMovie = async ({ id }: GetArgs): Promise<MovieResponse> => {
   const response = await fetch(`/api/movie/${id}`);
+
+  if (!response.ok) {
+    throw await buildHttpError(response);
+  }
+
+  return await response.json();
+};
+
+export const getCredits = async ({ id }: GetArgs): Promise<CreditsResponse> => {
+  const response = await fetch(`/api/movie/${id}/credits`);
 
   if (!response.ok) {
     throw await buildHttpError(response);
