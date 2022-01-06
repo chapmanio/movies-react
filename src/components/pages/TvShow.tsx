@@ -3,7 +3,7 @@ import type { CreditsResponse } from 'moviedb-promise/dist/request-types';
 import { Link, useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';
 
-import Rating from '../details/Rating';
+import Rating from '../assets/Rating';
 
 import type { ApiResponse, ExtShowResponse } from '../../lib/api';
 import { getTvShow, getTvCredits } from '../../lib/api/tvShow';
@@ -155,7 +155,7 @@ const TvShow = () => {
                 ) : tvShow.status === 'resolved' ? (
                   <button
                     type="button"
-                    className="inline-flex items-center py-2 pl-4 pr-5 ml-6 text-sm font-medium text-blue-700 bg-blue-100 border border-transparent rounded-md shadow-sm hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="inline-flex items-center py-2 pl-4 pr-5 ml-6 text-sm font-medium border border-transparent rounded-md shadow-sm text-fuchsia-700 bg-fuchsia-100 hover:bg-fuchsia-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
                   >
                     <PlusSmIcon className="w-5 h-5 mr-2 -ml-1" />
                     Add to list
@@ -212,7 +212,7 @@ const TvShow = () => {
                     >
                       {result.profile_path && (
                         <img
-                          src={`https://www.themoviedb.org/t/p/w138_and_h175_face/${result.profile_path}`}
+                          src={`https://www.themoviedb.org/t/p/w138_and_h175_face${result.profile_path}`}
                           alt=""
                           className="object-cover pointer-events-none group-hover:opacity-75"
                         />

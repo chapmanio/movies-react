@@ -11,8 +11,8 @@ import {
   formatSearchMovie,
   formatSearchPerson,
   formatSearchTvShow,
-  SearchResult,
-} from '../../lib/search';
+  ListItem,
+} from '../../lib/format';
 import type { ApiResponse } from '../../lib/api';
 import { searchMovie } from '../../lib/api/movie';
 import { searchPerson } from '../../lib/api/person';
@@ -31,7 +31,7 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState<ApiResponse<SearchMultiResponse> | undefined>(
     undefined
   );
-  const [formattedResults, setFormattedResults] = useState<SearchResult[]>([]);
+  const [formattedResults, setFormattedResults] = useState<ListItem[]>([]);
 
   // Refs
   const tabRef = useRef<HTMLDivElement>(null);
@@ -283,7 +283,7 @@ const Home = () => {
                   <>
                     {formattedResults.map((result) => (
                       <li key={result.id} className="relative">
-                        <SearchItem result={result} />
+                        <SearchItem item={result} />
                       </li>
                     ))}
                   </>

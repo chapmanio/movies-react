@@ -50,8 +50,7 @@ const Footer = () => {
           &copy; {new Date().getFullYear()}{' '}
           <a href="https://chapmanio.dev" className="hover:underline">
             chapmanio.dev
-          </a>{' '}
-          - built with React
+          </a>
         </p>
       </div>
     </footer>

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-import { api } from '../../utils/api';
+import { api } from '../../../utils/api';
 
 const getPerson = async (request: VercelRequest, response: VercelResponse) => {
   const { id } = request.query;

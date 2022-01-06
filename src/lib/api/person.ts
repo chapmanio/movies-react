@@ -1,4 +1,8 @@
-import type { Person, SearchPersonResponse } from 'moviedb-promise/dist/request-types';
+import type {
+  Person,
+  PersonCombinedCreditsResponse,
+  SearchPersonResponse,
+} from 'moviedb-promise/dist/request-types';
 
 import { buildHttpError } from '../api';
 
@@ -25,6 +29,16 @@ export const searchPerson = async ({ query, page }: SearchArgs): Promise<SearchP
 
 export const getPerson = async ({ id }: GetArgs): Promise<Person> => {
   const response = await fetch(`/api/person/${id}`);
+
+  if (!response.ok) {
+    throw await buildHttpError(response);
+  }
+
+  return await response.json();
+};
+
+export const getPersonCredits = async ({ id }: GetArgs): Promise<PersonCombinedCreditsResponse> => {
+  const response = await fetch(`/api/person/${id}/credits`);
 
   if (!response.ok) {
     throw await buildHttpError(response);

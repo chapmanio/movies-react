@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom';
 import { PlusSmIcon } from '@heroicons/react/solid';
 
-import type { SearchResult } from '../../lib/search';
+import type { ListItem } from '../../lib/format';
 
 // Types
 type SearchItemProps = {
-  result: SearchResult;
+  item: ListItem;
 };
 
 // Component
-const SearchItem = ({ result }: SearchItemProps) => {
+const SearchItem = ({ item }: SearchItemProps) => {
   // Derived state
-  const { id, type, poster, title, subTitle } = result;
+  const { id, type, poster, title, subTitle } = item;
 
   // Render
   return (
@@ -44,16 +44,16 @@ const SearchItem = ({ result }: SearchItemProps) => {
             : ``)
         }
       >
-        <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
+        <PlusSmIcon className="w-5 h-5" aria-hidden="true" />
       </button>
 
       <Link
         to={`/${type}/${id}`}
-        className="group block w-full aspect-w-2 aspect-h-3 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden"
+        className="block w-full overflow-hidden bg-gray-100 rounded-lg group aspect-w-2 aspect-h-3 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500"
       >
         {poster && (
           <img
-            src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${poster}`}
+            src={`https://www.themoviedb.org/t/p/w220_and_h330_face${poster}`}
             alt=""
             className="object-cover pointer-events-none group-hover:opacity-75"
           />
@@ -64,7 +64,7 @@ const SearchItem = ({ result }: SearchItemProps) => {
         </button>
       </Link>
 
-      <p className="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none">
+      <p className="block mt-2 text-sm font-medium text-gray-900 truncate pointer-events-none">
         {title}
       </p>
       <p className="block text-sm font-medium text-gray-500 pointer-events-none">{subTitle}</p>

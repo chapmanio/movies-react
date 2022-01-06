@@ -3,9 +3,9 @@ import { Link, Outlet } from 'react-router-dom';
 import { SearchIcon } from '@heroicons/react/solid';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 
-import NavLink from './links/NavLink';
-import AccountLink from './links/AccountLink';
-import MobileLink from './links/MobileLink';
+import NavLink from '../assets/links/NavLink';
+import AccountLink from '../assets/links/AccountLink';
+import MobileLink from '../assets/links/MobileLink';
 import Footer from './Footer';
 
 const DetailsLayout = () => {

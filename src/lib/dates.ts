@@ -1,5 +1,6 @@
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
+import differenceInYears from 'date-fns/differenceInYears';
 
 export const formatShortMonthDate = (isoString?: string) => {
   if (!isoString) {
@@ -15,6 +16,14 @@ export const formatShortDate = (isoString?: string) => {
   }
 
   return format(parseISO(isoString), 'dd/MM/yyyy');
+};
+
+export const formatAge = (birthday?: string, deathday?: string | null) => {
+  if (!birthday) {
+    return undefined;
+  }
+
+  return differenceInYears(deathday ? parseISO(deathday) : new Date(), parseISO(birthday));
 };
 
 export const formatYear = (isoString?: string) => {

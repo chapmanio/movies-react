@@ -3,7 +3,7 @@ import type { CreditsResponse, MovieResponse } from 'moviedb-promise/dist/reques
 import { Link, useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';
 
-import Rating from '../details/Rating';
+import Rating from '../assets/Rating';
 
 import type { ApiResponse } from '../../lib/api';
 import { getMovieCredits, getMovie } from '../../lib/api/movie';
@@ -212,7 +212,7 @@ const Movie = () => {
                     >
                       {result.profile_path && (
                         <img
-                          src={`https://www.themoviedb.org/t/p/w138_and_h175_face/${result.profile_path}`}
+                          src={`https://www.themoviedb.org/t/p/w138_and_h175_face${result.profile_path}`}
                           alt=""
                           className="object-cover pointer-events-none group-hover:opacity-75"
                         />
