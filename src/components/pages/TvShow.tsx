@@ -72,7 +72,7 @@ const TvShow = () => {
   return (
     <>
       <div
-        className="bg-cover bg-no-repeat bg-[right_-200px_top]"
+        className="bg-cover bg-no-repeat bg-right-top sm:bg-[right_-200px_top]"
         style={{
           backgroundImage:
             tvShow.status === 'resolved' && tvShow.data.backdrop_path
@@ -81,8 +81,8 @@ const TvShow = () => {
         }}
       >
         <div className="bg-theme-tv">
-          <div className="flex items-center px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div className="w-[300px] flex-none">
+          <div className="items-center px-4 py-8 mx-auto sm:flex max-w-7xl sm:px-6 lg:px-8">
+            <div className="sm:w-[300px] flex-none self-start">
               <div className="overflow-hidden rounded-lg aspect-w-2 aspect-h-3">
                 {tvShow.status === 'pending' ? (
                   <div className="bg-gray-100 animate-pulse" />
@@ -99,7 +99,7 @@ const TvShow = () => {
               </div>
             </div>
 
-            <div className="ml-10">
+            <div className="mt-6 sm:mt-0 sm:ml-10">
               {tvShow.status === 'pending' ? (
                 <div className="bg-gray-100 rounded animate-pulse h-9 w-96" />
               ) : tvShow.status === 'resolved' ? (
@@ -189,7 +189,7 @@ const TvShow = () => {
         </div>
 
         {credits.status !== 'rejected' ? (
-          <ul className="grid grid-cols-8 mt-8 gap-x-4 gap-y-8">
+          <ul className="grid grid-cols-2 mt-8 gap-x-4 gap-y-8 sm:grid-cols-4 lg:grid-cols-8">
             {credits.status === 'pending' ? (
               <>
                 {Array(8)

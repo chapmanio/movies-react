@@ -80,8 +80,8 @@ const Person = () => {
   return (
     <>
       <div className="bg-theme-person">
-        <div className="flex items-center px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="w-[300px] flex-none self-start">
+        <div className="items-center px-4 py-8 mx-auto sm:flex max-w-7xl sm:px-6 lg:px-8">
+          <div className="sm:w-[300px] flex-none self-start">
             <div className="overflow-hidden rounded-lg aspect-w-2 aspect-h-3">
               {person.status === 'pending' ? (
                 <div className="bg-gray-100 animate-pulse" />
@@ -98,7 +98,7 @@ const Person = () => {
             </div>
           </div>
 
-          <div className="ml-10">
+          <div className="mt-6 sm:mt-0 sm:ml-10">
             {person.status === 'pending' ? (
               <div className="bg-gray-100 rounded animate-pulse h-9 w-96" />
             ) : person.status === 'resolved' ? (
@@ -208,7 +208,7 @@ const Person = () => {
         </div>
 
         {credits.status !== 'rejected' ? (
-          <ul className="grid grid-cols-8 mt-8 gap-x-4 gap-y-8">
+          <ul className="grid grid-cols-2 mt-8 gap-x-4 gap-y-8 sm:grid-cols-4 lg:grid-cols-8">
             {credits.status === 'pending' ? (
               <>
                 {Array(8)

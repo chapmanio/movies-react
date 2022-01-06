@@ -183,7 +183,7 @@ const Home = () => {
 
   // Render
   return (
-    <>
+    <div className="px-4 mx-auto mt-16 max-w-7xl sm:px-6 lg:px-8">
       <form
         onSubmit={handleSearch}
         className="max-w-4xl px-4 py-4 mx-auto mt-16 bg-indigo-600 sm:flex rounded-xl sm:py-9 sm:px-12"
@@ -212,7 +212,7 @@ const Home = () => {
       </form>
 
       {searchResults ? (
-        <div className="px-4 mx-auto mt-16 max-w-7xl sm:px-6 lg:px-8" ref={tabRef}>
+        <div className="mt-16" ref={tabRef}>
           {!search ? (
             <div className="pb-5 border-b border-gray-200">
               <h3 className="text-lg font-medium leading-6 text-gray-900">Trending today</h3>
@@ -308,7 +308,7 @@ const Home = () => {
           ) : null}
         </div>
       ) : null}
-    </>
+    </div>
   );
 };
 
