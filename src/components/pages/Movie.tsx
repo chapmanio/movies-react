@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import type { CreditsResponse, MovieResponse } from 'moviedb-promise/dist/request-types';
 import { Link, useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';
@@ -71,6 +72,10 @@ const Movie = () => {
   // Render
   return (
     <>
+      <Helmet>
+        <title>{movie.status === 'resolved' ? `${movie.data.title} • Movies` : `Movies`}</title>
+      </Helmet>
+
       <div
         className="bg-cover bg-no-repeat bg-right-top sm:bg-[right_-200px_top]"
         style={{

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import type {
   Person as PersonResponse,
   PersonCombinedCreditsResponse,
@@ -79,6 +80,10 @@ const Person = () => {
   // Render
   return (
     <>
+      <Helmet>
+        <title>{person.status === 'resolved' ? `${person.data.name} • Movies` : `Movies`}</title>
+      </Helmet>
+
       <div className="bg-theme-person">
         <div className="items-center px-4 py-8 mx-auto sm:flex max-w-7xl sm:px-6 lg:px-8">
           <div className="sm:w-[300px] flex-none self-start">

@@ -20,6 +20,7 @@
     "moviedb-promise": "^3.1.12",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
     "react-router-dom": "6"
   },
   "devDependencies": {
@@ -32,7 +33,7 @@
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
-    "add": "^2.0.6",
+    "@types/react-helmet": "^6.1.5",
     "autoprefixer": "^10.4.0",
     "esbuild": "^0.14.6",
     "esbuild-register": "^3.2.1",
