@@ -13,8 +13,6 @@ const Footer = () => {
   const userState = useUserState();
   const userDispatch = useUserDispatch();
 
-  console.log(userState);
-
   // Handlers
   const handleSignOut = () => {
     userDispatch({ type: 'LOADING' });

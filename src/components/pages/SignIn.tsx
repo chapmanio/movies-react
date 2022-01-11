@@ -18,9 +18,6 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [error, setError] = useState<string | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
-
   // Effects
   useEffect(() => {
     if (userState.status === 'resolved' && userState.data.auth) {
@@ -33,8 +30,7 @@ const SignIn = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setIsLoading(true);
-    setError(undefined);
+    userDispatch({ type: 'LOADING' });
 
     signIn({ email, password })
       .then((user) => {
@@ -50,8 +46,7 @@ const SignIn = () => {
         });
       })
       .catch((error: Error) => {
-        setIsLoading(false);
-        setError(error.message);
+        userDispatch({ type: 'ERROR', error });
       });
   };
 
@@ -75,7 +70,12 @@ const SignIn = () => {
           </p>
         </div>
 
-        {error ? <Alert type="error" message={error} onClose={() => setError(undefined)} /> : null}
+        {userState.status === 'rejected' ? (
+          <Alert
+            type="error"
+            message={userState.error ? userState.error.message : `Something went wrong`}
+          />
+        ) : null}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
@@ -119,9 +119,9 @@ const SignIn = () => {
               type="submit"
               className={
                 `relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500` +
-                (isLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
+                (userState.status === 'pending' ? ` opacity-75` : ` hover:bg-indigo-700`)
               }
-              disabled={isLoading}
+              disabled={userState.status === 'pending'}
             >
               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                 <LockClosedIcon
@@ -130,7 +130,7 @@ const SignIn = () => {
                 />
               </span>
 
-              {!isLoading ? `Sign in` : `Please wait...`}
+              {userState.status === 'pending' ? `Please wait...` : `Sign in`}
             </button>
           </div>
         </form>
