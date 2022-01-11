@@ -1,15 +1,21 @@
 import { Link } from 'react-router-dom';
 import { PlusSmIcon } from '@heroicons/react/solid';
 
+import { useUserState } from '../../hooks/useUser';
+
 import type { ListItem } from '../../lib/format';
 
 // Types
 type SearchItemProps = {
   item: ListItem;
+  onAddToList: (item: ListItem) => void;
 };
 
 // Component
-const SearchItem = ({ item }: SearchItemProps) => {
+const SearchItem = ({ item, onAddToList }: SearchItemProps) => {
+  // Hooks
+  const userState = useUserState();
+
   // Derived state
   const { id, type, poster, title, subTitle } = item;
 
@@ -31,21 +37,24 @@ const SearchItem = ({ item }: SearchItemProps) => {
         {type === 'movie' ? 'Movie' : type === 'tv' ? 'TV Show' : type === 'person' ? 'Person' : ''}
       </span>
 
-      <button
-        type="button"
-        className={
-          `absolute -top-3 -right-3 z-10 inline-flex items-center p-1 border border-transparent rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
-          (type === 'movie'
-            ? ` text-blue-800 bg-blue-100 hover:bg-blue-200 focus:ring-blue-500`
-            : type === 'tv'
-            ? ` text-fuchsia-800 bg-fuchsia-100 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
-            : type === 'person'
-            ? ` text-green-800 bg-green-100 hover:bg-green-200 focus:ring-green-500`
-            : ``)
-        }
-      >
-        <PlusSmIcon className="w-5 h-5" aria-hidden="true" />
-      </button>
+      {userState.status === 'resolved' ? (
+        <button
+          type="button"
+          onClick={() => onAddToList(item)}
+          className={
+            `absolute -top-3 -right-3 z-10 inline-flex items-center p-1 border border-transparent rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
+            (type === 'movie'
+              ? ` text-blue-800 bg-blue-100 hover:bg-blue-200 focus:ring-blue-500`
+              : type === 'tv'
+              ? ` text-fuchsia-800 bg-fuchsia-100 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
+              : type === 'person'
+              ? ` text-green-800 bg-green-100 hover:bg-green-200 focus:ring-green-500`
+              : ``)
+          }
+        >
+          <PlusSmIcon className="w-5 h-5" aria-hidden="true" />
+        </button>
+      ) : null}
 
       <Link
         to={`/${type}/${id}`}

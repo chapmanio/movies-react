@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import type { CreditsResponse } from 'moviedb-promise/dist/request-types';
 import { Link, useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';

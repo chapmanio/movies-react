@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import type {
   Person as PersonResponse,
   PersonCombinedCreditsResponse,
 } from 'moviedb-promise/dist/request-types';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LocationMarkerIcon, PlusSmIcon, UserIcon } from '@heroicons/react/solid';
 import { CakeIcon } from '@heroicons/react/outline';
 
 import SearchItem from '../search/SearchItem';
+
+import { useUserState } from '../../hooks/useUser';
 
 import type { ApiResponse } from '../../lib/api';
 import { formatAge } from '../../lib/dates';
@@ -18,6 +20,8 @@ import { formatPersonCredits, ListItem } from '../../lib/format';
 const Person = () => {
   // Hooks
   const { id } = useParams();
+  const navigate = useNavigate();
+  const userState = useUserState();
 
   // Local state
   const [person, setPerson] = useState<ApiResponse<PersonResponse>>({
@@ -76,6 +80,18 @@ const Person = () => {
       isCancelled = true;
     };
   }, [id, person]);
+
+  // Handlers
+  const handleAddToList = ({ type, id }: ListItem) => {
+    if (userState.status === 'resolved') {
+      if (!userState.data.auth) {
+        // TODO: Provide type and id?
+        navigate('/sign-in');
+      } else {
+        // TODO: This!
+      }
+    }
+  };
 
   // Render
   return (
@@ -230,7 +246,7 @@ const Person = () => {
               <>
                 {formattedCredits.slice(0, 8).map((result) => (
                   <li key={result.id} className="relative">
-                    <SearchItem item={result} />
+                    <SearchItem item={result} onAddToList={handleAddToList} />
                   </li>
                 ))}
               </>
