@@ -1,18 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
-import ScrollToTop from './components/assets/ScrollToTop';
-import HomeLayout from './components/layouts/Home';
-import Home from './components/pages/Home';
-import DetailsLayout from './components/layouts/Details';
-import Movie from './components/pages/Movie';
-import TvShow from './components/pages/TvShow';
-import Person from './components/pages/Person';
-import NotFound from './components/pages/NotFound';
-import SignIn from './components/pages/SignIn';
-import Register from './components/pages/Register';
+import App from './components/App';
 
 import { UserProvider } from './hooks/useUser';
 
@@ -24,31 +14,7 @@ ReactDOM.render(
   <React.StrictMode>
     <HelmetProvider>
       <UserProvider>
-        <BrowserRouter>
-          <ScrollToTop>
-            <Routes>
-              <Route path="/" element={<HomeLayout />}>
-                <Route index element={<Home />} />
-                <Route path="sign-in" element={<SignIn />} />
-                <Route path="register" element={<Register />} />
-              </Route>
-
-              <Route path="movie" element={<DetailsLayout />}>
-                <Route path=":id" element={<Movie />} />
-              </Route>
-
-              <Route path="tv" element={<DetailsLayout />}>
-                <Route path=":id" element={<TvShow />} />
-              </Route>
-
-              <Route path="person" element={<DetailsLayout />}>
-                <Route path=":id" element={<Person />} />
-              </Route>
-
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </ScrollToTop>
-        </BrowserRouter>
+        <App />
       </UserProvider>
     </HelmetProvider>
   </React.StrictMode>,

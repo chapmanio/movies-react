@@ -32,7 +32,7 @@ export default async function signIn(request: VercelRequest, response: VercelRes
         }
 
         // Add the JWT cookie to the header
-        response.setHeader('Set-Cookie', createJwtCookie(user.id, email));
+        response.setHeader('Set-Cookie', createJwtCookie(user.id, user.email));
 
         // Return the user
         return response.status(200).json(user);

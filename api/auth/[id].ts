@@ -7,30 +7,34 @@ import { Prisma } from '@prisma/client';
 
 export default async function register(request: VercelRequest, response: VercelResponse) {
   switch (request.method) {
-    case 'POST':
+    case 'PATCH':
+      const { id } = request.query;
+
       // TODO: Use zod?
       const { name, email, password } = JSON.parse(request.body);
 
-      if (!name || !email || !password) {
-        return response.status(422).send('Name, email or password not supplied');
+      if (!name || !email) {
+        return response.status(422).send('Name or email not supplied');
       }
 
       try {
-        // Hash supplied password and create the user
-        const passwordHash = await bcrypt.hash(password, 10);
+        const passwordHash = password ? await bcrypt.hash(password, 10) : undefined;
 
-        const user = await db.user.create({
+        const user = await db.user.update({
           data: {
             name,
             email,
-            passwordHash,
+            ...(passwordHash && { passwordHash }),
+          },
+          where: {
+            id: id.toString(),
           },
         });
 
-        // Add the JWT cookie to the header
+        // Update the JWT cookie
         response.setHeader('Set-Cookie', createJwtCookie(user.id, user.email));
 
-        // Return the user
+        // Return the updated user
         return response.status(200).json(user);
       } catch (error) {
         // Handle Prisma error

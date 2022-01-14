@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { LockClosedIcon } from '@heroicons/react/solid';
@@ -18,14 +18,6 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Effects
-  useEffect(() => {
-    if (userState.status === 'resolved' && userState.data.auth) {
-      // Bounce home if already signed in
-      navigate('/', { replace: true });
-    }
-  }, [userState, navigate]);
-
   // Handlers
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,11 +31,15 @@ const SignIn = () => {
           user: {
             auth: true,
             user: {
-              userId: user.id,
+              id: user.id,
+              name: user.name,
               email: user.email,
             },
           },
         });
+
+        // Bounce home
+        navigate('/', { replace: true });
       })
       .catch((error: Error) => {
         userDispatch({ type: 'ERROR', error });
@@ -78,7 +74,6 @@ const SignIn = () => {
         ) : null}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <input type="hidden" name="remember" defaultValue="true" />
           <div className="-space-y-px rounded-md shadow-sm">
             <div>
               <label htmlFor="email-address" className="sr-only">

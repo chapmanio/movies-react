@@ -10,16 +10,30 @@ type UnauthenticatedUser = {
 type AuthenticatedUser = {
   auth: true;
   user: {
-    userId: String;
-    email: String;
+    id: string;
+    name: string;
+    email: string;
   };
 };
 
 export type AuthUser = UnauthenticatedUser | AuthenticatedUser;
 
-export type UserParams = {
-  email: String;
-  password: String;
+export type RegisterParams = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export type SignInParams = {
+  email: string;
+  password: string;
+};
+
+export type UpdateParams = {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
 };
 
 // Handlers
@@ -33,10 +47,11 @@ export const authUser = async (): Promise<AuthUser> => {
   return await response.json();
 };
 
-export const registerUser = async ({ email, password }: UserParams): Promise<User> => {
+export const registerUser = async ({ name, email, password }: RegisterParams): Promise<User> => {
   const response = await fetch(`/api/auth/register`, {
     method: 'POST',
     body: JSON.stringify({
+      name,
       email,
       password,
     }),
@@ -49,7 +64,24 @@ export const registerUser = async ({ email, password }: UserParams): Promise<Use
   return await response.json();
 };
 
-export const signIn = async ({ email, password }: UserParams): Promise<User> => {
+export const updateUser = async ({ id, name, email, password }: UpdateParams): Promise<User> => {
+  const response = await fetch(`/api/auth/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+    }),
+  });
+
+  if (!response.ok) {
+    throw await buildHttpError(response);
+  }
+
+  return await response.json();
+};
+
+export const signIn = async ({ email, password }: SignInParams): Promise<User> => {
   const response = await fetch(`/api/auth/sign-in`, {
     method: 'POST',
     body: JSON.stringify({

@@ -1319,22 +1319,22 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@prisma/client@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-3.6.0.tgz#68a60cd4c73a369b11f72e173e86fd6789939293"
-  integrity sha512-ycSGY9EZGROtje0iCNsgC5Zqi/ttX2sO7BNMYaLsUMiTlf3F69ZPH+08pRo0hrDfkZzyimXYqeXJlaoYDH1w7A==
+"@prisma/client@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-3.8.0.tgz#b92ad9e91e8a82139e0ea1d4f3266a926d1ea97f"
+  integrity sha512-odYAbzfGvVWpDxhk2Yb03DlcCg6zKgJjt5admcp4xtr7u0f76B2NppC4TSGxvdQUGzPI6G37afu2oZCb/uwGfg==
   dependencies:
-    "@prisma/engines-version" "3.6.0-24.dc520b92b1ebb2d28dc3161f9f82e875bd35d727"
+    "@prisma/engines-version" "3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f"
 
-"@prisma/engines-version@3.6.0-24.dc520b92b1ebb2d28dc3161f9f82e875bd35d727":
-  version "3.6.0-24.dc520b92b1ebb2d28dc3161f9f82e875bd35d727"
-  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-3.6.0-24.dc520b92b1ebb2d28dc3161f9f82e875bd35d727.tgz#25aa447776849a774885866b998732b37ec4f4f5"
-  integrity sha512-vtoO2ys6mSfc8ONTWdcYztKN3GBU1tcKBj0aXObyjzSuGwHFcM/pEA0xF+n1W4/0TAJgfoPX2khNEit6g0jtNA==
+"@prisma/engines-version@3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f":
+  version "3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f.tgz#4c8d9744b5e54650a8ba5fde0a711399d6adba24"
+  integrity sha512-G2JH6yWt6ixGKmsRmVgaQYahfwMopim0u/XLIZUo2o/mZ5jdu7+BL+2V5lZr7XiG1axhyrpvlyqE/c0OgYSl3g==
 
-"@prisma/engines@3.6.0-24.dc520b92b1ebb2d28dc3161f9f82e875bd35d727":
-  version "3.6.0-24.dc520b92b1ebb2d28dc3161f9f82e875bd35d727"
-  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-3.6.0-24.dc520b92b1ebb2d28dc3161f9f82e875bd35d727.tgz#c68ede6aeffa9ef7743a32cfa6daf9172a4e15b3"
-  integrity sha512-dRClHS7DsTVchDKzeG72OaEyeDskCv91pnZ72Fftn0mp4BkUvX2LvWup65hCNzwwQm5IDd6A88APldKDnMiEMA==
+"@prisma/engines@3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f":
+  version "3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f.tgz#4479099b99f6a082ce5843ee7208943ccedd127f"
+  integrity sha512-bHYubuItSN/DGYo36aDu7xJiJmK52JOSHs4MK+KbceAtwS20BCWadRgtpQ3iZ2EXfN/B1T0iCXlNraaNwnpU2w==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.0"
@@ -1720,6 +1720,13 @@
   version "8.5.6"
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.6.tgz#1913e5a61e70a192c5a444623da4901a7b1a9d42"
   integrity sha512-+P3O/xC7nzVizIi5VbF34YtqSonFsdnbXBnWUCYRiKOi1f9gA4sEFvXkrGr/QVV23IbMYvcoerI7nnhDUiWXRQ==
+  dependencies:
+    "@types/node" "*"
+
+"@types/md5@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@types/md5/-/md5-2.3.1.tgz#010bcf3bb50a2cff3a574cb1c0b4051a9c67d6bc"
+  integrity sha512-OK3oe+ALIoPSo262lnhAYwpqFNXbiwH2a+0+Z5YBnkQEwWD8fk5+PIeRhYA48PzvX9I4SGNpWy+9bLj8qz92RQ==
   dependencies:
     "@types/node" "*"
 
@@ -2726,6 +2733,11 @@ char-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-2.0.0.tgz#16f98f3f874edceddd300fda5d58df380a7641a6"
   integrity sha512-oGu2QekBMXgyQNWPDRQ001bjvDnZe4/zBTz37TMbiKz1NbNiyiH5hRkobe7npRN6GfbGbxMYFck/vQ1r9c1VMA==
 
+charenc@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
+  integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
+
 check-types@^11.1.1:
   version "11.1.2"
   resolved "https://registry.yarnpkg.com/check-types/-/check-types-11.1.2.tgz#86a7c12bf5539f6324eb0e70ca8896c0e38f3e2f"
@@ -2989,6 +3001,11 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypt@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/crypt/-/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
+  integrity sha1-iNf/fsDfuG9xPch7u0LQRNPmxBs=
 
 crypto-random-string@^2.0.0:
   version "2.0.0"
@@ -4878,6 +4895,11 @@ is-boolean-object@^1.1.0:
     call-bind "^1.0.2"
     has-tostringtag "^1.0.0"
 
+is-buffer@~1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
+  integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
+
 is-callable@^1.1.4, is-callable@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.4.tgz#47301d58dd0259407865547853df6d61fe471945"
@@ -5936,6 +5958,15 @@ makeerror@1.0.12:
   integrity sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==
   dependencies:
     tmpl "1.0.5"
+
+md5@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/md5/-/md5-2.3.0.tgz#c3da9a6aae3a30b46b7b0c349b87b110dc3bda4f"
+  integrity sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==
+  dependencies:
+    charenc "0.0.2"
+    crypt "0.0.2"
+    is-buffer "~1.1.6"
 
 mdn-data@2.0.14:
   version "2.0.14"
@@ -7084,12 +7115,12 @@ pretty-format@^27.0.0, pretty-format@^27.0.2, pretty-format@^27.4.2:
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
 
-prisma@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/prisma/-/prisma-3.6.0.tgz#99532abc02e045e58c6133a19771bdeb28cecdbe"
-  integrity sha512-6SqgHS/5Rq6HtHjsWsTxlj+ySamGyCLBUQfotc2lStOjPv52IQuDVpp58GieNqc9VnfuFyHUvTZw7aQB+G2fvQ==
+prisma@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-3.8.0.tgz#6aecfee801133d63467e1b6e17416251d5ea6e2e"
+  integrity sha512-xLmVyO/L6C4ZdHzHqiJVq3ZfDWSym29x75JcwJx746ps61UcNEg4ozSwN9ud7UjXLntdXe1xDLNOUO1lc7LN5g==
   dependencies:
-    "@prisma/engines" "3.6.0-24.dc520b92b1ebb2d28dc3161f9f82e875bd35d727"
+    "@prisma/engines" "3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"

@@ -9,7 +9,7 @@ import {
 // Types
 type AlertProps = {
   type: 'success' | 'error' | 'warning' | 'info';
-  message: String;
+  message: string;
   onClose?: () => void;
 };
 

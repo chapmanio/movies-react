@@ -1,7 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import jwt from 'jsonwebtoken';
+import { clearCookie } from '../../utils/auth';
 
-export default function signOut(request: VercelRequest, response: VercelResponse) {
+import { db } from '../../utils/db';
+
+export default async function signOut(request: VercelRequest, response: VercelResponse) {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined');
   }
@@ -22,7 +25,31 @@ export default function signOut(request: VercelRequest, response: VercelResponse
         return response.status(401).send('Invalid Authorization token');
       }
 
-      return response.status(200).json({ auth: true, user: payload });
+      // Retrieve the user ID
+      if (typeof payload === 'string') {
+        return response.status(401).send('Invalid JWT payload');
+      }
+
+      const { userId } = payload;
+
+      if (!userId) {
+        response.setHeader('Set-Cookie', clearCookie());
+
+        return response.status(200).json({ auth: false });
+      }
+
+      // Retrieve the db user
+      const user = await db.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        response.setHeader('Set-Cookie', clearCookie());
+
+        return response.status(200).json({ auth: false });
+      }
+
+      return response.status(200).json({ auth: true, user });
     default:
       return response.status(405).send('Invalid request method');
   }
