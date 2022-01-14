@@ -18,7 +18,7 @@ type GetArgs = {
 
 // Exports
 export const searchMovie = async ({ query, page }: SearchArgs): Promise<MovieResultsResponse> => {
-  const response = await fetch(`/api/movie/search?query=${query}&page=${page}`);
+  const response = await fetch(`/api/search?area=movie&query=${query}&page=${page}`);
 
   if (!response.ok) {
     throw await buildHttpError(response);

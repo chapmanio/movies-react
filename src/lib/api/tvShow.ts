@@ -14,7 +14,7 @@ type GetArgs = {
 
 // Exports
 export const searchTv = async ({ query, page }: SearchArgs): Promise<TvResultsResponse> => {
-  const response = await fetch(`/api/tv/search?query=${query}&page=${page}`);
+  const response = await fetch(`/api/search?area=tv&query=${query}&page=${page}`);
 
   if (!response.ok) {
     throw await buildHttpError(response);
