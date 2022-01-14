@@ -28,7 +28,7 @@ export const searchPerson = async ({ query, page }: SearchArgs): Promise<SearchP
 };
 
 export const getPerson = async ({ id }: GetArgs): Promise<Person> => {
-  const response = await fetch(`/api/person/${id}`);
+  const response = await fetch(`/api/person?id=${id}`);
 
   if (!response.ok) {
     throw await buildHttpError(response);
@@ -38,7 +38,7 @@ export const getPerson = async ({ id }: GetArgs): Promise<Person> => {
 };
 
 export const getPersonCredits = async ({ id }: GetArgs): Promise<PersonCombinedCreditsResponse> => {
-  const response = await fetch(`/api/person/${id}/credits`);
+  const response = await fetch(`/api/person?id=${id}&action=credits`);
 
   if (!response.ok) {
     throw await buildHttpError(response);

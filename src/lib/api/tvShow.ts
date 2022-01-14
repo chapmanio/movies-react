@@ -24,7 +24,7 @@ export const searchTv = async ({ query, page }: SearchArgs): Promise<TvResultsRe
 };
 
 export const getTvShow = async ({ id }: GetArgs): Promise<ExtShowResponse> => {
-  const response = await fetch(`/api/tv/${id}`);
+  const response = await fetch(`/api/tv?id=${id}`);
 
   if (!response.ok) {
     throw await buildHttpError(response);
@@ -34,7 +34,7 @@ export const getTvShow = async ({ id }: GetArgs): Promise<ExtShowResponse> => {
 };
 
 export const getTvCredits = async ({ id }: GetArgs): Promise<CreditsResponse> => {
-  const response = await fetch(`/api/tv/${id}/credits`);
+  const response = await fetch(`/api/tv?id=${id}&action=credits`);
 
   if (!response.ok) {
     throw await buildHttpError(response);

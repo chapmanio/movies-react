@@ -28,7 +28,7 @@ export const searchMovie = async ({ query, page }: SearchArgs): Promise<MovieRes
 };
 
 export const getMovie = async ({ id }: GetArgs): Promise<MovieResponse> => {
-  const response = await fetch(`/api/movie/${id}`);
+  const response = await fetch(`/api/movie?id=${id}`);
 
   if (!response.ok) {
     throw await buildHttpError(response);
@@ -38,7 +38,7 @@ export const getMovie = async ({ id }: GetArgs): Promise<MovieResponse> => {
 };
 
 export const getMovieCredits = async ({ id }: GetArgs): Promise<CreditsResponse> => {
-  const response = await fetch(`/api/movie/${id}/credits`);
+  const response = await fetch(`/api/movie?id=${id}&action=credits`);
 
   if (!response.ok) {
     throw await buildHttpError(response);

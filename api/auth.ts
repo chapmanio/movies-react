@@ -15,8 +15,6 @@ export default async function auth(request: VercelRequest, response: VercelRespo
   // https://vercel.link/function-count-limit
   const { action } = request.query;
 
-  console.log({ action });
-
   switch (action) {
     case 'sign-in':
       if (request.method === 'POST') {
