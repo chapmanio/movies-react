@@ -68,8 +68,6 @@ const DetailsLayout = () => {
   };
 
   const handleSignOut = () => {
-    userDispatch({ type: 'LOADING' });
-
     signOut()
       .then(() => {
         userDispatch({ type: 'SET_USER', user: { auth: false } });

@@ -4,14 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import Alert from '../assets/Alert';
 
-import { useUserDispatch, useUserState } from '../../hooks/useUser';
+import { useUserDispatch } from '../../hooks/useUser';
 
 import { registerUser } from '../../lib/api/auth';
 
 const Register = () => {
   // Hooks
   const navigate = useNavigate();
-  const userState = useUserState();
   const userDispatch = useUserDispatch();
 
   // Local state
@@ -20,14 +19,18 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
+
   // Handlers
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (password !== confirm) {
-      userDispatch({ type: 'ERROR', error: new Error('Passwords do not match') });
+      setError('Passwords do not match');
     } else {
-      userDispatch({ type: 'LOADING' });
+      setError(undefined);
+      setSubmitLoading(true);
 
       registerUser({ name, email, password })
         .then((user) => {
@@ -47,7 +50,8 @@ const Register = () => {
           navigate('/', { replace: true });
         })
         .catch((error: Error) => {
-          userDispatch({ type: 'ERROR', error });
+          setSubmitLoading(false);
+          setError(error.message);
         });
     }
   };
@@ -72,12 +76,7 @@ const Register = () => {
           </p>
         </div>
 
-        {userState.status === 'rejected' ? (
-          <Alert
-            type="error"
-            message={userState.error ? userState.error.message : `Something went wrong`}
-          />
-        ) : null}
+        {error ? <Alert type="error" message={error} onClose={() => setError(undefined)} /> : null}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
@@ -154,11 +153,11 @@ const Register = () => {
               type="submit"
               className={
                 `w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500` +
-                (userState.status === 'pending' ? ` opacity-75` : ` hover:bg-indigo-700`)
+                (submitLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
               }
-              disabled={userState.status === 'pending'}
+              disabled={submitLoading}
             >
-              {userState.status === 'pending' ? `Please wait...` : `Create account`}
+              {submitLoading ? `Please wait...` : `Create account`}
             </button>
           </div>
         </form>

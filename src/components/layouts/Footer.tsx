@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import LinkedInIcon from '../assets/icons/LinkedIn';
 import TwitterIcon from '../assets/icons/Twitter';
 import GitHubIcon from '../assets/icons/GitHub';
-import Notification from '../assets/Notification';
 
 import { useUserDispatch, useUserState } from '../../hooks/useUser';
 
@@ -15,17 +13,11 @@ const Footer = () => {
   const userState = useUserState();
   const userDispatch = useUserDispatch();
 
-  // Local state
-  const [showConfirm, setShowConfirm] = useState(false);
-
   // Handlers
   const handleSignOut = () => {
-    setShowConfirm(false);
-
     signOut()
       .then(() => {
         userDispatch({ type: 'SET_USER', user: { auth: false } });
-        setShowConfirm(true);
       })
       .catch((error: Error) => {
         userDispatch({ type: 'ERROR', error });
@@ -103,13 +95,6 @@ const Footer = () => {
           </p>
         </div>
       </footer>
-
-      <Notification
-        visible={showConfirm}
-        type="success"
-        title="You are now signed out"
-        onClose={() => setShowConfirm(false)}
-      />
     </>
   );
 };

@@ -39,6 +39,7 @@ const MyAccount = () => {
       if (password !== confirm) {
         setError('Passwords do not match');
       } else {
+        setError(undefined);
         setSubmitLoading(true);
         setShowConfirm(false);
 

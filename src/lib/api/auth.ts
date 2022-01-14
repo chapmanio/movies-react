@@ -48,7 +48,7 @@ export const authUser = async (): Promise<AuthUser> => {
 };
 
 export const registerUser = async ({ name, email, password }: RegisterParams): Promise<User> => {
-  const response = await fetch(`/api/auth/register`, {
+  const response = await fetch(`/api/auth?action=register`, {
     method: 'POST',
     body: JSON.stringify({
       name,
@@ -65,7 +65,7 @@ export const registerUser = async ({ name, email, password }: RegisterParams): P
 };
 
 export const updateUser = async ({ id, name, email, password }: UpdateParams): Promise<User> => {
-  const response = await fetch(`/api/auth/${id}`, {
+  const response = await fetch(`/api/auth?action=account&id=${id}`, {
     method: 'PATCH',
     body: JSON.stringify({
       name,
@@ -82,7 +82,7 @@ export const updateUser = async ({ id, name, email, password }: UpdateParams): P
 };
 
 export const signIn = async ({ email, password }: SignInParams): Promise<User> => {
-  const response = await fetch(`/api/auth/sign-in`, {
+  const response = await fetch(`/api/auth?action=sign-in`, {
     method: 'POST',
     body: JSON.stringify({
       email,
@@ -98,7 +98,7 @@ export const signIn = async ({ email, password }: SignInParams): Promise<User> =
 };
 
 export const signOut = async (): Promise<void> => {
-  const response = await fetch(`/api/auth/sign-out`, { method: 'POST' });
+  const response = await fetch(`/api/auth?action=sign-out`, { method: 'POST' });
 
   if (!response.ok) {
     throw await buildHttpError(response);

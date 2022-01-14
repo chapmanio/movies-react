@@ -41,7 +41,10 @@ const App = () => {
             />
           </Route>
 
-          <Route path="my-account" element={<DetailsLayout />}>
+          <Route
+            path="my-account"
+            element={authedUser ? <DetailsLayout /> : <Navigate to="/" replace={true} />}
+          >
             <Route index element={<MyAccount />} />
           </Route>
 
