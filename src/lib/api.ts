@@ -39,7 +39,10 @@ export const apiFetch = async <T>(url: string, init?: RequestInit | undefined): 
   const mergedUrl = `${API_URL}${url}`;
 
   // Call API
-  const response = await fetch(mergedUrl, init);
+  const response = await fetch(mergedUrl, {
+    ...init,
+    credentials: 'include',
+  });
 
   if (!response.ok) {
     throw await buildHttpError(response);
