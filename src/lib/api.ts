@@ -20,8 +20,6 @@ type ApiError = {
 
 export type ApiResponse<T> = ApiPending | ApiSuccess<T> | ApiError;
 
-type ApiRequestInit = Omit<RequestInit, 'credentials'>;
-
 export interface ExtShowResponse extends ShowResponse {
   tagline?: string;
 }
@@ -36,30 +34,19 @@ const buildHttpError = async (response: Response): Promise<Error> => {
   return error;
 };
 
-const apiFetch = async <T>(url: string, init: RequestInit): Promise<T> => {
+export const apiFetch = async <T>(url: string, init?: RequestInit): Promise<T> => {
   // Add API prefix to request URL
   const apiUrl = `${API_URL}${url}`;
 
   // Call API
-  const response = await fetch(apiUrl, init);
+  const response = await fetch(apiUrl, {
+    ...init,
+    credentials: 'include',
+  });
 
   if (!response.ok) {
     throw await buildHttpError(response);
   }
 
   return await response.json();
-};
-
-export const publicApiFetch = async <T>(url: string, init?: ApiRequestInit): Promise<T> => {
-  return apiFetch(url, {
-    ...init,
-    credentials: 'same-origin',
-  });
-};
-
-export const authedApiFetch = async <T>(url: string, init?: ApiRequestInit): Promise<T> => {
-  return apiFetch(url, {
-    ...init,
-    credentials: 'include',
-  });
 };

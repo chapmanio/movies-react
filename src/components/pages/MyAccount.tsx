@@ -44,7 +44,6 @@ const MyAccount = () => {
         setShowConfirm(false);
 
         updateUser({
-          id: userState.data.user.id,
           name,
           email,
           password,

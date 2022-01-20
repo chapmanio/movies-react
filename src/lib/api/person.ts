@@ -4,7 +4,7 @@ import type {
   SearchPersonResponse,
 } from 'moviedb-promise/dist/request-types';
 
-import { publicApiFetch } from '../api';
+import { apiFetch } from '../api';
 
 // Types
 type SearchArgs = {
@@ -18,13 +18,13 @@ type GetArgs = {
 
 // Exports
 export const searchPerson = async ({ query, page }: SearchArgs) => {
-  return publicApiFetch<SearchPersonResponse>(`/search?area=person&query=${query}&page=${page}`);
+  return apiFetch<SearchPersonResponse>(`/search?area=person&query=${query}&page=${page}`);
 };
 
 export const getPerson = async ({ id }: GetArgs) => {
-  return publicApiFetch<Person>(`/person/${id}`);
+  return apiFetch<Person>(`/person/${id}`);
 };
 
 export const getPersonCredits = async ({ id }: GetArgs) => {
-  return publicApiFetch<PersonCombinedCreditsResponse>(`/person/${id}/credits`);
+  return apiFetch<PersonCombinedCreditsResponse>(`/person/${id}/credits`);
 };

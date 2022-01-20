@@ -1,4 +1,4 @@
-import { authedApiFetch } from '../api';
+import { apiFetch } from '../api';
 import type { User } from './types';
 
 // Types
@@ -29,7 +29,6 @@ export type SignInParams = {
 };
 
 export type UpdateParams = {
-  id: string;
   name: string;
   email: string;
   password: string;
@@ -37,11 +36,11 @@ export type UpdateParams = {
 
 // Handlers
 export const authUser = async () => {
-  return authedApiFetch<AuthUser>(`/auth`);
+  return apiFetch<AuthUser>(`/auth`);
 };
 
 export const registerUser = async ({ name, email, password }: RegisterParams) => {
-  return authedApiFetch<User>(`/auth/register`, {
+  return apiFetch<User>(`/auth/register`, {
     method: 'POST',
     body: JSON.stringify({
       name,
@@ -51,9 +50,9 @@ export const registerUser = async ({ name, email, password }: RegisterParams) =>
   });
 };
 
-export const updateUser = async ({ id, name, email, password }: UpdateParams) => {
-  return authedApiFetch<User>(`/auth/account/${id}`, {
-    method: 'PUT',
+export const updateUser = async ({ name, email, password }: UpdateParams) => {
+  return apiFetch<User>(`/auth/account/${email}`, {
+    method: 'POST',
     body: JSON.stringify({
       name,
       email,
@@ -63,7 +62,7 @@ export const updateUser = async ({ id, name, email, password }: UpdateParams) =>
 };
 
 export const signIn = async ({ email, password }: SignInParams) => {
-  return authedApiFetch<User>(`/auth/sign-in`, {
+  return apiFetch<User>(`/auth/sign-in`, {
     method: 'POST',
     body: JSON.stringify({
       email,
@@ -73,5 +72,5 @@ export const signIn = async ({ email, password }: SignInParams) => {
 };
 
 export const signOut = async () => {
-  return authedApiFetch<void>(`/auth/sign-out`, { method: 'POST' });
+  return apiFetch<void>(`/auth/sign-out`, { method: 'POST' });
 };
