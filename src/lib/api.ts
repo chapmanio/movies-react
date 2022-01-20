@@ -41,7 +41,7 @@ export const apiFetch = async <T>(url: string, init?: RequestInit | undefined): 
   // Call API
   const response = await fetch(mergedUrl, {
     ...init,
-    credentials: 'same-origin',
+    credentials: 'include',
   });
 
   if (!response.ok) {
