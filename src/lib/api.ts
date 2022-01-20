@@ -1,5 +1,8 @@
 import type { ShowResponse } from 'moviedb-promise/dist/request-types';
 
+// Constants
+const API_URL = 'https://movies-api.chapmanio.dev/api';
+
 // Types
 type ApiPending = {
   status: 'pending';
@@ -22,11 +25,25 @@ export interface ExtShowResponse extends ShowResponse {
 }
 
 // Helpers
-export const buildHttpError = async (response: Response): Promise<Error> => {
+const buildHttpError = async (response: Response): Promise<Error> => {
   const responseText = await response.text();
   const error = new Error(responseText);
 
   error.name = `${response.status} ${response.statusText}`;
 
   return error;
+};
+
+export const apiFetch = async <T>(url: string, init?: RequestInit | undefined): Promise<T> => {
+  // Build API url
+  const mergedUrl = `${API_URL}${url}`;
+
+  // Call API
+  const response = await fetch(mergedUrl, init);
+
+  if (!response.ok) {
+    throw await buildHttpError(response);
+  }
+
+  return await response.json();
 };

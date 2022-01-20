@@ -4,7 +4,7 @@ import type {
   SearchPersonResponse,
 } from 'moviedb-promise/dist/request-types';
 
-import { buildHttpError } from '../api';
+import { apiFetch } from '../api';
 
 // Types
 type SearchArgs = {
@@ -17,32 +17,14 @@ type GetArgs = {
 };
 
 // Exports
-export const searchPerson = async ({ query, page }: SearchArgs): Promise<SearchPersonResponse> => {
-  const response = await fetch(`/api/search?area=person&query=${query}&page=${page}`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const searchPerson = async ({ query, page }: SearchArgs) => {
+  return apiFetch<SearchPersonResponse>(`/search?area=person&query=${query}&page=${page}`);
 };
 
-export const getPerson = async ({ id }: GetArgs): Promise<Person> => {
-  const response = await fetch(`/api/person?id=${id}`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const getPerson = async ({ id }: GetArgs) => {
+  return apiFetch<Person>(`/person/${id}`);
 };
 
-export const getPersonCredits = async ({ id }: GetArgs): Promise<PersonCombinedCreditsResponse> => {
-  const response = await fetch(`/api/person?id=${id}&action=credits`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const getPersonCredits = async ({ id }: GetArgs) => {
+  return apiFetch<PersonCombinedCreditsResponse>(`/person/${id}/credits`);
 };

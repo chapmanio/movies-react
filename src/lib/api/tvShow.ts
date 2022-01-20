@@ -1,6 +1,6 @@
 import type { CreditsResponse, TvResultsResponse } from 'moviedb-promise/dist/request-types';
 
-import { buildHttpError, ExtShowResponse } from '../api';
+import { apiFetch, ExtShowResponse } from '../api';
 
 // Types
 type SearchArgs = {
@@ -13,32 +13,14 @@ type GetArgs = {
 };
 
 // Exports
-export const searchTv = async ({ query, page }: SearchArgs): Promise<TvResultsResponse> => {
-  const response = await fetch(`/api/search?area=tv&query=${query}&page=${page}`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const searchTv = async ({ query, page }: SearchArgs) => {
+  return apiFetch<TvResultsResponse>(`/search?area=tv&query=${query}&page=${page}`);
 };
 
-export const getTvShow = async ({ id }: GetArgs): Promise<ExtShowResponse> => {
-  const response = await fetch(`/api/tv?id=${id}`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const getTvShow = async ({ id }: GetArgs) => {
+  return apiFetch<ExtShowResponse>(`/tv/${id}`);
 };
 
-export const getTvCredits = async ({ id }: GetArgs): Promise<CreditsResponse> => {
-  const response = await fetch(`/api/tv?id=${id}&action=credits`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const getTvCredits = async ({ id }: GetArgs) => {
+  return apiFetch<CreditsResponse>(`/tv/${id}/credits`);
 };

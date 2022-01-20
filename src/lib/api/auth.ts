@@ -1,6 +1,5 @@
-import { User } from '@prisma/client';
-
-import { buildHttpError } from '../api';
+import { apiFetch } from '../api';
+import type { User } from './types';
 
 // Types
 type UnauthenticatedUser = {
@@ -37,18 +36,12 @@ export type UpdateParams = {
 };
 
 // Handlers
-export const authUser = async (): Promise<AuthUser> => {
-  const response = await fetch(`/api/auth`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const authUser = async () => {
+  return apiFetch<AuthUser>(`/auth`);
 };
 
-export const registerUser = async ({ name, email, password }: RegisterParams): Promise<User> => {
-  const response = await fetch(`/api/auth?action=register`, {
+export const registerUser = async ({ name, email, password }: RegisterParams) => {
+  return apiFetch<User>(`/auth/register`, {
     method: 'POST',
     body: JSON.stringify({
       name,
@@ -56,16 +49,10 @@ export const registerUser = async ({ name, email, password }: RegisterParams): P
       password,
     }),
   });
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
 };
 
-export const updateUser = async ({ id, name, email, password }: UpdateParams): Promise<User> => {
-  const response = await fetch(`/api/auth?action=account&id=${id}`, {
+export const updateUser = async ({ id, name, email, password }: UpdateParams) => {
+  return apiFetch<User>(`/auth/account/${id}`, {
     method: 'PATCH',
     body: JSON.stringify({
       name,
@@ -73,36 +60,18 @@ export const updateUser = async ({ id, name, email, password }: UpdateParams): P
       password,
     }),
   });
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
 };
 
-export const signIn = async ({ email, password }: SignInParams): Promise<User> => {
-  const response = await fetch(`/api/auth?action=sign-in`, {
+export const signIn = async ({ email, password }: SignInParams) => {
+  return apiFetch<User>(`/auth/sign-in`, {
     method: 'POST',
     body: JSON.stringify({
       email,
       password,
     }),
   });
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
 };
 
-export const signOut = async (): Promise<void> => {
-  const response = await fetch(`/api/auth?action=sign-out`, { method: 'POST' });
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return;
+export const signOut = async () => {
+  return apiFetch<void>(`/api/auth/sign-out`, { method: 'POST' });
 };

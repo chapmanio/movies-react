@@ -4,7 +4,7 @@ import type {
   MovieResultsResponse,
 } from 'moviedb-promise/dist/request-types';
 
-import { buildHttpError } from '../api';
+import { apiFetch } from '../api';
 
 // Types
 type SearchArgs = {
@@ -17,32 +17,14 @@ type GetArgs = {
 };
 
 // Exports
-export const searchMovie = async ({ query, page }: SearchArgs): Promise<MovieResultsResponse> => {
-  const response = await fetch(`/api/search?area=movie&query=${query}&page=${page}`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const searchMovie = async ({ query, page }: SearchArgs) => {
+  return apiFetch<MovieResultsResponse>(`/search?area=movie&query=${query}&page=${page}`);
 };
 
-export const getMovie = async ({ id }: GetArgs): Promise<MovieResponse> => {
-  const response = await fetch(`/api/movie?id=${id}`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const getMovie = async ({ id }: GetArgs) => {
+  return apiFetch<MovieResponse>(`/movie/${id}`);
 };
 
-export const getMovieCredits = async ({ id }: GetArgs): Promise<CreditsResponse> => {
-  const response = await fetch(`/api/movie?id=${id}&action=credits`);
-
-  if (!response.ok) {
-    throw await buildHttpError(response);
-  }
-
-  return await response.json();
+export const getMovieCredits = async ({ id }: GetArgs) => {
+  return apiFetch<CreditsResponse>(`/movie/${id}/credits`);
 };
