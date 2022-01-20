@@ -53,7 +53,7 @@ export const registerUser = async ({ name, email, password }: RegisterParams) =>
 
 export const updateUser = async ({ id, name, email, password }: UpdateParams) => {
   return apiFetch<User>(`/auth/account/${id}`, {
-    method: 'PATCH',
+    method: 'PUT',
     body: JSON.stringify({
       name,
       email,
@@ -73,5 +73,5 @@ export const signIn = async ({ email, password }: SignInParams) => {
 };
 
 export const signOut = async () => {
-  return apiFetch<void>(`/api/auth/sign-out`, { method: 'POST' });
+  return apiFetch<void>(`/auth/sign-out`, { method: 'POST' });
 };
