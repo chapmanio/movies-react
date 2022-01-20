@@ -1,6 +1,6 @@
 import type { SearchMultiResponse, TrendingResponse } from 'moviedb-promise/dist/request-types';
 
-import { apiFetch } from '../api';
+import { publicApiFetch } from '../api';
 
 // Types
 type SearchArgs = {
@@ -10,9 +10,9 @@ type SearchArgs = {
 
 // Exports
 export const getTrending = async () => {
-  return apiFetch<TrendingResponse>(`/trending`);
+  return publicApiFetch<TrendingResponse>(`/trending`);
 };
 
 export const searchAll = async ({ query, page }: SearchArgs) => {
-  return apiFetch<SearchMultiResponse>(`/search?query=${query}&page=${page}`);
+  return publicApiFetch<SearchMultiResponse>(`/search?query=${query}&page=${page}`);
 };
