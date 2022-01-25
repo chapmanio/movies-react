@@ -206,15 +206,15 @@ const Home = () => {
 
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <p className="max-w-xl mx-auto mt-5 text-xl text-center text-gray-500">
-          Built on top of Vercel{' '}
+          Supported by a{` `}
           <a
-            href="https://vercel.com/docs/concepts/functions/introduction"
+            href="https://workers.cloudflare.com/"
             rel="nofollow noreferrer"
             className="font-semibold hover:text-indigo-600"
           >
-            serverless functions
-          </a>
-          , connected to a{' '}
+            Cloudflare workers
+          </a>{' '}
+          hosted API, connecting to a{' '}
           <a
             href="https://www.prisma.io/"
             rel="nofollow noreferrer"
@@ -222,15 +222,15 @@ const Home = () => {
           >
             Prisma
           </a>
-          -managed database, and interacting with{' '}
+          -managed database and interacting with{' '}
           <a
             href="https://developers.themoviedb.org/"
             rel="nofollow noreferrer"
             className="font-semibold hover:text-indigo-600"
           >
-            The Movie Database API
-          </a>
-          .
+            The Movie Database
+          </a>{' '}
+          external API.
         </p>
 
         <form
