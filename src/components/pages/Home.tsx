@@ -204,8 +204,8 @@ const Home = () => {
         <title>Movies</title>
       </Helmet>
 
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <p className="max-w-xl mx-auto mt-5 text-xl text-center text-gray-500">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <p className="mx-auto mt-5 max-w-xl text-center text-xl text-gray-500">
           Supported by a{` `}
           <a
             href="https://workers.cloudflare.com/"
@@ -235,9 +235,9 @@ const Home = () => {
 
         <form
           onSubmit={handleSearch}
-          className="max-w-4xl px-4 py-4 mx-auto mt-16 bg-indigo-600 sm:flex rounded-xl sm:py-9 sm:px-12"
+          className="mx-auto mt-16 max-w-4xl rounded-xl bg-indigo-600 px-4 py-4 sm:flex sm:py-9 sm:px-12"
         >
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <label htmlFor="search" className="sr-only">
               Search
             </label>
@@ -246,14 +246,14 @@ const Home = () => {
               name="search"
               defaultValue={search || ''}
               type="search"
-              className="block w-full px-5 py-3 text-base text-gray-900 placeholder-gray-500 border border-transparent rounded-md shadow-sm focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
+              className="block w-full rounded-md border border-transparent px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
               placeholder="Search for a movie, tv show or person..."
             />
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-3">
             <button
               type="submit"
-              className="block w-full px-5 py-3 text-base font-medium text-white bg-indigo-500 border border-transparent rounded-md shadow hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700 sm:px-10"
+              className="block w-full rounded-md border border-transparent bg-indigo-500 px-5 py-3 text-base font-medium text-white shadow hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700 sm:px-10"
             >
               Search
             </button>
@@ -263,7 +263,7 @@ const Home = () => {
         {searchResults ? (
           <div className="mt-16" ref={tabRef}>
             {!search ? (
-              <div className="pb-5 border-b border-gray-200">
+              <div className="border-b border-gray-200 pb-5">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">Trending today</h3>
               </div>
             ) : (
@@ -275,7 +275,7 @@ const Home = () => {
                   <select
                     id="tabs"
                     name="tabs"
-                    className="block w-full py-2 pl-3 pr-10 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                     value={tab}
                     onChange={(event) => {
                       searchParams.set('tab', event.target.value);
@@ -291,7 +291,7 @@ const Home = () => {
                 </div>
                 <div className="hidden sm:block">
                   <div className="border-b border-gray-200">
-                    <nav className="flex -mb-px space-x-8" aria-label="Tabs">
+                    <nav className="-mb-px flex space-x-8" aria-label="Tabs">
                       <TabButton current={tab === 'all'} onClick={() => changeTab('all')}>
                         All
                       </TabButton>
@@ -315,16 +315,16 @@ const Home = () => {
 
             {searchResults.status !== 'rejected' ? (
               <>
-                <ul className="grid grid-cols-2 mt-8 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-6 lg:grid-cols-5 lg:gap-x-8 xl:gap-x-12">
+                <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-6 lg:grid-cols-5 lg:gap-x-8 xl:gap-x-12">
                   {searchResults.status === 'pending' ? (
                     <>
                       {Array(20)
                         .fill(null)
                         .map((_, index) => (
                           <li key={index} className="animate-pulse">
-                            <div className="block w-full overflow-hidden bg-gray-100 rounded-lg group aspect-w-2 aspect-h-3" />
-                            <div className="w-3/4 h-4 mt-2 bg-gray-100 rounded" />
-                            <div className="w-1/2 h-4 mt-1 bg-gray-100 rounded" />
+                            <div className="group aspect-w-2 aspect-h-3 block w-full overflow-hidden rounded-lg bg-gray-100" />
+                            <div className="mt-2 h-4 w-3/4 rounded bg-gray-100" />
+                            <div className="mt-1 h-4 w-1/2 rounded bg-gray-100" />
                           </li>
                         ))}
                     </>

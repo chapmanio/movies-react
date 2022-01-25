@@ -101,11 +101,11 @@ const Person = () => {
       </Helmet>
 
       <div className="bg-theme-person">
-        <div className="items-center px-4 py-8 mx-auto sm:flex max-w-7xl sm:px-6 lg:px-8">
-          <div className="sm:w-[300px] flex-none self-start">
-            <div className="overflow-hidden rounded-lg aspect-w-2 aspect-h-3">
+        <div className="mx-auto max-w-7xl items-center px-4 py-8 sm:flex sm:px-6 lg:px-8">
+          <div className="flex-none self-start sm:w-[300px]">
+            <div className="aspect-w-2 aspect-h-3 overflow-hidden rounded-lg">
               {person.status === 'pending' ? (
-                <div className="bg-gray-100 animate-pulse" />
+                <div className="animate-pulse bg-gray-100" />
               ) : person.status === 'resolved' && person.data.profile_path ? (
                 <img
                   src={`https://www.themoviedb.org/t/p/w300_and_h450_bestv2${person.data.profile_path}`}
@@ -121,19 +121,19 @@ const Person = () => {
 
           <div className="mt-6 sm:mt-0 sm:ml-10">
             {person.status === 'pending' ? (
-              <div className="bg-gray-100 rounded animate-pulse h-9 w-96" />
+              <div className="h-9 w-96 animate-pulse rounded bg-gray-100" />
             ) : person.status === 'resolved' ? (
               <h2 className="text-2xl font-bold leading-7 text-white sm:text-3xl">
                 {person.data.name}
               </h2>
             ) : null}
 
-            <div className="flex flex-col mt-1 sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-              <div className="flex items-center mt-2 text-sm font-light text-gray-200">
-                <UserIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-300" />
+            <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+              <div className="mt-2 flex items-center text-sm font-light text-gray-200">
+                <UserIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-300" />
 
                 {person.status === 'pending' ? (
-                  <div className="h-4 bg-gray-100 rounded w-14 animate-pulse" />
+                  <div className="h-4 w-14 animate-pulse rounded bg-gray-100" />
                 ) : person.status === 'resolved' ? (
                   <>
                     {person.data.gender === 1
@@ -145,11 +145,11 @@ const Person = () => {
                 ) : null}
               </div>
 
-              <div className="flex items-center mt-2 text-sm font-light text-gray-200">
-                <CakeIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-300" />
+              <div className="mt-2 flex items-center text-sm font-light text-gray-200">
+                <CakeIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-300" />
 
                 {person.status === 'pending' ? (
-                  <div className="w-20 h-4 bg-gray-100 rounded animate-pulse" />
+                  <div className="h-4 w-20 animate-pulse rounded bg-gray-100" />
                 ) : person.status === 'resolved' && person.data.birthday ? (
                   <>
                     {person.data.deathday ? `Died ` : null}
@@ -160,11 +160,11 @@ const Person = () => {
                 )}
               </div>
 
-              <div className="flex items-center mt-2 text-sm font-light text-gray-200">
-                <LocationMarkerIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-300" />
+              <div className="mt-2 flex items-center text-sm font-light text-gray-200">
+                <LocationMarkerIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-300" />
 
                 {person.status === 'pending' ? (
-                  <div className="h-4 bg-gray-100 rounded w-36 animate-pulse" />
+                  <div className="h-4 w-36 animate-pulse rounded bg-gray-100" />
                 ) : person.status === 'resolved' && person.data.place_of_birth ? (
                   <>{person.data.place_of_birth}</>
                 ) : (
@@ -175,22 +175,22 @@ const Person = () => {
 
             <div className="mt-6">
               {person.status === 'pending' ? (
-                <div className="w-32 bg-gray-100 rounded animate-pulse h-9" />
+                <div className="h-9 w-32 animate-pulse rounded bg-gray-100" />
               ) : person.status === 'resolved' ? (
                 <button
                   type="button"
-                  className="inline-flex items-center py-2 pl-4 pr-5 text-sm font-medium text-green-700 bg-green-100 border border-transparent rounded-md shadow-sm hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  className="inline-flex items-center rounded-md border border-transparent bg-green-100 py-2 pl-4 pr-5 text-sm font-medium text-green-700 shadow-sm hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 >
-                  <PlusSmIcon className="w-5 h-5 mr-2 -ml-1" />
+                  <PlusSmIcon className="mr-2 -ml-1 h-5 w-5" />
                   Add to list
                 </button>
               ) : null}
             </div>
 
             <div className="mt-6">
-              <h3 className="text-lg italic font-bold text-gray-200">Biography</h3>
+              <h3 className="text-lg font-bold italic text-gray-200">Biography</h3>
               {person.status === 'pending' ? (
-                <div className="w-full h-32 mt-1 bg-gray-100 rounded animate-pulse" />
+                <div className="mt-1 h-32 w-full animate-pulse rounded bg-gray-100" />
               ) : person.status === 'resolved' && person.data.biography ? (
                 <>
                   {person.data.biography.length > 400 ? (
@@ -223,22 +223,22 @@ const Person = () => {
         </div>
       </div>
 
-      <div className="px-4 mx-auto mt-12 max-w-7xl sm:px-6 lg:px-8">
-        <div className="pb-5 border-b border-gray-200">
+      <div className="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="border-b border-gray-200 pb-5">
           <h3 className="text-lg font-medium leading-6 text-gray-900">Latest roles</h3>
         </div>
 
         {credits.status !== 'rejected' ? (
-          <ul className="grid grid-cols-2 mt-8 gap-x-4 gap-y-8 sm:grid-cols-4 lg:grid-cols-8">
+          <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:grid-cols-8">
             {credits.status === 'pending' ? (
               <>
                 {Array(8)
                   .fill(null)
                   .map((_, index) => (
                     <li key={index} className="animate-pulse">
-                      <div className="block w-full overflow-hidden bg-gray-100 rounded-lg group aspect-w-2 aspect-h-3" />
-                      <div className="w-3/4 h-4 mt-2 bg-gray-100 rounded" />
-                      <div className="w-1/2 h-4 mt-1 bg-gray-100 rounded" />
+                      <div className="group aspect-w-2 aspect-h-3 block w-full overflow-hidden rounded-lg bg-gray-100" />
+                      <div className="mt-2 h-4 w-3/4 rounded bg-gray-100" />
+                      <div className="mt-1 h-4 w-1/2 rounded bg-gray-100" />
                     </li>
                   ))}
               </>

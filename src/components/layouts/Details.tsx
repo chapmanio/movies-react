@@ -80,19 +80,19 @@ const DetailsLayout = () => {
   // Render
   return (
     <>
-      <nav className="bg-white border-b border-gray-200">
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="flex items-center h-16">
+      <nav className="border-b border-gray-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center">
             <div className="flex flex-1">
-              <div className="flex items-center flex-shrink-0">
+              <div className="flex flex-shrink-0 items-center">
                 <Link
                   to="/"
-                  className="text-2xl font-bold text-gray-900 md:text-4xl sm:tracking-tight"
+                  className="text-2xl font-bold text-gray-900 sm:tracking-tight md:text-4xl"
                 >
                   Movies
                 </Link>
               </div>
-              <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8 sm:items-center">
+              <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:items-center sm:space-x-8">
                 {userState.status === 'resolved' && userState.data.auth ? (
                   <>
                     <NavLink to="/lists">My lists</NavLink>
@@ -108,18 +108,18 @@ const DetailsLayout = () => {
             <form
               method="get"
               action="/"
-              className="self-center w-full max-w-xs ml-2 sm:ml-6 lg:max-w-lg"
+              className="ml-2 w-full max-w-xs self-center sm:ml-6 lg:max-w-lg"
             >
               <label htmlFor="search" className="sr-only">
                 Search
               </label>
-              <div className="relative text-gray-400 rounded-md focus-within:text-gray-600">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <SearchIcon className="w-5 h-5" />
+              <div className="relative rounded-md text-gray-400 focus-within:text-gray-600">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <SearchIcon className="h-5 w-5" />
                 </div>
                 <input
                   id="search"
-                  className="block w-full pl-10 border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="block w-full rounded-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   placeholder="Search"
                   type="search"
                   name="search"
@@ -134,7 +134,7 @@ const DetailsLayout = () => {
                     <div>
                       <button
                         type="button"
-                        className="flex items-center max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         id="user-menu-button"
                         aria-expanded={showSubNav}
                         aria-haspopup="true"
@@ -144,7 +144,7 @@ const DetailsLayout = () => {
                         <span className="sr-only">Open user menu</span>
 
                         <img
-                          className="w-8 h-8 rounded-full"
+                          className="h-8 w-8 rounded-full"
                           src={`https://www.gravatar.com/avatar/${md5(
                             userState.data.user.email
                           )}?s=56&r=pg`}
@@ -155,10 +155,10 @@ const DetailsLayout = () => {
 
                     <div
                       className={
-                        `origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none` +
+                        `absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none` +
                         (showSubNav
-                          ? ` ease-out duration-100 opacity-100 scale-100`
-                          : ` ease-in duration-75 opacity-0 scale-95`)
+                          ? ` scale-100 opacity-100 duration-100 ease-out`
+                          : ` scale-95 opacity-0 duration-75 ease-in`)
                       }
                       role="menu"
                       aria-orientation="vertical"
@@ -190,10 +190,10 @@ const DetailsLayout = () => {
               </div>
             </div>
 
-            <div className="flex items-center ml-2 -mr-2 sm:hidden">
+            <div className="ml-2 -mr-2 flex items-center sm:hidden">
               <button
                 type="button"
-                className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 aria-controls="mobile-menu"
                 aria-expanded={showMobileNav}
                 ref={mobileNavRef}
@@ -210,7 +210,7 @@ const DetailsLayout = () => {
 
         {showMobileNav ? (
           <div className="sm:hidden" id="mobile-menu">
-            <div className="pt-2 pb-3 space-y-1">
+            <div className="space-y-1 pt-2 pb-3">
               {userState.status === 'resolved' && userState.data.auth ? (
                 <MobileLink to="/lists">My lists</MobileLink>
               ) : (
@@ -222,11 +222,11 @@ const DetailsLayout = () => {
             </div>
 
             {userState.status === 'resolved' && userState.data.auth ? (
-              <div className="pt-4 pb-3 border-t border-gray-200">
+              <div className="border-t border-gray-200 pt-4 pb-3">
                 <div className="flex items-center px-4">
                   <div className="flex-shrink-0">
                     <img
-                      className="w-10 h-10 rounded-full"
+                      className="h-10 w-10 rounded-full"
                       src={`https://www.gravatar.com/avatar/${md5(
                         userState.data.user.email
                       )}?s=64&r=pg`}
@@ -245,14 +245,14 @@ const DetailsLayout = () => {
                 <div className="mt-3 space-y-1">
                   <Link
                     to="/my-account"
-                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                   >
                     My account
                   </Link>
 
                   <button
                     type="button"
-                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                   >
                     Sign out
                   </button>

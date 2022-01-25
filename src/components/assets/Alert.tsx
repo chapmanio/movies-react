@@ -19,7 +19,7 @@ const Alert = ({ type, message, onClose }: AlertProps) => {
   return (
     <div
       className={
-        `p-4 rounded-md` +
+        `rounded-md p-4` +
         (type === 'success'
           ? ` bg-green-50`
           : type === 'error'
@@ -32,13 +32,13 @@ const Alert = ({ type, message, onClose }: AlertProps) => {
       <div className="flex">
         <div className="flex-shrink-0">
           {type === 'success' ? (
-            <CheckCircleIcon className="w-5 h-5 text-green-400" aria-hidden="true" />
+            <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
           ) : type === 'error' ? (
-            <XCircleIcon className="w-5 h-5 text-red-400" aria-hidden="true" />
+            <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
           ) : type === 'warning' ? (
-            <ExclamationIcon className="w-5 h-5 text-yellow-400" aria-hidden="true" />
+            <ExclamationIcon className="h-5 w-5 text-yellow-400" aria-hidden="true" />
           ) : (
-            <InformationCircleIcon className="w-5 h-5 text-blue-400" aria-hidden="true" />
+            <InformationCircleIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
           )}
         </div>
         <div className="ml-3">
@@ -59,24 +59,24 @@ const Alert = ({ type, message, onClose }: AlertProps) => {
         </div>
 
         {onClose && (
-          <div className="pl-3 ml-auto">
+          <div className="ml-auto pl-3">
             <div className="-mx-1.5 -my-1.5">
               <button
                 type="button"
                 className={
                   `inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2` +
                   (type === 'success'
-                    ? ` bg-green-50 text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600`
+                    ? ` bg-green-50 text-green-500 hover:bg-green-100 focus:ring-green-600 focus:ring-offset-green-50`
                     : type === 'error'
-                    ? ` bg-red-50 text-red-500 hover:bg-red-100 focus:ring-offset-red-50 focus:ring-red-600`
+                    ? ` bg-red-50 text-red-500 hover:bg-red-100 focus:ring-red-600 focus:ring-offset-red-50`
                     : type === 'warning'
-                    ? ` bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-offset-yellow-50 focus:ring-yellow-600`
-                    : ` bg-blue-50 text-blue-500 hover:bg-blue-100 focus:ring-offset-blue-50 focus:ring-blue-600`)
+                    ? ` bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-600 focus:ring-offset-yellow-50`
+                    : ` bg-blue-50 text-blue-500 hover:bg-blue-100 focus:ring-blue-600 focus:ring-offset-blue-50`)
                 }
                 onClick={onClose}
               >
                 <span className="sr-only">Dismiss</span>
-                <XIcon className="w-5 h-5" aria-hidden="true" />
+                <XIcon className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
           </div>

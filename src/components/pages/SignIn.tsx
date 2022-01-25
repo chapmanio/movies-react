@@ -58,12 +58,12 @@ const SignIn = () => {
         <title>Sign In</title>
       </Helmet>
 
-      <div className="max-w-md px-4 mx-auto mt-10 space-y-8 sm:px-6">
+      <div className="mx-auto mt-10 max-w-md space-y-8 px-4 sm:px-6">
         <div>
-          <h2 className="text-3xl font-extrabold text-center text-gray-900">
+          <h2 className="text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-sm text-center text-gray-600">
+          <p className="mt-2 text-center text-sm text-gray-600">
             Or{' '}
             <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
               create a new account
@@ -85,7 +85,7 @@ const SignIn = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -101,7 +101,7 @@ const SignIn = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -113,14 +113,14 @@ const SignIn = () => {
             <button
               type="submit"
               className={
-                `relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500` +
+                `group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
                 (submitLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
               }
               disabled={submitLoading}
             >
               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                 <LockClosedIcon
-                  className="w-5 h-5 text-indigo-500 group-hover:text-indigo-400"
+                  className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
                   aria-hidden="true"
                 />
               </span>
