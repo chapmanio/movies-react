@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import type { SearchMultiResponse } from 'moviedb-promise/dist/request-types';
 
 import Pagination from '../search/Pagination';
@@ -29,7 +29,6 @@ type Tab = 'all' | 'movie' | 'tv' | 'person';
 const Home = () => {
   // Hooks
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
   const userState = useUserState();
 
   // Local state
@@ -187,13 +186,8 @@ const Home = () => {
   };
 
   const handleAddToList = ({ type, id }: ListItem) => {
-    if (userState.status === 'resolved') {
-      if (!userState.data.auth) {
-        // TODO: Provide type and id?
-        navigate('/sign-in');
-      } else {
-        // TODO: This!
-      }
+    if (userState.status === 'resolved' && userState.data.auth) {
+      // TODO: This!
     }
   };
 

@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { ExclamationCircleIcon } from '@heroicons/react/outline';
 
 import Alert from '../assets/Alert';
 import Notification from '../assets/Notification';
+import Modal from '../assets/Modal';
 
 import { useUserDispatch, useUserState } from '../../hooks/useUser';
 
-import { updateUser } from '../../lib/api/auth';
+import { deleteUser, updateUser } from '../../lib/api/auth';
 
 const MyAccount = () => {
   // Hooks
+  const navigate = useNavigate();
   const userState = useUserState();
   const userDispatch = useUserDispatch();
 
@@ -20,7 +24,11 @@ const MyAccount = () => {
   const [confirm, setConfirm] = useState('');
 
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [showComplete, setShowComplete] = useState(false);
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
   const [error, setError] = useState<string | undefined>(undefined);
 
   // Effects
@@ -41,6 +49,7 @@ const MyAccount = () => {
       } else {
         setError(undefined);
         setSubmitLoading(true);
+        setShowComplete(false);
         setShowConfirm(false);
 
         updateUser({
@@ -62,7 +71,7 @@ const MyAccount = () => {
             });
 
             setSubmitLoading(false);
-            setShowConfirm(true);
+            setShowComplete(true);
           })
           .catch((error: Error) => {
             setSubmitLoading(false);
@@ -72,6 +81,28 @@ const MyAccount = () => {
     }
   };
 
+  const handleRemove = () => {
+    setError(undefined);
+    setDeleteLoading(true);
+    setShowComplete(false);
+    setShowConfirm(false);
+
+    deleteUser(email)
+      .then(() => {
+        userDispatch({
+          type: 'SET_USER',
+          user: { auth: false },
+        });
+
+        // Bounce home
+        navigate('/', { replace: true });
+      })
+      .catch((error: Error) => {
+        setDeleteLoading(false);
+        setError(error.message);
+      });
+  };
+
   // Render
   return (
     <>
@@ -79,7 +110,7 @@ const MyAccount = () => {
         <title>My account</title>
       </Helmet>
 
-      <div className="mx-auto mt-10 max-w-md space-y-6 px-4 sm:px-6">
+      <div className="mx-auto mt-8 max-w-md space-y-6 px-4 sm:mt-16 sm:px-6">
         <h2 className="text-center text-3xl font-extrabold text-gray-900">My account</h2>
 
         {error ? <Alert type="error" message={error} onClose={() => setError(undefined)} /> : null}
@@ -157,22 +188,71 @@ const MyAccount = () => {
               type="submit"
               className={
                 `group w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
-                (submitLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
+                (submitLoading || deleteLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
               }
-              disabled={submitLoading}
+              disabled={submitLoading || deleteLoading}
             >
               {submitLoading ? `Please wait...` : `Update account`}
+            </button>
+          </div>
+
+          <div>
+            <button
+              type="button"
+              className={
+                `group w-full rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
+                (submitLoading || deleteLoading ? ` opacity-75` : ` hover:bg-gray-50`)
+              }
+              disabled={submitLoading || deleteLoading}
+              onClick={() => setShowConfirm(true)}
+            >
+              {deleteLoading ? `Please wait...` : `Remove account`}
             </button>
           </div>
         </form>
       </div>
 
       <Notification
-        visible={showConfirm}
+        visible={showComplete}
         type="success"
         title="Account updated"
-        onClose={() => setShowConfirm(false)}
+        onClose={() => setShowComplete(false)}
       />
+
+      <Modal visible={showConfirm}>
+        <div className="sm:flex sm:items-start">
+          <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+            <ExclamationCircleIcon className="h-6 w-6 text-red-600" />
+          </div>
+          <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+            <h3 className="text-lg font-medium leading-6 text-gray-900" id="modal-title">
+              Remove account
+            </h3>
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">
+                Are you sure you want to remove your account? All of your data will be permanently
+                removed from our servers forever. This action cannot be undone.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+          <button
+            type="button"
+            className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+            onClick={handleRemove}
+          >
+            Remove
+          </button>
+          <button
+            type="button"
+            className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+            onClick={() => setShowConfirm(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
     </>
   );
 };

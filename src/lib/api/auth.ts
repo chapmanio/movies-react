@@ -1,4 +1,4 @@
-import { apiFetch } from '../api';
+import { apiFetch, apiRaw } from '../api';
 import type { User } from './types';
 
 // Types
@@ -59,6 +59,14 @@ export const updateUser = async ({ name, email, password }: UpdateParams) => {
       password,
     }),
   });
+};
+
+export const deleteUser = async (email: string) => {
+  await apiRaw(`/auth/delete/${email}`, {
+    method: 'POST',
+  });
+
+  return;
 };
 
 export const signIn = async ({ email, password }: SignInParams) => {

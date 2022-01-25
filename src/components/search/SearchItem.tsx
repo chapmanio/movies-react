@@ -37,7 +37,7 @@ const SearchItem = ({ item, onAddToList }: SearchItemProps) => {
         {type === 'movie' ? 'Movie' : type === 'tv' ? 'TV Show' : type === 'person' ? 'Person' : ''}
       </span>
 
-      {userState.status === 'resolved' ? (
+      {userState.status === 'resolved' && userState.data.auth ? (
         <button
           type="button"
           onClick={() => onAddToList(item)}

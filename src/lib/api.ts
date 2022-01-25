@@ -34,7 +34,7 @@ const buildHttpError = async (response: Response): Promise<Error> => {
   return error;
 };
 
-export const apiFetch = async <T>(url: string, init?: RequestInit): Promise<T> => {
+export const apiRaw = async (url: string, init?: RequestInit): Promise<Response> => {
   // Add API prefix to request URL
   const apiUrl = `${API_URL}${url}`;
 
@@ -47,6 +47,12 @@ export const apiFetch = async <T>(url: string, init?: RequestInit): Promise<T> =
   if (!response.ok) {
     throw await buildHttpError(response);
   }
+
+  return response;
+};
+
+export const apiFetch = async <T>(url: string, init?: RequestInit): Promise<T> => {
+  const response = await apiRaw(url, init);
 
   return await response.json();
 };
