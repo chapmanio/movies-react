@@ -14,7 +14,7 @@ type GetArgs = {
 
 // Exports
 export const searchTv = async ({ query, page }: SearchArgs) => {
-  return apiFetch<TvResultsResponse>(`/search?area=tv&query=${query}&page=${page}`);
+  return apiFetch<TvResultsResponse>(`/tv/search?query=${query}&page=${page}`);
 };
 
 export const getTvShow = async ({ id }: GetArgs) => {

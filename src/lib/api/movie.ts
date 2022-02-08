@@ -18,7 +18,7 @@ type GetArgs = {
 
 // Exports
 export const searchMovie = async ({ query, page }: SearchArgs) => {
-  return apiFetch<MovieResultsResponse>(`/search?area=movie&query=${query}&page=${page}`);
+  return apiFetch<MovieResultsResponse>(`/movie/search?query=${query}&page=${page}`);
 };
 
 export const getMovie = async ({ id }: GetArgs) => {

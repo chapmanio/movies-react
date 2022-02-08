@@ -18,7 +18,7 @@ type GetArgs = {
 
 // Exports
 export const searchPerson = async ({ query, page }: SearchArgs) => {
-  return apiFetch<SearchPersonResponse>(`/search?area=person&query=${query}&page=${page}`);
+  return apiFetch<SearchPersonResponse>(`/person/search?query=${query}&page=${page}`);
 };
 
 export const getPerson = async ({ id }: GetArgs) => {
