@@ -3,16 +3,6 @@ import { createContext, useReducer, useContext, useEffect } from 'react';
 import { ApiResponse } from '../lib/api';
 import { AuthUser, authUser } from '../lib/api/auth';
 
-/*
-Data shared globally across all components that are children
-of the <UserProvider></UserProvider> component
-  https://reactjs.org/docs/context.html
-
-Following the patterns modelled by Kent C Dodds
-  https://kentcdodds.com/blog/how-to-use-react-context-effectively
-  https://kentcdodds.com/blog/how-to-optimize-your-context-value
-*/
-
 // Types
 type UserAction =
   | { type: 'LOADING' }

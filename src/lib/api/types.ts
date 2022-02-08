@@ -8,7 +8,10 @@ export type ListItem = {
   id: string;
   listId: string;
   mediaType: Direction;
-  mdbId: string;
+  tmdbId: string;
+  title: string;
+  subtitle: string;
+  posterUrl: string;
 };
 
 export type List = {
@@ -17,6 +20,7 @@ export type List = {
   createdAt: string;
   updatedAt: string;
   name: string;
+  slug: string;
   items: ListItem[];
 };
 
