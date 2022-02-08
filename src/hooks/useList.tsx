@@ -1,9 +1,9 @@
 import { createContext, useReducer, useContext } from 'react';
 
 // Types
-type ListAction = { type: 'SET_CURRENT_LIST'; currentId: string } | { type: 'CLEAR_CURRENT_LIST' };
+type ListAction = { type: 'SET_CURRENT_LIST'; slug: string } | { type: 'CLEAR_CURRENT_LIST' };
 
-type ListState = { currentId: string } | undefined;
+type ListState = { slug?: string };
 type ListDispatch = (action: ListAction) => void;
 
 // Context
@@ -16,11 +16,14 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
     case 'SET_CURRENT_LIST': {
       return {
         ...state,
-        currentId: action.currentId,
+        slug: action.slug,
       };
     }
     case 'CLEAR_CURRENT_LIST': {
-      return undefined;
+      return {
+        ...state,
+        slug: undefined,
+      };
     }
     default:
       throw new Error(`Unhandled action type`);
@@ -30,7 +33,7 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
 // Provider
 const ListProvider: React.FC<{ initialState?: ListState }> = ({ children, initialState }) => {
   // Reducer
-  const [state, dispatch] = useReducer(listReducer, initialState ?? undefined);
+  const [state, dispatch] = useReducer(listReducer, initialState ?? { slug: undefined });
 
   // Render
   return (

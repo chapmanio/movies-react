@@ -5,11 +5,22 @@ import { Link, useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';
 
 import Rating from '../assets/Rating';
+import Modal from '../assets/Modal';
+import AddToList from '../lists/AddToList';
 
 import type { ApiResponse } from '../../lib/api';
 import { getMovieCredits, getMovie } from '../../lib/api/movie';
 import { formatRuntime, formatShortDate, formatYear } from '../../lib/dates';
 
+import { formatMovie, ListItem } from '../../lib/format';
+
+// Types
+type AddToListModal = {
+  visible: boolean;
+  item?: ListItem;
+};
+
+// Component
 const Movie = () => {
   // Hooks
   const { id } = useParams();
@@ -21,6 +32,7 @@ const Movie = () => {
   const [credits, setCredits] = useState<ApiResponse<CreditsResponse>>({
     status: 'pending',
   });
+  const [addToListModal, setAddToListModal] = useState<AddToListModal>({ visible: false });
 
   // Effects
   useEffect(() => {
@@ -126,6 +138,7 @@ const Movie = () => {
                     <>{formatShortDate(movie.data.release_date)}</>
                   ) : null}
                 </div>
+
                 <div className="mt-2 flex items-center text-sm font-light text-gray-200">
                   <FilmIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-300" />
 
@@ -135,6 +148,7 @@ const Movie = () => {
                     <>{movie.data.genres?.map((genre) => genre.name).join(', ')}</>
                   ) : null}
                 </div>
+
                 {movie.status === 'pending' ? (
                   <div className="mt-2 flex items-center text-sm font-light text-gray-200">
                     <ClockIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-300" />
@@ -160,7 +174,10 @@ const Movie = () => {
                 ) : movie.status === 'resolved' ? (
                   <button
                     type="button"
-                    className="ml-6 inline-flex items-center rounded-md border border-transparent bg-blue-100 py-2 pl-4 pr-5 text-sm font-medium text-blue-700 shadow-sm hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="ml-6 inline-flex items-center rounded-md border border-transparent bg-blue-100 py-2 pl-4 pr-5 text-sm font-medium text-blue-700 shadow-sm hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-700"
+                    onClick={() =>
+                      setAddToListModal({ visible: true, item: formatMovie(movie.data) })
+                    }
                   >
                     <PlusSmIcon className="mr-2 -ml-1 h-5 w-5" />
                     Add to list
@@ -241,6 +258,19 @@ const Movie = () => {
           </ul>
         ) : null}
       </div>
+
+      <Modal
+        visible={addToListModal.visible}
+        canClose={true}
+        onClose={() => setAddToListModal((modal) => ({ ...modal, visible: false }))}
+      >
+        {addToListModal.item ? (
+          <AddToList
+            item={addToListModal.item}
+            onComplete={() => setAddToListModal((modal) => ({ ...modal, visible: false }))}
+          />
+        ) : null}
+      </Modal>
     </>
   );
 };

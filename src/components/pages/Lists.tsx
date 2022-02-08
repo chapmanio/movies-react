@@ -251,11 +251,6 @@ const Lists = () => {
             ))}
           </>
         ) : null}
-        {/* <li key={index} className="animate-pulse">
-                            <div className="group aspect-w-2 aspect-h-3 block w-full overflow-hidden rounded-lg bg-gray-100" />
-                            <div className="mt-2 h-4 w-3/4 rounded bg-gray-100" />
-                            <div className="mt-1 h-4 w-1/2 rounded bg-gray-100" />
-                          </li>} */}
       </div>
 
       <Notification

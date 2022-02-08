@@ -24,7 +24,7 @@ const List = ({ item, onEdit, onDelete }: ListProps) => {
   const [showMenu, setShowMenu] = useState(false);
 
   // Derived state
-  const { id, name, items } = item;
+  const { name, items, slug } = item;
 
   // Refs
   const menuRef = useRef<HTMLDivElement>(null);
@@ -68,10 +68,7 @@ const List = ({ item, onEdit, onDelete }: ListProps) => {
 
   const handleAddToList = () => {
     // Set global state
-    listDispatch({
-      type: 'SET_CURRENT_LIST',
-      currentId: id,
-    });
+    listDispatch({ type: 'SET_CURRENT_LIST', slug });
 
     // Redirect home
     navigate(`/`);

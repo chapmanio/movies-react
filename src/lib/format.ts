@@ -1,10 +1,13 @@
 import type {
+  MovieResponse,
   MovieResult,
   MovieResultsResponse,
+  Person,
   PersonCombinedCreditsResponse,
   PersonResult,
   SearchMultiResponse,
   SearchPersonResponse,
+  ShowResponse,
   TvResult,
   TvResultsResponse,
 } from 'moviedb-promise/dist/request-types';
@@ -23,7 +26,7 @@ export type ListItem = {
 };
 
 // Helpers
-const formatMovie = (movie: MovieResult): ListItem => {
+export const formatMovie = (movie: MovieResult | MovieResponse): ListItem => {
   return {
     id: movie.id ?? 0,
     type: 'movie',
@@ -33,21 +36,21 @@ const formatMovie = (movie: MovieResult): ListItem => {
   };
 };
 
-const formatTvShow = (tvShow: TvResult): ListItem => {
+export const formatTvShow = (tvShow: TvResult | ShowResponse): ListItem => {
   return {
     id: tvShow.id ?? 0,
     type: 'tv',
-    poster: tvShow.poster_path,
+    poster: tvShow.poster_path ?? undefined,
     title: tvShow.name || 'Unknown name',
     subTitle: formatShortMonthDate(tvShow.first_air_date),
   };
 };
 
-const formatPerson = (person: PersonResult): ListItem => {
+export const formatPerson = (person: PersonResult | Person): ListItem => {
   return {
     id: person.id ?? 0,
     type: 'person',
-    poster: person.profile_path,
+    poster: person.profile_path ?? undefined,
     title: person.name || 'Unknown name',
   };
 };

@@ -1,16 +1,29 @@
+import { XIcon } from '@heroicons/react/outline';
+
 // Types
-type ModalProps = {
+type BaseModalProps = {
   visible: boolean;
 };
 
+interface CloseableModal extends BaseModalProps {
+  canClose: true;
+  onClose: () => void;
+}
+
+interface UncloseableModal extends BaseModalProps {
+  canClose: false;
+}
+
+type ModalProps = CloseableModal | UncloseableModal;
+
 // Component
-const Modal: React.FC<ModalProps> = ({ visible, children }) => {
+const Modal: React.FC<ModalProps> = (props) => {
   // Render
   return (
     <div
       className={
         `fixed inset-0 z-10 overflow-y-auto` +
-        (visible ? ` pointer-events-auto` : ` pointer-events-none`)
+        (props.visible ? ` pointer-events-auto` : ` pointer-events-none`)
       }
       aria-labelledby="modal-title"
       role="dialog"
@@ -20,9 +33,11 @@ const Modal: React.FC<ModalProps> = ({ visible, children }) => {
         <div
           className={
             `fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity` +
-            (visible ? ` opacity-100 duration-300 ease-out` : ` opacity-0 duration-200 ease-in`)
+            (props.visible
+              ? ` opacity-100 duration-300 ease-out`
+              : ` opacity-0 duration-200 ease-in`)
           }
-          aria-hidden="true"
+          aria-hidden={!props.visible}
         />
 
         {/* <!-- This element is to trick the browser into centering the modal contents. --> */}
@@ -33,12 +48,25 @@ const Modal: React.FC<ModalProps> = ({ visible, children }) => {
         <div
           className={
             `inline-block transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle` +
-            (visible
+            (props.visible
               ? ` translate-y-0 opacity-100 duration-300 ease-out sm:scale-100`
               : ` translate-y-4 opacity-0 duration-200 ease-in sm:translate-y-0 sm:scale-95`)
           }
         >
-          {children}
+          {props.canClose ? (
+            <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+              <button
+                type="button"
+                className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={props.onClose}
+              >
+                <span className="sr-only">Close</span>
+                <XIcon className="h-6 w-6" />
+              </button>
+            </div>
+          ) : null}
+
+          {props.children}
         </div>
       </div>
     </div>

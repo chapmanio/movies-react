@@ -9,14 +9,23 @@ import { LocationMarkerIcon, PlusSmIcon, UserIcon } from '@heroicons/react/solid
 import { CakeIcon } from '@heroicons/react/outline';
 
 import SearchItem from '../search/SearchItem';
+import Modal from '../assets/Modal';
+import AddToList from '../lists/AddToList';
 
 import { useUserState } from '../../hooks/useUser';
 
 import type { ApiResponse } from '../../lib/api';
 import { formatAge } from '../../lib/dates';
 import { getPerson, getPersonCredits } from '../../lib/api/person';
-import { formatPersonCredits, ListItem } from '../../lib/format';
+import { formatPerson, formatPersonCredits, ListItem } from '../../lib/format';
 
+// Types
+type AddToListModal = {
+  visible: boolean;
+  item?: ListItem;
+};
+
+// Component
 const Person = () => {
   // Hooks
   const { id } = useParams();
@@ -32,6 +41,7 @@ const Person = () => {
   });
   const [formattedCredits, setFormattedCredits] = useState<ListItem[]>([]);
   const [showMore, setShowMore] = useState(false);
+  const [addToListModal, setAddToListModal] = useState<AddToListModal>({ visible: false });
 
   // Effects
   useEffect(() => {
@@ -179,7 +189,10 @@ const Person = () => {
               ) : person.status === 'resolved' ? (
                 <button
                   type="button"
-                  className="inline-flex items-center rounded-md border border-transparent bg-green-100 py-2 pl-4 pr-5 text-sm font-medium text-green-700 shadow-sm hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  className="inline-flex items-center rounded-md border border-transparent bg-green-100 py-2 pl-4 pr-5 text-sm font-medium text-green-700 shadow-sm hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-green-700"
+                  onClick={() =>
+                    setAddToListModal({ visible: true, item: formatPerson(person.data) })
+                  }
                 >
                   <PlusSmIcon className="mr-2 -ml-1 h-5 w-5" />
                   Add to list
@@ -254,6 +267,19 @@ const Person = () => {
           </ul>
         ) : null}
       </div>
+
+      <Modal
+        visible={addToListModal.visible}
+        canClose={true}
+        onClose={() => setAddToListModal((modal) => ({ ...modal, visible: false }))}
+      >
+        {addToListModal.item ? (
+          <AddToList
+            item={addToListModal.item}
+            onComplete={() => setAddToListModal((modal) => ({ ...modal, visible: false }))}
+          />
+        ) : null}
+      </Modal>
     </>
   );
 };
