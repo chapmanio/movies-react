@@ -6,8 +6,6 @@ import type { SearchMultiResponse } from 'moviedb-promise/dist/request-types';
 import Pagination from '../search/Pagination';
 import TabButton from '../search/TabButton';
 import SearchItem from '../search/SearchItem';
-import Modal from '../assets/Modal';
-import AddToList from '../lists/AddToList';
 
 import {
   formatSearchAll,
@@ -25,11 +23,6 @@ import { searchTv } from '../../lib/api/tvShow';
 // Types
 type Tab = 'all' | 'movie' | 'tv' | 'person';
 
-type AddToListModal = {
-  visible: boolean;
-  item?: ListItem;
-};
-
 // Component
 const Home = () => {
   // Hooks
@@ -40,7 +33,6 @@ const Home = () => {
     undefined
   );
   const [formattedResults, setFormattedResults] = useState<ListItem[]>([]);
-  const [addToListModal, setAddToListModal] = useState<AddToListModal>({ visible: false });
 
   // Refs
   const tabRef = useRef<HTMLDivElement>(null);
@@ -325,10 +317,7 @@ const Home = () => {
                     <>
                       {formattedResults.map((result) => (
                         <li key={result.id} className="relative">
-                          <SearchItem
-                            item={result}
-                            onAddToList={(item) => setAddToListModal({ visible: true, item })}
-                          />
+                          <SearchItem item={result} />
                         </li>
                       ))}
                     </>
@@ -354,19 +343,6 @@ const Home = () => {
           </div>
         ) : null}
       </div>
-
-      <Modal
-        visible={addToListModal.visible}
-        canClose={true}
-        onClose={() => setAddToListModal((modal) => ({ ...modal, visible: false }))}
-      >
-        {addToListModal.item ? (
-          <AddToList
-            item={addToListModal.item}
-            onComplete={() => setAddToListModal((modal) => ({ ...modal, visible: false }))}
-          />
-        ) : null}
-      </Modal>
     </>
   );
 };

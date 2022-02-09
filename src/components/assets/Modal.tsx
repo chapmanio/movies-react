@@ -1,7 +1,9 @@
+import { createPortal } from 'react-dom';
 import { XIcon } from '@heroicons/react/outline';
 
 // Types
 type BaseModalProps = {
+  title: string;
   visible: boolean;
 };
 
@@ -19,13 +21,13 @@ type ModalProps = CloseableModal | UncloseableModal;
 // Component
 const Modal: React.FC<ModalProps> = (props) => {
   // Render
-  return (
+  return createPortal(
     <div
       className={
         `fixed inset-0 z-10 overflow-y-auto` +
         (props.visible ? ` pointer-events-auto` : ` pointer-events-none`)
       }
-      aria-labelledby="modal-title"
+      aria-labelledby={props.title}
       role="dialog"
       aria-modal="true"
     >
@@ -69,7 +71,8 @@ const Modal: React.FC<ModalProps> = (props) => {
           {props.children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

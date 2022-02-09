@@ -5,21 +5,13 @@ import { Link, useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';
 
 import Rating from '../assets/Rating';
-import Modal from '../assets/Modal';
-import AddToList from '../lists/AddToList';
+import AddToListButton from '../lists/AddToListButton';
 
 import type { ApiResponse, ExtShowResponse } from '../../lib/api';
 import { getTvShow, getTvCredits } from '../../lib/api/tvShow';
 import { formatRuntime, formatShortDate, formatYear } from '../../lib/dates';
-import { formatTvShow, ListItem } from '../../lib/format';
+import { formatTvShow } from '../../lib/format';
 
-// Types
-type AddToListModal = {
-  visible: boolean;
-  item?: ListItem;
-};
-
-// Component
 const TvShow = () => {
   // Hooks
   const { id } = useParams();
@@ -31,7 +23,6 @@ const TvShow = () => {
   const [credits, setCredits] = useState<ApiResponse<CreditsResponse>>({
     status: 'pending',
   });
-  const [addToListModal, setAddToListModal] = useState<AddToListModal>({ visible: false });
 
   // Effects
   useEffect(() => {
@@ -171,16 +162,13 @@ const TvShow = () => {
                 {tvShow.status === 'pending' ? (
                   <div className="h-9 w-32 animate-pulse rounded bg-gray-100" />
                 ) : tvShow.status === 'resolved' ? (
-                  <button
-                    type="button"
+                  <AddToListButton
+                    item={formatTvShow(tvShow.data)}
                     className="ml-6 inline-flex items-center rounded-md border border-transparent bg-fuchsia-100 py-2 pl-4 pr-5 text-sm font-medium text-fuchsia-700 shadow-sm hover:bg-fuchsia-200 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 focus:ring-offset-fuchsia-700"
-                    onClick={() =>
-                      setAddToListModal({ visible: true, item: formatTvShow(tvShow.data) })
-                    }
                   >
                     <PlusSmIcon className="mr-2 -ml-1 h-5 w-5" />
                     Add to list
-                  </button>
+                  </AddToListButton>
                 ) : null}
               </div>
 
@@ -225,6 +213,7 @@ const TvShow = () => {
               </>
             ) : (
               <>
+                {/* TODO: Use search item? */}
                 {credits.data.cast?.slice(0, 8).map((result) => (
                   <li key={result.id} className="relative">
                     <Link
@@ -257,19 +246,6 @@ const TvShow = () => {
           </ul>
         ) : null}
       </div>
-
-      <Modal
-        visible={addToListModal.visible}
-        canClose={true}
-        onClose={() => setAddToListModal((modal) => ({ ...modal, visible: false }))}
-      >
-        {addToListModal.item ? (
-          <AddToList
-            item={addToListModal.item}
-            onComplete={() => setAddToListModal((modal) => ({ ...modal, visible: false }))}
-          />
-        ) : null}
-      </Modal>
     </>
   );
 };

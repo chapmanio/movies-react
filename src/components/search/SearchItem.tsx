@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { PlusSmIcon } from '@heroicons/react/solid';
 
+import AddToListButton from '../lists/AddToListButton';
+
 import { useUserState } from '../../hooks/useUser';
 
 import type { ListItem } from '../../lib/format';
@@ -8,11 +10,10 @@ import type { ListItem } from '../../lib/format';
 // Types
 type SearchItemProps = {
   item: ListItem;
-  onAddToList: (item: ListItem) => void;
 };
 
 // Component
-const SearchItem = ({ item, onAddToList }: SearchItemProps) => {
+const SearchItem = ({ item }: SearchItemProps) => {
   // Hooks
   const userState = useUserState();
 
@@ -38,9 +39,8 @@ const SearchItem = ({ item, onAddToList }: SearchItemProps) => {
       </span>
 
       {userState.status === 'resolved' && userState.data.auth ? (
-        <button
-          type="button"
-          onClick={() => onAddToList(item)}
+        <AddToListButton
+          item={item}
           className={
             `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
             (type === 'movie'
@@ -53,7 +53,7 @@ const SearchItem = ({ item, onAddToList }: SearchItemProps) => {
           }
         >
           <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
-        </button>
+        </AddToListButton>
       ) : null}
 
       <Link
