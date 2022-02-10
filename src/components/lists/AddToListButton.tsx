@@ -40,17 +40,26 @@ const AddToListButton: React.FC<AddToListButtonProps> = ({ item, className, chil
 
   // Effects
   useEffect(() => {
+    if (listState.lists.status === 'resolved') {
+      setList((currentList) => {
+        if (currentList) {
+          return currentList;
+        }
+
+        if (listState.lists.status === 'resolved') {
+          const selectedList = listState.selectedId
+            ? listState.lists.data.find((list) => list.id === listState.selectedId)
+            : undefined;
+
+          return selectedList ? selectedList.id : listState.lists.data[0].id;
+        }
+      });
+    }
+
     setList((currentList) => {
       if (currentList) {
         return currentList;
       }
-
-      const selectedList =
-        listState.lists.status === 'resolved'
-          ? listState.lists.data.find((list) => list.id === listState.selectedId)
-          : undefined;
-
-      return selectedList ? selectedList.id : currentList;
     });
   }, [listState]);
 
@@ -191,12 +200,13 @@ const AddToListButton: React.FC<AddToListButtonProps> = ({ item, className, chil
 
             {userState.status === 'resolved' && userState.data.auth ? (
               <div className="mt-6 flex space-x-2">
-                {listState.lists.status === 'pending' ? (
+                {listState.lists.status === 'pending' ||
+                (listState.lists.status === 'resolved' && !list) ? (
                   <>
                     <div className="h-9 w-2/3 animate-pulse rounded-md bg-gray-100" />
                     <div className="h-9 w-1/3 animate-pulse rounded-md bg-gray-100" />
                   </>
-                ) : listState.lists.status === 'resolved' ? (
+                ) : listState.lists.status === 'resolved' && list ? (
                   <>
                     {listState.lists.data.length > 0 ? (
                       <>
