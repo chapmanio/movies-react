@@ -4,8 +4,6 @@ import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/solid';
 import AddToListButton from './AddToListButton';
 import RemoveFromListButton from './RemoveFromListButton';
 
-import { useUserState } from '../../hooks/useUser';
-
 import type { ListItem as ListeItemType } from '../../lib/format';
 import type { List } from '../../lib/api/types';
 
@@ -32,9 +30,6 @@ type ListItemProps = ListItemNoAction | ListItemAdd | ListItemRemove;
 
 // Component
 const ListItem = ({ showType = true, ...rest }: ListItemProps) => {
-  // Hooks
-  const userState = useUserState();
-
   // Derived state
   const { tmdbId, type, poster, title, subTitle } = rest.item;
 
@@ -64,43 +59,39 @@ const ListItem = ({ showType = true, ...rest }: ListItemProps) => {
         </span>
       ) : null}
 
-      {userState.status === 'resolved' && userState.data.auth && rest.action ? (
-        <>
-          {rest.action === 'add' ? (
-            <AddToListButton
-              item={rest.item}
-              className={
-                `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
-                (type === 'movie'
-                  ? ` bg-blue-100 text-blue-800 hover:bg-blue-200 focus:ring-blue-500`
-                  : type === 'tv'
-                  ? ` bg-fuchsia-100 text-fuchsia-800 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
-                  : type === 'person'
-                  ? ` bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500`
-                  : ``)
-              }
-            >
-              <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
-            </AddToListButton>
-          ) : rest.action === 'remove' ? (
-            <RemoveFromListButton
-              item={rest.item}
-              list={rest.list}
-              className={
-                `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
-                (type === 'movie'
-                  ? ` bg-blue-100 text-blue-800 hover:bg-blue-200 focus:ring-blue-500`
-                  : type === 'tv'
-                  ? ` bg-fuchsia-100 text-fuchsia-800 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
-                  : type === 'person'
-                  ? ` bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500`
-                  : ``)
-              }
-            >
-              <MinusSmIcon className="h-5 w-5" aria-hidden="true" />
-            </RemoveFromListButton>
-          ) : null}
-        </>
+      {rest.action === 'add' ? (
+        <AddToListButton
+          item={rest.item}
+          className={
+            `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
+            (type === 'movie'
+              ? ` bg-blue-100 text-blue-800 hover:bg-blue-200 focus:ring-blue-500`
+              : type === 'tv'
+              ? ` bg-fuchsia-100 text-fuchsia-800 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
+              : type === 'person'
+              ? ` bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500`
+              : ``)
+          }
+        >
+          <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
+        </AddToListButton>
+      ) : rest.action === 'remove' ? (
+        <RemoveFromListButton
+          item={rest.item}
+          list={rest.list}
+          className={
+            `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
+            (type === 'movie'
+              ? ` bg-blue-100 text-blue-800 hover:bg-blue-200 focus:ring-blue-500`
+              : type === 'tv'
+              ? ` bg-fuchsia-100 text-fuchsia-800 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
+              : type === 'person'
+              ? ` bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500`
+              : ``)
+          }
+        >
+          <MinusSmIcon className="h-5 w-5" aria-hidden="true" />
+        </RemoveFromListButton>
       ) : null}
 
       <Link

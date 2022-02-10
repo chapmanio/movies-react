@@ -8,7 +8,9 @@ import type { ApiError } from '../../lib/api';
 import type { ListItem } from '../../lib/format';
 import { addList, addListItem } from '../../lib/api/lists';
 
+import { useUserState } from '../../hooks/useUser';
 import { useListDispatch, useListState } from '../../hooks/useList';
+import { Link } from 'react-router-dom';
 
 // Types
 type AddToListButtonProps = {
@@ -19,6 +21,7 @@ type AddToListButtonProps = {
 // Component
 const AddToListButton: React.FC<AddToListButtonProps> = ({ item, className, children }) => {
   // Hooks
+  const userState = useUserState();
   const listState = useListState();
   const listDispatch = useListDispatch();
 
@@ -186,75 +189,85 @@ const AddToListButton: React.FC<AddToListButtonProps> = ({ item, className, chil
               </div>
             ) : null}
 
-            <div className="mt-6 flex space-x-2">
-              {listState.lists.status === 'pending' ? (
-                <>
-                  <div className="h-9 w-2/3 animate-pulse rounded-md bg-gray-100" />
-                  <div className="h-9 w-1/3 animate-pulse rounded-md bg-gray-100" />
-                </>
-              ) : listState.lists.status === 'resolved' ? (
-                <>
-                  {listState.lists.data.length > 0 ? (
-                    <>
-                      <select
-                        id="list"
-                        name="list"
-                        className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                        value={list}
-                        onChange={(event) => setList(event.target.value)}
-                      >
-                        {listState.lists.data.map((list) => (
-                          <option key={list.id} value={list.id}>
-                            {list.name}
-                          </option>
-                        ))}
-                      </select>
+            {userState.status === 'resolved' && userState.data.auth ? (
+              <div className="mt-6 flex space-x-2">
+                {listState.lists.status === 'pending' ? (
+                  <>
+                    <div className="h-9 w-2/3 animate-pulse rounded-md bg-gray-100" />
+                    <div className="h-9 w-1/3 animate-pulse rounded-md bg-gray-100" />
+                  </>
+                ) : listState.lists.status === 'resolved' ? (
+                  <>
+                    {listState.lists.data.length > 0 ? (
+                      <>
+                        <select
+                          id="list"
+                          name="list"
+                          className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                          value={list}
+                          onChange={(event) => setList(event.target.value)}
+                        >
+                          {listState.lists.data.map((list) => (
+                            <option key={list.id} value={list.id}>
+                              {list.name}
+                            </option>
+                          ))}
+                        </select>
 
-                      <button
-                        type="button"
-                        className={
-                          `flex-none rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
-                          (submitLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
-                        }
-                        disabled={submitLoading}
-                        onClick={handleAddToList}
-                      >
-                        {submitLoading ? `Please wait...` : `Add to list`}
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-full">
-                        <label htmlFor="email" className="sr-only">
-                          Email
-                        </label>
-                        <input
-                          type="text"
-                          name="name"
-                          id="name"
-                          className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                          placeholder="List name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                      </div>
+                        <button
+                          type="button"
+                          className={
+                            `flex-none rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
+                            (submitLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
+                          }
+                          disabled={submitLoading}
+                          onClick={handleAddToList}
+                        >
+                          {submitLoading ? `Please wait...` : `Add to list`}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-full">
+                          <label htmlFor="email" className="sr-only">
+                            Email
+                          </label>
+                          <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                            placeholder="List name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                          />
+                        </div>
 
-                      <button
-                        type="button"
-                        className={
-                          `flex-none rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
-                          (submitLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
-                        }
-                        disabled={submitLoading}
-                        onClick={handleAddList}
-                      >
-                        {submitLoading ? `Please wait...` : `Create list`}
-                      </button>
-                    </>
-                  )}
-                </>
-              ) : null}
-            </div>
+                        <button
+                          type="button"
+                          className={
+                            `flex-none rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
+                            (submitLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
+                          }
+                          disabled={submitLoading}
+                          onClick={handleAddList}
+                        >
+                          {submitLoading ? `Please wait...` : `Create list`}
+                        </button>
+                      </>
+                    )}
+                  </>
+                ) : null}
+              </div>
+            ) : (
+              <p className="mt-5 text-red-600">
+                You must be{' '}
+                <Link to="/sign-in" className="underline hover:text-red-700">
+                  signed in
+                </Link>{' '}
+                to add to a list.
+              </p>
+            )}
           </div>
         </div>
       </Modal>

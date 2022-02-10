@@ -214,7 +214,6 @@ const TvShow = () => {
               </>
             ) : (
               <>
-                {/* TODO: Use search item? */}
                 {credits.data.cast?.slice(0, 8).map((result) => (
                   <li key={result.id} className="relative">
                     <ListItem
