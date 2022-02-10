@@ -12,6 +12,7 @@ import Footer from './Footer';
 import { useUserState, useUserDispatch } from '../../hooks/useUser';
 
 import { signOut } from '../../lib/api/auth';
+import { ApiError } from '../../lib/api';
 
 const DetailsLayout = () => {
   // Hooks
@@ -72,7 +73,7 @@ const DetailsLayout = () => {
       .then(() => {
         userDispatch({ type: 'SET_USER', user: { auth: false } });
       })
-      .catch((error: Error) => {
+      .catch((error: ApiError) => {
         userDispatch({ type: 'ERROR', error });
       });
   };

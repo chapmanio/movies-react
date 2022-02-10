@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Loading from './assets/Loading';
@@ -13,13 +14,54 @@ import SignIn from './pages/SignIn';
 import Register from './pages/Register';
 import MyAccount from './pages/MyAccount';
 import NotFound from './pages/NotFound';
+import Notification, { NotificationProps } from './assets/Notification';
 
 import { useUserState } from '../hooks/useUser';
-import { ListProvider } from '../hooks/useList';
+import { useListDispatch, useListState } from '../hooks/useList';
 
+import { getAllLists } from '../lib/api/lists';
+import { ApiError } from '../lib/api';
+
+// Types
+type NotificationType = Omit<NotificationProps, 'onClose'>;
+
+// Component
 const App = () => {
   // Hooks
   const userState = useUserState();
+  const listState = useListState();
+  const listDispatch = useListDispatch();
+
+  // Local state
+  const [notification, setNotification] = useState<NotificationType>({
+    type: 'success',
+    title: '',
+    visible: false,
+  });
+
+  // Effects
+  useEffect(() => {
+    if (userState.status === 'resolved' && userState.data.auth) {
+      // If we have an authed user, get their lists as well
+      getAllLists()
+        .then((lists) => {
+          listDispatch({ type: 'SET_LISTS', lists });
+        })
+        .catch((error: ApiError) => {
+          listDispatch({ type: 'LISTS_ERROR', error });
+        });
+    }
+  }, [userState, listDispatch]);
+
+  useEffect(() => {
+    if (listState.lists.status === 'rejected') {
+      setNotification({
+        type: 'error',
+        visible: true,
+        title: 'Unable to retrieve your lists',
+      });
+    }
+  }, [listState.lists]);
 
   // Derived state
   const authedUser = userState.status === 'resolved' && userState.data.auth;
@@ -28,7 +70,7 @@ const App = () => {
   return userState.status === 'pending' ? (
     <Loading />
   ) : (
-    <ListProvider>
+    <>
       <BrowserRouter>
         <ScrollToTop>
           <Routes>
@@ -62,7 +104,12 @@ const App = () => {
           </Routes>
         </ScrollToTop>
       </BrowserRouter>
-    </ListProvider>
+
+      <Notification
+        {...notification}
+        onClose={() => setNotification((notification) => ({ ...notification, visible: false }))}
+      />
+    </>
   );
 };
 

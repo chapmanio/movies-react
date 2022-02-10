@@ -25,7 +25,7 @@ const Notification = ({
 }: NotificationProps) => (
   <div
     aria-live="assertive"
-    className="pointer-events-none fixed inset-0 flex items-end justify-center px-4 py-6 sm:items-start sm:justify-end sm:p-6"
+    className="pointer-events-none fixed inset-0 z-20 flex items-end justify-center px-4 py-6 sm:items-start sm:justify-end sm:p-6"
   >
     <div
       className={

@@ -10,6 +10,7 @@ import Modal from '../assets/Modal';
 import { useUserDispatch, useUserState } from '../../hooks/useUser';
 
 import { deleteUser, updateUser } from '../../lib/api/auth';
+import { ApiError } from '../../lib/api';
 
 const MyAccount = () => {
   // Hooks
@@ -73,7 +74,7 @@ const MyAccount = () => {
             setSubmitLoading(false);
             setShowComplete(true);
           })
-          .catch((error: Error) => {
+          .catch((error: ApiError) => {
             setSubmitLoading(false);
             setError(error.message);
           });
@@ -97,7 +98,7 @@ const MyAccount = () => {
         // Bounce home
         navigate('/', { replace: true });
       })
-      .catch((error: Error) => {
+      .catch((error: ApiError) => {
         setDeleteLoading(false);
         setError(error.message);
       });

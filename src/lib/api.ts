@@ -4,32 +4,38 @@ import type { ShowResponse } from 'moviedb-promise/dist/request-types';
 const API_URL = 'https://movies-api.chapmanio.dev/api';
 
 // Types
-type ApiPending = {
+export interface ApiError extends Error {
+  status?: number;
+}
+
+type ResponsePending = {
   status: 'pending';
 };
 
-type ApiSuccess<T> = {
+type ResponseSuccess<T> = {
   status: 'resolved';
   data: T;
 };
 
-type ApiError = {
+type ResponseError = {
   status: 'rejected';
-  error?: Error;
+  error?: ApiError;
 };
 
-export type ApiResponse<T> = ApiPending | ApiSuccess<T> | ApiError;
+export type ApiResponse<T> = ResponsePending | ResponseSuccess<T> | ResponseError;
 
 export interface ExtShowResponse extends ShowResponse {
   tagline?: string;
 }
 
 // Helpers
-const buildHttpError = async (response: Response): Promise<Error> => {
+const buildHttpError = async (response: Response): Promise<ApiError> => {
   const responseText = await response.text();
-  const error = new Error(responseText);
+
+  const error = new Error(responseText) as ApiError;
 
   error.name = `${response.status} ${response.statusText}`;
+  error.status = response.status;
 
   return error;
 };

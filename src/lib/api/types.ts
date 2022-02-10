@@ -1,14 +1,8 @@
-enum Direction {
-  MOVIE,
-  TV,
-  PERSON,
-}
-
 export type ListItem = {
   id: string;
   listId: string;
-  mediaType: Direction;
-  tmdbId: string;
+  mediaType: 'MOVIE' | 'TV' | 'PERSON';
+  tmdbId: number;
   title: string;
   subtitle: string;
   posterUrl: string;
@@ -21,7 +15,7 @@ export type List = {
   updatedAt: string;
   name: string;
   slug: string;
-  items: ListItem[];
+  items?: ListItem[];
 };
 
 export type User = {

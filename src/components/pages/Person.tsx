@@ -8,13 +8,13 @@ import { useParams } from 'react-router-dom';
 import { LocationMarkerIcon, PlusSmIcon, UserIcon } from '@heroicons/react/solid';
 import { CakeIcon } from '@heroicons/react/outline';
 
-import SearchItem from '../search/SearchItem';
+import ListItem from '../lists/ListItem';
 import AddToListButton from '../lists/AddToListButton';
 
-import type { ApiResponse } from '../../lib/api';
+import type { ApiError, ApiResponse } from '../../lib/api';
 import { formatAge } from '../../lib/dates';
 import { getPerson, getPersonCredits } from '../../lib/api/person';
-import { formatPerson, formatPersonCredits, ListItem } from '../../lib/format';
+import { formatPerson, formatPersonCredits, ListItem as ListItemType } from '../../lib/format';
 
 // Component
 const Person = () => {
@@ -28,7 +28,7 @@ const Person = () => {
   const [credits, setCredits] = useState<ApiResponse<PersonCombinedCreditsResponse>>({
     status: 'pending',
   });
-  const [formattedCredits, setFormattedCredits] = useState<ListItem[]>([]);
+  const [formattedCredits, setFormattedCredits] = useState<ListItemType[]>([]);
   const [showMore, setShowMore] = useState(false);
 
   // Effects
@@ -43,7 +43,7 @@ const Person = () => {
           setPerson({ status: 'resolved', data });
         }
       })
-      .catch((error: Error) => {
+      .catch((error: ApiError) => {
         if (!isCancelled) {
           setPerson({ status: 'rejected', error });
         }
@@ -67,7 +67,7 @@ const Person = () => {
             setFormattedCredits(formatPersonCredits(data));
           }
         })
-        .catch((error: Error) => {
+        .catch((error: ApiError) => {
           if (!isCancelled) {
             setCredits({ status: 'rejected', error });
           }
@@ -231,8 +231,8 @@ const Person = () => {
             ) : (
               <>
                 {formattedCredits.slice(0, 8).map((result) => (
-                  <li key={result.id} className="relative">
-                    <SearchItem item={result} />
+                  <li key={result.tmdbId} className="relative">
+                    <ListItem item={result} action="add" />
                   </li>
                 ))}
               </>

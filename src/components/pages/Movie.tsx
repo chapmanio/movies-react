@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import type { CreditsResponse, MovieResponse } from 'moviedb-promise/dist/request-types';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';
 
 import Rating from '../assets/Rating';
 import AddToListButton from '../lists/AddToListButton';
+import ListItem from '../lists/ListItem';
 
-import type { ApiResponse } from '../../lib/api';
+import type { ApiError, ApiResponse } from '../../lib/api';
 import { getMovieCredits, getMovie } from '../../lib/api/movie';
 import { formatRuntime, formatShortDate, formatYear } from '../../lib/dates';
 
@@ -37,7 +38,7 @@ const Movie = () => {
           setMovie({ status: 'resolved', data });
         }
       })
-      .catch((error: Error) => {
+      .catch((error: ApiError) => {
         if (!isCancelled) {
           setMovie({ status: 'rejected', error });
         }
@@ -60,7 +61,7 @@ const Movie = () => {
             setCredits({ status: 'resolved', data });
           }
         })
-        .catch((error: Error) => {
+        .catch((error: ApiError) => {
           if (!isCancelled) {
             setCredits({ status: 'rejected', error });
           }
@@ -215,32 +216,19 @@ const Movie = () => {
               </>
             ) : (
               <>
-                {/* TODO: Use search item? */}
                 {credits.data.cast?.slice(0, 8).map((result) => (
                   <li key={result.id} className="relative">
-                    <Link
-                      to={`/person/${result.id}`}
-                      className="group aspect-w-2 aspect-h-3 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
-                    >
-                      {result.profile_path && (
-                        <img
-                          src={`https://www.themoviedb.org/t/p/w138_and_h175_face${result.profile_path}`}
-                          alt=""
-                          className="pointer-events-none object-cover group-hover:opacity-75"
-                        />
-                      )}
-
-                      <button type="button" className="absolute inset-0 focus:outline-none">
-                        <span className="sr-only">View details for {result.name}</span>
-                      </button>
-                    </Link>
-
-                    <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">
-                      {result.name}
-                    </p>
-                    <p className="pointer-events-none block text-sm font-medium text-gray-500">
-                      {result.character}
-                    </p>
+                    <ListItem
+                      item={{
+                        tmdbId: result.id ?? 0,
+                        type: 'person',
+                        title: result.name ?? 'Unknown name',
+                        subTitle: result.character,
+                        poster: result.profile_path ?? undefined,
+                      }}
+                      showType={false}
+                      action="add"
+                    />
                   </li>
                 ))}
               </>

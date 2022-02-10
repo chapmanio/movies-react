@@ -5,16 +5,16 @@ import type { SearchMultiResponse } from 'moviedb-promise/dist/request-types';
 
 import Pagination from '../search/Pagination';
 import TabButton from '../search/TabButton';
-import SearchItem from '../search/SearchItem';
+import ListItem from '../lists/ListItem';
 
 import {
   formatSearchAll,
   formatSearchMovie,
   formatSearchPerson,
   formatSearchTvShow,
-  ListItem,
+  ListItem as ListItemType,
 } from '../../lib/format';
-import type { ApiResponse } from '../../lib/api';
+import type { ApiError, ApiResponse } from '../../lib/api';
 import { searchMovie } from '../../lib/api/movie';
 import { searchPerson } from '../../lib/api/person';
 import { searchAll, getTrending } from '../../lib/api/search';
@@ -32,7 +32,7 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState<ApiResponse<SearchMultiResponse> | undefined>(
     undefined
   );
-  const [formattedResults, setFormattedResults] = useState<ListItem[]>([]);
+  const [formattedResults, setFormattedResults] = useState<ListItemType[]>([]);
 
   // Refs
   const tabRef = useRef<HTMLDivElement>(null);
@@ -65,7 +65,7 @@ const Home = () => {
                 setFormattedResults(formatSearchAll(data));
               }
             })
-            .catch((error: Error) => {
+            .catch((error: ApiError) => {
               if (!isCancelled) {
                 // TODO: Handle error
                 setSearchResults({ status: 'rejected', error });
@@ -85,7 +85,7 @@ const Home = () => {
                 setFormattedResults(formatSearchMovie(data));
               }
             })
-            .catch((error: Error) => {
+            .catch((error: ApiError) => {
               if (!isCancelled) {
                 // TODO: Handle error
                 setSearchResults({ status: 'rejected', error });
@@ -105,7 +105,7 @@ const Home = () => {
                 setFormattedResults(formatSearchTvShow(data));
               }
             })
-            .catch((error: Error) => {
+            .catch((error: ApiError) => {
               if (!isCancelled) {
                 // TODO: Handle error
                 setSearchResults({ status: 'rejected', error });
@@ -125,7 +125,7 @@ const Home = () => {
                 setFormattedResults(formatSearchPerson(data));
               }
             })
-            .catch((error: Error) => {
+            .catch((error: ApiError) => {
               if (!isCancelled) {
                 // TODO: Handle error
                 setSearchResults({ status: 'rejected', error });
@@ -150,7 +150,7 @@ const Home = () => {
             setFormattedResults(formatSearchAll(data));
           }
         })
-        .catch((error: Error) => {
+        .catch((error: ApiError) => {
           if (!isCancelled) {
             // TODO: Handle error
             setSearchResults({ status: 'rejected', error });
@@ -316,8 +316,8 @@ const Home = () => {
                   ) : (
                     <>
                       {formattedResults.map((result) => (
-                        <li key={result.id} className="relative">
-                          <SearchItem item={result} />
+                        <li key={result.tmdbId} className="relative">
+                          <ListItem item={result} action="add" />
                         </li>
                       ))}
                     </>

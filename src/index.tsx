@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './components/App';
 
 import { UserProvider } from './hooks/useUser';
+import { ListProvider } from './hooks/useList';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -14,7 +15,9 @@ ReactDOM.render(
   <React.StrictMode>
     <HelmetProvider>
       <UserProvider>
-        <App />
+        <ListProvider>
+          <App />
+        </ListProvider>
       </UserProvider>
     </HelmetProvider>
   </React.StrictMode>,

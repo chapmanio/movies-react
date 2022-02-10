@@ -1,22 +1,26 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import Alert from '../assets/Alert';
 import List from '../lists/List';
 import Notification, { NotificationProps } from '../assets/Notification';
 
-import { addList, deleteList, getAllLists, updateList } from '../../lib/api/lists';
+import { useListState, useListDispatch } from '../../hooks/useList';
+
+import { addList, deleteList, updateList } from '../../lib/api/lists';
 import type { List as ListType } from '../../lib/api/types';
-import type { ApiResponse } from '../../lib/api';
+import type { ApiError } from '../../lib/api';
 
 // Types
 type Confirm = Omit<NotificationProps, 'onClose'>;
 
 // Component
 const Lists = () => {
-  // Local state
-  const [lists, setLists] = useState<ApiResponse<ListType[]>>({ status: 'pending' });
+  // Hooks
+  const listState = useListState();
+  const listDispatch = useListDispatch();
 
+  // Local state
   const [slug, setSlug] = useState<string | undefined>(undefined);
   const [name, setName] = useState('');
 
@@ -51,22 +55,6 @@ const Lists = () => {
     }));
   }, []);
 
-  // Effects
-  useEffect(() => {
-    // Get all lists on load
-    getAllLists()
-      .then((lists) => {
-        setLists({
-          status: 'resolved',
-          data: lists,
-        });
-      })
-      .catch((error: Error) => {
-        setLists({ status: 'rejected', error });
-        setError(error.message);
-      });
-  }, []);
-
   // Handlers
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -79,19 +67,12 @@ const Lists = () => {
         updateList({ slug, name })
           .then((list) => {
             // Update list
-            if (lists.status === 'resolved') {
-              const updatedLists = lists.data.map((item) => (item.slug === slug ? list : item));
+            listDispatch({ type: 'UPDATE_LIST', id: list.id, list });
 
-              setLists((lists) => ({
-                ...lists,
-                data: updatedLists,
-              }));
-
-              // Clear form and confirm
-              actionComplete('List updated');
-            }
+            // Clear form and confirm
+            actionComplete('List updated');
           })
-          .catch((error: Error) => {
+          .catch((error: ApiError) => {
             setSubmitLoading(false);
             setError(error.message);
           });
@@ -99,19 +80,12 @@ const Lists = () => {
         addList(name)
           .then((list) => {
             // Add to lists
-            if (lists.status === 'resolved') {
-              const newLists = [...lists.data, list].sort((a, b) => a.name.localeCompare(b.name));
+            listDispatch({ type: 'ADD_LIST', list });
 
-              setLists((lists) => ({
-                ...lists,
-                data: newLists,
-              }));
-
-              // Clear form and confirm
-              actionComplete('List added');
-            }
+            // Clear form and confirm
+            actionComplete('List added');
           })
-          .catch((error: Error) => {
+          .catch((error: ApiError) => {
             setSubmitLoading(false);
             setError(error.message);
           });
@@ -124,38 +98,27 @@ const Lists = () => {
     setName('');
   };
 
-  const handleEdit = (slug: string) => {
-    if (lists.status === 'resolved') {
-      const list = lists.data.find((list) => list.slug === slug);
-
-      if (list) {
-        if (titleRef.current) {
-          titleRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        setSlug(list.slug);
-        setName(list.name);
-      }
+  const handleEdit = (list: ListType) => {
+    if (titleRef.current) {
+      titleRef.current.scrollIntoView({ behavior: 'smooth' });
     }
+
+    setSlug(list.slug);
+    setName(list.name);
   };
 
-  const handleDelete = (slug: string) => {
-    deleteList(slug)
+  const handleDelete = (list: ListType) => {
+    // TODO: Confirmation first?
+
+    deleteList(list.slug)
       .then(() => {
-        if (lists.status === 'resolved') {
-          // Remove from lists
-          const newLists = lists.data.filter((item) => item.slug !== slug);
+        // Remove list
+        listDispatch({ type: 'REMOVE_LIST', id: list.id });
 
-          setLists((lists) => ({
-            ...lists,
-            data: newLists,
-          }));
-
-          // Clear and confirm
-          actionComplete('List removed');
-        }
+        // Clear and confirm
+        actionComplete('List removed');
       })
-      .catch((error: Error) => {
+      .catch((error: ApiError) => {
         setError(error.message);
       });
   };
@@ -220,7 +183,7 @@ const Lists = () => {
           ) : null}
         </form>
 
-        {lists.status === 'pending' ? (
+        {listState.lists.status === 'pending' ? (
           <div className="mt-10 animate-pulse">
             <div className="flex items-center space-x-8">
               <div className="mt-2 h-7 w-36 rounded bg-gray-100" />
@@ -238,14 +201,14 @@ const Lists = () => {
               <li className="aspect-w-2 aspect-h-3 rounded-lg bg-gray-100" />
             </ul>
           </div>
-        ) : lists.status === 'resolved' ? (
+        ) : listState.lists.status === 'resolved' ? (
           <>
-            {lists.data.map((list) => (
+            {listState.lists.data.map((list) => (
               <div key={list.id} className="mt-10">
                 <List
-                  item={list}
-                  onEdit={() => handleEdit(list.slug)}
-                  onDelete={() => handleDelete(list.slug)}
+                  list={list}
+                  onEdit={() => handleEdit(list)}
+                  onDelete={() => handleDelete(list)}
                 />
               </div>
             ))}

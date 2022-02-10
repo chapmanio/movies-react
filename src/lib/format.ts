@@ -18,8 +18,9 @@ import { formatShortMonthDate } from './dates';
 
 // Types
 export type ListItem = {
+  dbId?: string;
+  tmdbId: number;
   type: 'movie' | 'tv' | 'person';
-  id: number;
   poster?: string;
   title: string;
   subTitle?: string;
@@ -28,7 +29,7 @@ export type ListItem = {
 // Helpers
 export const formatMovie = (movie: MovieResult | MovieResponse): ListItem => {
   return {
-    id: movie.id ?? 0,
+    tmdbId: movie.id ?? 0,
     type: 'movie',
     poster: movie.poster_path,
     title: movie.title || 'Unknown title',
@@ -38,7 +39,7 @@ export const formatMovie = (movie: MovieResult | MovieResponse): ListItem => {
 
 export const formatTvShow = (tvShow: TvResult | ShowResponse): ListItem => {
   return {
-    id: tvShow.id ?? 0,
+    tmdbId: tvShow.id ?? 0,
     type: 'tv',
     poster: tvShow.poster_path ?? undefined,
     title: tvShow.name || 'Unknown name',
@@ -48,7 +49,7 @@ export const formatTvShow = (tvShow: TvResult | ShowResponse): ListItem => {
 
 export const formatPerson = (person: PersonResult | Person): ListItem => {
   return {
-    id: person.id ?? 0,
+    tmdbId: person.id ?? 0,
     type: 'person',
     poster: person.profile_path ?? undefined,
     title: person.name || 'Unknown name',

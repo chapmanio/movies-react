@@ -1,10 +1,27 @@
 import { createContext, useReducer, useContext } from 'react';
+import type { ApiError, ApiResponse } from '../lib/api';
+import type { List, ListItem } from '../lib/api/types';
 
 // Types
-type ListAction = { type: 'SET_CURRENT_LIST'; slug: string } | { type: 'CLEAR_CURRENT_LIST' };
+type ListAction =
+  | { type: 'SET_LISTS'; lists: List[] }
+  | { type: 'LISTS_ERROR'; error?: ApiError }
+  | { type: 'ADD_LIST'; list: List }
+  | { type: 'UPDATE_LIST'; id: string; list: List }
+  | { type: 'REMOVE_LIST'; id: string }
+  | { type: 'ADD_LIST_ITEM'; id: string; item: ListItem }
+  | { type: 'REMOVE_LIST_ITEM'; id: string; itemId: string }
+  | { type: 'SET_SELECTED_LIST'; id: string }
+  | { type: 'CLEAR_SELECTED_LIST' };
 
-type ListState = { slug?: string };
+type ListState = { lists: ApiResponse<List[]>; selectedId?: string };
 type ListDispatch = (action: ListAction) => void;
+
+// Initial state
+const defaultInitialState: ListState = {
+  lists: { status: 'pending' },
+  selectedId: undefined,
+};
 
 // Context
 const ListStateContext = createContext<ListState | undefined>(undefined);
@@ -13,16 +30,143 @@ const ListDispatchContext = createContext<ListDispatch | undefined>(undefined);
 // Reducer
 const listReducer = (state: ListState, action: ListAction): ListState => {
   switch (action.type) {
-    case 'SET_CURRENT_LIST': {
+    case 'SET_LISTS': {
       return {
         ...state,
-        slug: action.slug,
+        lists: {
+          status: 'resolved',
+          data: action.lists,
+        },
       };
     }
-    case 'CLEAR_CURRENT_LIST': {
+    case 'LISTS_ERROR': {
       return {
         ...state,
-        slug: undefined,
+        lists: {
+          status: 'rejected',
+          error: action.error,
+        },
+      };
+    }
+    case 'ADD_LIST': {
+      if (state.lists.status !== 'resolved') {
+        throw new Error(`User lists not yet loaded`);
+      }
+
+      const newLists = [...state.lists.data, action.list].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          data: newLists,
+        },
+      };
+    }
+    case 'UPDATE_LIST': {
+      if (state.lists.status !== 'resolved') {
+        throw new Error(`User lists not yet loaded`);
+      }
+
+      const updatedLists = state.lists.data.map((list) => {
+        if (list.id === action.id) {
+          return action.list;
+        }
+
+        return list;
+      });
+
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          data: updatedLists,
+        },
+      };
+    }
+    case 'REMOVE_LIST': {
+      if (state.lists.status !== 'resolved') {
+        throw new Error(`User lists not yet loaded`);
+      }
+
+      const newLists = state.lists.data.filter((list) => list.id !== action.id);
+
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          data: newLists,
+        },
+      };
+    }
+    case 'ADD_LIST_ITEM': {
+      if (state.lists.status !== 'resolved') {
+        throw new Error(`User lists not yet loaded`);
+      }
+
+      const updatedLists = state.lists.data.map((list) => {
+        if (list.id === action.id) {
+          const currentItems = list.items || [];
+          const updatedItems = [...currentItems, action.item].sort((a, b) =>
+            a.title.localeCompare(b.title)
+          );
+
+          return {
+            ...list,
+            items: updatedItems,
+          };
+        }
+
+        return list;
+      });
+
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          data: updatedLists,
+        },
+      };
+    }
+    case 'REMOVE_LIST_ITEM': {
+      if (state.lists.status !== 'resolved') {
+        throw new Error(`User lists not yet loaded`);
+      }
+
+      const updatedLists = state.lists.data.map((list) => {
+        if (list.id === action.id) {
+          const currentItems = list.items || [];
+          const updatedItems = currentItems.filter((item) => item.id !== action.itemId);
+
+          return {
+            ...list,
+            items: updatedItems,
+          };
+        }
+
+        return list;
+      });
+
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          data: updatedLists,
+        },
+      };
+    }
+    case 'SET_SELECTED_LIST': {
+      return {
+        ...state,
+        selectedId: action.id,
+      };
+    }
+    case 'CLEAR_SELECTED_LIST': {
+      return {
+        ...state,
+        selectedId: undefined,
       };
     }
     default:
@@ -33,7 +177,7 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
 // Provider
 const ListProvider: React.FC<{ initialState?: ListState }> = ({ children, initialState }) => {
   // Reducer
-  const [state, dispatch] = useReducer(listReducer, initialState ?? { slug: undefined });
+  const [state, dispatch] = useReducer(listReducer, initialState ?? defaultInitialState);
 
   // Render
   return (

@@ -1,30 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DotsVerticalIcon, PencilAltIcon } from '@heroicons/react/solid';
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/outline';
+
+import ListItem from '../lists/ListItem';
 
 import { useListDispatch } from '../../hooks/useList';
 
 import type { List as ListType } from '../../lib/api/types';
-import { useNavigate } from 'react-router-dom';
+import type { ListItem as ListItemType } from '../../lib/format';
 
 // Types
 type ListProps = {
-  item: ListType;
+  list: ListType;
   onEdit: () => void;
   onDelete: () => void;
 };
 
 // Component
-const List = ({ item, onEdit, onDelete }: ListProps) => {
+const List = ({ list, onEdit, onDelete }: ListProps) => {
   // Hooks
   const listDispatch = useListDispatch();
   const navigate = useNavigate();
 
+  // Derived state
+  const { id, name, items } = list;
+
   // Local state
   const [showMenu, setShowMenu] = useState(false);
-
-  // Derived state
-  const { name, items, slug } = item;
 
   // Refs
   const menuRef = useRef<HTMLDivElement>(null);
@@ -50,7 +53,7 @@ const List = ({ item, onEdit, onDelete }: ListProps) => {
 
   useEffect(() => {
     // Clear current list on load
-    listDispatch({ type: 'CLEAR_CURRENT_LIST' });
+    listDispatch({ type: 'CLEAR_SELECTED_LIST' });
   }, [listDispatch]);
 
   // Handlers
@@ -68,7 +71,7 @@ const List = ({ item, onEdit, onDelete }: ListProps) => {
 
   const handleAddToList = () => {
     // Set global state
-    listDispatch({ type: 'SET_CURRENT_LIST', slug });
+    listDispatch({ type: 'SET_SELECTED_LIST', id });
 
     // Redirect home
     navigate(`/`);
@@ -96,7 +99,7 @@ const List = ({ item, onEdit, onDelete }: ListProps) => {
 
           <div
             className={
-              `absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none ` +
+              `absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none ` +
               (showMenu
                 ? ` pointer-events-auto scale-100 opacity-100 duration-100 ease-out`
                 : ` pointer-events-none scale-95 opacity-0 duration-75 ease-in`)
@@ -136,26 +139,41 @@ const List = ({ item, onEdit, onDelete }: ListProps) => {
       </div>
 
       <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-6 lg:grid-cols-8 lg:gap-x-8 xl:gap-x-12">
-        {items ? (
-          <p>Items</p>
-        ) : (
-          <li>
-            <div className="aspect-w-2 aspect-h-3">
-              <button
-                type="button"
-                className="group w-full overflow-hidden rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                onClick={handleAddToList}
-              >
-                <div className="px-6">
-                  <PlusCircleIcon className="mx-auto h-10 w-10 text-gray-300 group-hover:text-gray-400" />
-                  <p className="mt-2 block text-sm font-medium text-gray-400 group-hover:text-gray-600">
-                    Add to this list
-                  </p>
-                </div>
-              </button>
-            </div>
-          </li>
-        )}
+        <li>
+          <div className="aspect-w-2 aspect-h-3">
+            <button
+              type="button"
+              className="group w-full overflow-hidden rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={handleAddToList}
+            >
+              <div className="px-6">
+                <PlusCircleIcon className="mx-auto h-10 w-10 text-gray-300 group-hover:text-gray-400" />
+                <p className="mt-2 block text-sm font-medium text-gray-400 group-hover:text-gray-600">
+                  Add to this list
+                </p>
+              </div>
+            </button>
+          </div>
+        </li>
+
+        {items
+          ? items.map((item) => (
+              <li key={item.id} className="relative">
+                <ListItem
+                  item={{
+                    dbId: item.id,
+                    tmdbId: item.tmdbId,
+                    type: item.mediaType.toLowerCase() as ListItemType['type'],
+                    title: item.title,
+                    subTitle: item.subtitle,
+                    poster: item.posterUrl,
+                  }}
+                  action="remove"
+                  list={list}
+                />
+              </li>
+            ))
+          : null}
       </ul>
     </>
   );

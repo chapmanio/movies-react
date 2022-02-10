@@ -8,6 +8,7 @@ import Alert from '../assets/Alert';
 import { useUserDispatch } from '../../hooks/useUser';
 
 import { signIn } from '../../lib/api/auth';
+import { ApiError } from '../../lib/api';
 
 const SignIn = () => {
   // Hooks
@@ -45,7 +46,7 @@ const SignIn = () => {
         // Bounce home
         navigate('/', { replace: true });
       })
-      .catch((error: Error) => {
+      .catch((error: ApiError) => {
         setSubmitLoading(false);
         setError(error.message);
       });

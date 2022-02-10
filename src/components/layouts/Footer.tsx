@@ -7,6 +7,7 @@ import GitHubIcon from '../assets/icons/GitHub';
 import { useUserDispatch, useUserState } from '../../hooks/useUser';
 
 import { signOut } from '../../lib/api/auth';
+import { ApiError } from '../../lib/api';
 
 const Footer = () => {
   // Hooks
@@ -19,7 +20,7 @@ const Footer = () => {
       .then(() => {
         userDispatch({ type: 'SET_USER', user: { auth: false } });
       })
-      .catch((error: Error) => {
+      .catch((error: ApiError) => {
         userDispatch({ type: 'ERROR', error });
       });
   };
