@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom';
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/solid';
 
-import AddToListButton from './AddToListButton';
-import RemoveFromListButton from './RemoveFromListButton';
-
-import type { ListItem as ListeItemType } from '../../lib/format';
+import type { ListItem as ListItemType } from '../../lib/format';
 import type { List } from '../../lib/api/types';
+import { useListModalDispatch } from '../../hooks/useListModal';
 
 // Types
 type ListItemBase = {
-  item: ListeItemType;
+  item: ListItemType;
   showType?: boolean;
 };
 
@@ -30,6 +28,9 @@ type ListItemProps = ListItemNoAction | ListItemAdd | ListItemRemove;
 
 // Component
 const ListItem = ({ showType = true, ...rest }: ListItemProps) => {
+  // Hooks
+  const listModalDispatch = useListModalDispatch();
+
   // Derived state
   const { tmdbId, type, poster, title, subTitle } = rest.item;
 
@@ -60,8 +61,8 @@ const ListItem = ({ showType = true, ...rest }: ListItemProps) => {
       ) : null}
 
       {rest.action === 'add' ? (
-        <AddToListButton
-          item={rest.item}
+        <button
+          type="button"
           className={
             `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
             (type === 'movie'
@@ -71,14 +72,19 @@ const ListItem = ({ showType = true, ...rest }: ListItemProps) => {
               : type === 'person'
               ? ` bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500`
               : ``)
+          }
+          onClick={() =>
+            listModalDispatch({
+              type: 'SHOW_ADD_MODAL',
+              item: rest.item,
+            })
           }
         >
           <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
-        </AddToListButton>
+        </button>
       ) : rest.action === 'remove' ? (
-        <RemoveFromListButton
-          item={rest.item}
-          list={rest.list}
+        <button
+          type="button"
           className={
             `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
             (type === 'movie'
@@ -89,9 +95,16 @@ const ListItem = ({ showType = true, ...rest }: ListItemProps) => {
               ? ` bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500`
               : ``)
           }
+          onClick={() =>
+            listModalDispatch({
+              type: 'SHOW_REMOVE_MODAL',
+              list: rest.list,
+              item: rest.item,
+            })
+          }
         >
           <MinusSmIcon className="h-5 w-5" aria-hidden="true" />
-        </RemoveFromListButton>
+        </button>
       ) : null}
 
       <Link

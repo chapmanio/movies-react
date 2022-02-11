@@ -9,7 +9,7 @@ import {
 // Types
 export type NotificationProps = {
   visible: boolean;
-  type: 'success' | 'warn' | 'error' | 'info';
+  type?: 'success' | 'warn' | 'error' | 'info';
   title: string;
   description?: string;
   onClose: () => void;

@@ -9,7 +9,8 @@ import { LocationMarkerIcon, PlusSmIcon, UserIcon } from '@heroicons/react/solid
 import { CakeIcon } from '@heroicons/react/outline';
 
 import ListItem from '../lists/ListItem';
-import AddToListButton from '../lists/AddToListButton';
+
+import { useListModalDispatch } from '../../hooks/useListModal';
 
 import type { ApiError, ApiResponse } from '../../lib/api';
 import { formatAge } from '../../lib/dates';
@@ -20,6 +21,7 @@ import { formatPerson, formatPersonCredits, ListItem as ListItemType } from '../
 const Person = () => {
   // Hooks
   const { id } = useParams();
+  const listModalDispatch = useListModalDispatch();
 
   // Local state
   const [person, setPerson] = useState<ApiResponse<PersonResponse>>({
@@ -163,13 +165,18 @@ const Person = () => {
               {person.status === 'pending' ? (
                 <div className="h-9 w-32 animate-pulse rounded bg-gray-100" />
               ) : person.status === 'resolved' ? (
-                <AddToListButton
-                  item={formatPerson(person.data)}
+                <button
                   className="inline-flex items-center rounded-md border border-transparent bg-green-100 py-2 pl-4 pr-5 text-sm font-medium text-green-700 shadow-sm hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-green-700"
+                  onClick={() =>
+                    listModalDispatch({
+                      type: 'SHOW_ADD_MODAL',
+                      item: formatPerson(person.data),
+                    })
+                  }
                 >
                   <PlusSmIcon className="mr-2 -ml-1 h-5 w-5" />
                   Add to list
-                </AddToListButton>
+                </button>
               ) : null}
             </div>
 

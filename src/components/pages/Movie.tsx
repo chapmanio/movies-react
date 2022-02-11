@@ -5,18 +5,19 @@ import { useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';
 
 import Rating from '../assets/Rating';
-import AddToListButton from '../lists/AddToListButton';
 import ListItem from '../lists/ListItem';
+
+import { useListModalDispatch } from '../../hooks/useListModal';
 
 import type { ApiError, ApiResponse } from '../../lib/api';
 import { getMovieCredits, getMovie } from '../../lib/api/movie';
 import { formatRuntime, formatShortDate, formatYear } from '../../lib/dates';
-
 import { formatMovie } from '../../lib/format';
 
 const Movie = () => {
   // Hooks
   const { id } = useParams();
+  const listModalDispatch = useListModalDispatch();
 
   // Local state
   const [movie, setMovie] = useState<ApiResponse<MovieResponse>>({
@@ -164,14 +165,19 @@ const Movie = () => {
                 {movie.status === 'pending' ? (
                   <div className="h-9 w-32 animate-pulse rounded bg-gray-100" />
                 ) : movie.status === 'resolved' ? (
-                  <AddToListButton
-                    item={formatMovie(movie.data)}
+                  <button
+                    type="button"
                     className="ml-6 inline-flex items-center rounded-md border border-transparent bg-blue-100 py-2 pl-4 pr-5 text-sm font-medium text-blue-700 shadow-sm hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-700"
+                    onClick={() =>
+                      listModalDispatch({
+                        type: 'SHOW_ADD_MODAL',
+                        item: formatMovie(movie.data),
+                      })
+                    }
                   >
-                    {' '}
                     <PlusSmIcon className="mr-2 -ml-1 h-5 w-5" />
                     Add to list
-                  </AddToListButton>
+                  </button>
                 ) : null}
               </div>
 

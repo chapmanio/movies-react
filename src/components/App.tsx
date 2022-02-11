@@ -14,6 +14,7 @@ import SignIn from './pages/SignIn';
 import Register from './pages/Register';
 import MyAccount from './pages/MyAccount';
 import NotFound from './pages/NotFound';
+import ListModal from './lists/ListModal';
 import Notification, { NotificationProps } from './assets/Notification';
 
 import { useUserState } from '../hooks/useUser';
@@ -33,11 +34,7 @@ const App = () => {
   const listDispatch = useListDispatch();
 
   // Local state
-  const [notification, setNotification] = useState<NotificationType>({
-    type: 'success',
-    title: '',
-    visible: false,
-  });
+  const [notification, setNotification] = useState<NotificationType | undefined>(undefined);
 
   // Effects
   useEffect(() => {
@@ -105,10 +102,18 @@ const App = () => {
         </ScrollToTop>
       </BrowserRouter>
 
-      <Notification
-        {...notification}
-        onClose={() => setNotification((notification) => ({ ...notification, visible: false }))}
-      />
+      <ListModal />
+
+      {notification ? (
+        <Notification
+          {...notification}
+          onClose={() =>
+            setNotification((notification) =>
+              notification ? { ...notification, visible: false } : undefined
+            )
+          }
+        />
+      ) : null}
     </>
   );
 };

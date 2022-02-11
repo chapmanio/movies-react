@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HelmetProvider } from 'react-helmet-async';
 
+import Providers from './components/Providers';
 import App from './components/App';
-
-import { UserProvider } from './hooks/useUser';
-import { ListProvider } from './hooks/useList';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -13,13 +10,9 @@ import './styles/index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <HelmetProvider>
-      <UserProvider>
-        <ListProvider>
-          <App />
-        </ListProvider>
-      </UserProvider>
-    </HelmetProvider>
+    <Providers>
+      <App />
+    </Providers>
   </React.StrictMode>,
   document.getElementById('root')
 );

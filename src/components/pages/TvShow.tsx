@@ -5,8 +5,9 @@ import { useParams } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, FilmIcon, PlusSmIcon } from '@heroicons/react/solid';
 
 import Rating from '../assets/Rating';
-import AddToListButton from '../lists/AddToListButton';
 import ListItem from '../lists/ListItem';
+
+import { useListModalDispatch } from '../../hooks/useListModal';
 
 import type { ApiError, ApiResponse, ExtShowResponse } from '../../lib/api';
 import { getTvShow, getTvCredits } from '../../lib/api/tvShow';
@@ -16,6 +17,7 @@ import { formatTvShow } from '../../lib/format';
 const TvShow = () => {
   // Hooks
   const { id } = useParams();
+  const listModalDispatch = useListModalDispatch();
 
   // Local state
   const [tvShow, setTvShow] = useState<ApiResponse<ExtShowResponse>>({
@@ -163,13 +165,19 @@ const TvShow = () => {
                 {tvShow.status === 'pending' ? (
                   <div className="h-9 w-32 animate-pulse rounded bg-gray-100" />
                 ) : tvShow.status === 'resolved' ? (
-                  <AddToListButton
-                    item={formatTvShow(tvShow.data)}
+                  <button
+                    type="button"
                     className="ml-6 inline-flex items-center rounded-md border border-transparent bg-fuchsia-100 py-2 pl-4 pr-5 text-sm font-medium text-fuchsia-700 shadow-sm hover:bg-fuchsia-200 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 focus:ring-offset-fuchsia-700"
+                    onClick={() =>
+                      listModalDispatch({
+                        type: 'SHOW_ADD_MODAL',
+                        item: formatTvShow(tvShow.data),
+                      })
+                    }
                   >
                     <PlusSmIcon className="mr-2 -ml-1 h-5 w-5" />
                     Add to list
-                  </AddToListButton>
+                  </button>
                 ) : null}
               </div>
 
