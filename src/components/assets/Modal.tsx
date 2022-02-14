@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { XIcon } from '@heroicons/react/outline';
 
@@ -20,6 +21,44 @@ type ModalProps = CloseableModal | UncloseableModal;
 
 // Component
 const Modal: React.FC<ModalProps> = (props) => {
+  // Refs
+  const isActiveRef = useRef(false);
+
+  // Callbacks
+  const escape = useCallback(
+    (event) => {
+      if (event.key === 'Escape') {
+        props.canClose && props.onClose();
+      }
+    },
+    [props]
+  );
+
+  // Effects
+  useEffect(() => {
+    if (props.visible && !isActiveRef.current) {
+      isActiveRef.current = true;
+
+      const scrollY = window.scrollY;
+
+      document.body.classList.add('fixed', 'w-full');
+      document.body.style.top = `-${scrollY}px`;
+
+      document.addEventListener('keydown', escape);
+    } else if (!props.visible && isActiveRef.current) {
+      isActiveRef.current = false;
+
+      const scrollY = document.body.style.top;
+
+      document.body.classList.remove('fixed', 'w-full');
+      document.body.style.top = '';
+
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+
+      document.removeEventListener('keydown', escape);
+    }
+  }, [props, escape]);
+
   // Render
   return createPortal(
     <div
