@@ -31,7 +31,19 @@ const Footer = () => {
       <footer className="bg-white">
         <div className="mx-auto mt-8 max-w-7xl overflow-hidden px-4 py-12 sm:px-6 lg:px-8">
           <nav className="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
-            {userState.status === 'resolved' && userState.data.auth ? (
+            {userState.status === 'pending' ? (
+              <>
+                <div className="mt-1 animate-pulse px-5 py-2">
+                  <div className="h-5 w-14 rounded-md bg-gray-100" />
+                </div>
+                <div className="mt-1 animate-pulse px-5 py-2">
+                  <div className="h-5 w-20 rounded-md bg-gray-100" />
+                </div>
+                <div className="mt-1 animate-pulse px-5 py-2">
+                  <div className="h-5 w-14 rounded-md bg-gray-100" />
+                </div>
+              </>
+            ) : userState.status === 'resolved' && userState.data.auth ? (
               <>
                 <div className="px-5 py-2">
                   <Link to="/lists" className="text-base text-gray-500 hover:text-gray-900">
@@ -83,7 +95,10 @@ const Footer = () => {
               <TwitterIcon className="h-6 w-6" />
             </a>
 
-            <a href="https://github.com/chapmanio" className="text-gray-400 hover:text-gray-500">
+            <a
+              href="https://github.com/chapmanio/movies-react"
+              className="text-gray-400 hover:text-gray-500"
+            >
               <span className="sr-only">GitHub</span>
               <GitHubIcon className="h-6 w-6" />
             </a>

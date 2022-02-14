@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import Alert from '../assets/Alert';
@@ -7,7 +7,7 @@ import Notification, { NotificationProps } from '../assets/Notification';
 
 import { useListState, useListDispatch } from '../../hooks/useList';
 
-import { addList, deleteList, updateList } from '../../lib/api/lists';
+import { addList, deleteList, getAllLists, updateList } from '../../lib/api/lists';
 import type { List as ListType } from '../../lib/api/types';
 import type { ApiError } from '../../lib/api';
 
@@ -54,6 +54,20 @@ const Lists = () => {
       title: message,
     }));
   }, []);
+
+  // Effects
+  useEffect(() => {
+    // If they're not already in global state, get the lists
+    if (listState.lists.status !== 'resolved') {
+      getAllLists()
+        .then((lists) => {
+          listDispatch({ type: 'SET_LISTS', lists });
+        })
+        .catch((error: ApiError) => {
+          listDispatch({ type: 'LISTS_ERROR', error });
+        });
+    }
+  }, [listState.lists.status, listDispatch]);
 
   // Handlers
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

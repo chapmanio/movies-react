@@ -10,7 +10,7 @@ import { useListState, useListDispatch } from '../../hooks/useList';
 import { useListModalDispatch, useListModalState } from '../../hooks/useListModal';
 
 import { ApiError } from '../../lib/api';
-import { addList, addListItem, deleteListItem } from '../../lib/api/lists';
+import { addList, addListItem, deleteListItem, getAllLists } from '../../lib/api/lists';
 
 // Types
 type NotificationType = Omit<NotificationProps, 'onClose'>;
@@ -34,6 +34,26 @@ const ListModal = () => {
   const [notification, setNotification] = useState<NotificationType | undefined>(undefined);
 
   // Effects
+  useEffect(() => {
+    // When/if we have an authed user, get their lists
+    if (
+      listModalState.item &&
+      listModalState.operation &&
+      userState.status === 'resolved' &&
+      userState.data.auth &&
+      listState.lists.status !== 'resolved'
+    ) {
+      // If we have an authed user, get their lists as well
+      getAllLists()
+        .then((lists) => {
+          listDispatch({ type: 'SET_LISTS', lists });
+        })
+        .catch((error: ApiError) => {
+          listDispatch({ type: 'LISTS_ERROR', error });
+        });
+    }
+  }, [listModalState, userState, listState.lists.status, listDispatch]);
+
   useEffect(() => {
     if (listState.lists.status === 'resolved') {
       setList((currentList) => {
