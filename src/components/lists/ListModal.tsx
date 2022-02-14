@@ -114,7 +114,9 @@ const ListModal = () => {
     }
   };
 
-  const handleAddToList = () => {
+  const handleAddToList = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     setSubmitLoading(true);
 
     if (list && listModalState.visible && listModalState.operation === 'add') {
@@ -253,16 +255,16 @@ const ListModal = () => {
               {userState.status === 'resolved' && userState.data.auth ? (
                 <>
                   {listModalState.operation === 'add' ? (
-                    <div className="mt-6 flex space-x-2">
+                    <div className="mt-6">
                       {listState.lists.status === 'pending' ? (
-                        <>
+                        <div className="flex space-x-2">
                           <div className="h-9 w-2/3 animate-pulse rounded-md bg-gray-100" />
                           <div className="h-9 w-1/3 animate-pulse rounded-md bg-gray-100" />
-                        </>
+                        </div>
                       ) : listState.lists.status === 'resolved' ? (
                         <>
                           {listState.lists.data.length > 0 ? (
-                            <>
+                            <form className="flex space-x-2" onSubmit={handleAddToList}>
                               <select
                                 id="list"
                                 name="list"
@@ -278,17 +280,16 @@ const ListModal = () => {
                               </select>
 
                               <button
-                                type="button"
+                                type="submit"
                                 className={
                                   `flex-none rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
                                   (submitLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
                                 }
                                 disabled={submitLoading}
-                                onClick={handleAddToList}
                               >
                                 {submitLoading ? `Please wait...` : `Add to list`}
                               </button>
-                            </>
+                            </form>
                           ) : (
                             <>
                               <div className="w-full">
