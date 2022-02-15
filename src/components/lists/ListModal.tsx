@@ -56,25 +56,12 @@ const ListModal = () => {
   }, [listModalState, userState, listState.lists.status, listDispatch]);
 
   useEffect(() => {
-    if (listState.lists.status === 'resolved') {
-      setList((currentList) => {
-        // Don't override if this is already set
-        if (currentList) {
-          return currentList;
-        }
+    if (listState.lists.status === 'resolved' && listState.lists.data.length > 0) {
+      const selectedList = listState.selectedId
+        ? listState.lists.data.find((list) => list.id === listState.selectedId)
+        : undefined;
 
-        // Default to selected list, or first item
-        if (listState.lists.status === 'resolved' && listState.lists.data.length > 0) {
-          const selectedList = listState.selectedId
-            ? listState.lists.data.find((list) => list.id === listState.selectedId)
-            : undefined;
-
-          return selectedList ? selectedList.id : listState.lists.data[0].id;
-        }
-
-        // Nothing to select!
-        return undefined;
-      });
+      setList(selectedList ? selectedList.id : listState.lists.data[0].id);
     }
   }, [listState]);
 
@@ -318,7 +305,7 @@ const ListModal = () => {
                               </button>
                             </form>
                           ) : (
-                            <>
+                            <div className="flex space-x-2">
                               <div className="w-full">
                                 <label htmlFor="email" className="sr-only">
                                   Email
@@ -345,7 +332,7 @@ const ListModal = () => {
                               >
                                 {submitLoading ? `Please wait...` : `Create list`}
                               </button>
-                            </>
+                            </div>
                           )}
                         </>
                       ) : null}

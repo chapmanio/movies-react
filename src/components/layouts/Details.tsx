@@ -5,7 +5,6 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import md5 from 'md5';
 
 import NavLink from '../assets/links/NavLink';
-import AccountLink from '../assets/links/AccountLink';
 import MobileLink from '../assets/links/MobileLink';
 import Footer from './Footer';
 
@@ -94,10 +93,10 @@ const DetailsLayout = () => {
                 </Link>
               </div>
               <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:items-center sm:space-x-8">
-                {userState.status === 'resolved' && userState.data.auth ? (
-                  <>
-                    <NavLink to="/lists">My lists</NavLink>
-                  </>
+                {userState.status === 'pending' ? (
+                  <div className="h-4 w-14 animate-pulse rounded-md bg-gray-100" />
+                ) : userState.status === 'resolved' && userState.data.auth ? (
+                  <NavLink to="/lists">My lists</NavLink>
                 ) : (
                   <>
                     <NavLink to="/sign-in">Sign in</NavLink>
@@ -166,18 +165,19 @@ const DetailsLayout = () => {
                       aria-labelledby="user-menu-button"
                       tabIndex={-1}
                     >
-                      <AccountLink
+                      <Link
                         to="/my-account"
                         role="menuitem"
                         tabIndex={-1}
                         id="user-menu-item-0"
+                        className="lock py-2 px-4 text-sm text-gray-700 hover:bg-gray-100"
                       >
                         My account
-                      </AccountLink>
+                      </Link>
 
                       <button
                         type="button"
-                        className="block px-4 py-2 text-sm text-gray-700"
+                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
                         tabIndex={-1}
                         id="user-menu-item-1"
@@ -235,10 +235,10 @@ const DetailsLayout = () => {
                     />
                   </div>
                   <div className="ml-3">
-                    <div className="text-base font-medium text-gray-800">
+                    <div className="break-words text-base font-medium text-gray-800">
                       {userState.data.user.name}
                     </div>
-                    <div className="text-sm font-medium text-gray-500">
+                    <div className="break-all text-sm font-medium text-gray-500">
                       {userState.data.user.email}
                     </div>
                   </div>

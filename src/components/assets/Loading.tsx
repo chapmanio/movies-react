@@ -7,7 +7,7 @@ const Loading = () => {
         <h1 className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
           Movies
         </h1>
-        <p className="mt-4 text-sm text-gray-700">Loading...</p>
+        <p className="mt-4 text-sm text-gray-700">Checking access...</p>
       </div>
     </div>
   );

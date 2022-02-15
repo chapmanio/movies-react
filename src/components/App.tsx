@@ -49,11 +49,20 @@ const App = () => {
           <Route
             element={
               <WithAuth>
-                <HomeLayout />
+                <DetailsLayout />
               </WithAuth>
             }
           >
             <Route path="lists" element={<Lists />} />
+          </Route>
+
+          <Route
+            element={
+              <WithAuth>
+                <HomeLayout />
+              </WithAuth>
+            }
+          >
             <Route path="my-account" element={<MyAccount />} />
           </Route>
 
