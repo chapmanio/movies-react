@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { useSearchParams } from 'react-router-dom';
-import type { SearchMultiResponse } from 'moviedb-promise/dist/request-types';
+import { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { useSearchParams } from "react-router-dom";
+import type { SearchMultiResponse } from "moviedb-promise/dist/request-types";
 
-import Pagination from '../search/Pagination';
-import TabButton from '../search/TabButton';
-import ListItem from '../lists/ListItem';
+import Pagination from "../search/Pagination";
+import TabButton from "../search/TabButton";
+import ListItem from "../lists/ListItem";
 
 import {
   formatSearchAll,
@@ -13,122 +13,115 @@ import {
   formatSearchPerson,
   formatSearchTvShow,
   ListItem as ListItemType,
-} from '../../lib/format';
-import type { ApiError, ApiResponse } from '../../lib/api';
-import { searchMovie } from '../../lib/api/movie';
-import { searchPerson } from '../../lib/api/person';
-import { searchAll, getTrending } from '../../lib/api/search';
-import { searchTv } from '../../lib/api/tvShow';
+} from "../../lib/format";
+import type { ApiError, ApiResponse } from "../../lib/api";
+import { searchMovie } from "../../lib/api/movie";
+import { searchPerson } from "../../lib/api/person";
+import { searchAll, getTrending } from "../../lib/api/search";
+import { searchTv } from "../../lib/api/tvShow";
 
-// Types
-type Tab = 'all' | 'movie' | 'tv' | 'person';
+type Tab = "all" | "movie" | "tv" | "person";
 
-// Component
 const Home = () => {
-  // Hooks
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Local state
-  const [searchResults, setSearchResults] = useState<ApiResponse<SearchMultiResponse> | undefined>(
-    undefined
-  );
+  const [searchResults, setSearchResults] = useState<
+    ApiResponse<SearchMultiResponse> | undefined
+  >(undefined);
   const [formattedResults, setFormattedResults] = useState<ListItemType[]>([]);
 
-  // Refs
   const tabRef = useRef<HTMLDivElement>(null);
 
-  // Derived state
-  const search = searchParams.get('search') || '';
-  const tab = (searchParams.get('tab') || 'all') as Tab;
-  const page = parseInt(searchParams.get('page') || '1');
+  const search = searchParams.get("search") || "";
+  const tab = (searchParams.get("tab") || "all") as Tab;
+  const page = parseInt(searchParams.get("page") || "1");
 
-  // Effects
   useEffect(() => {
     let isCancelled = false;
 
-    setSearchResults({ status: 'pending' });
+    setSearchResults({ status: "pending" });
 
-    if (search && search.trim() !== '') {
+    if (search && search.trim() !== "") {
       if (tabRef.current) {
-        tabRef.current.scrollIntoView({ behavior: 'smooth' });
+        tabRef.current.scrollIntoView({ behavior: "smooth" });
       }
 
       switch (tab) {
-        case 'all':
+        case "all":
           searchAll({
             query: search,
             page,
           })
             .then((data) => {
               if (!isCancelled) {
-                setSearchResults({ status: 'resolved', data });
+                setSearchResults({ status: "resolved", data });
                 setFormattedResults(formatSearchAll(data));
               }
             })
             .catch((error: ApiError) => {
               if (!isCancelled) {
                 // TODO: Handle error
-                setSearchResults({ status: 'rejected', error });
+                setSearchResults({ status: "rejected", error });
                 setFormattedResults([]);
               }
             });
 
           break;
-        case 'movie':
+        case "movie":
           searchMovie({
             query: search,
             page,
           })
             .then((data) => {
               if (!isCancelled) {
-                setSearchResults({ status: 'resolved', data });
+                setSearchResults({ status: "resolved", data });
                 setFormattedResults(formatSearchMovie(data));
               }
             })
             .catch((error: ApiError) => {
               if (!isCancelled) {
                 // TODO: Handle error
-                setSearchResults({ status: 'rejected', error });
+                setSearchResults({ status: "rejected", error });
                 setFormattedResults([]);
               }
             });
 
           break;
-        case 'tv':
+        case "tv":
           searchTv({
             query: search,
             page,
           })
             .then((data) => {
               if (!isCancelled) {
-                setSearchResults({ status: 'resolved', data });
+                setSearchResults({ status: "resolved", data });
                 setFormattedResults(formatSearchTvShow(data));
               }
             })
             .catch((error: ApiError) => {
               if (!isCancelled) {
                 // TODO: Handle error
-                setSearchResults({ status: 'rejected', error });
+                setSearchResults({ status: "rejected", error });
                 setFormattedResults([]);
               }
             });
 
           break;
-        case 'person':
+        case "person":
           searchPerson({
             query: search,
             page,
           })
             .then((data) => {
               if (!isCancelled) {
-                setSearchResults({ status: 'resolved', data });
+                setSearchResults({ status: "resolved", data });
                 setFormattedResults(formatSearchPerson(data));
               }
             })
             .catch((error: ApiError) => {
               if (!isCancelled) {
                 // TODO: Handle error
-                setSearchResults({ status: 'rejected', error });
+                setSearchResults({ status: "rejected", error });
                 setFormattedResults([]);
               }
             });
@@ -136,7 +129,7 @@ const Home = () => {
           break;
         default:
           // Something went wrong!
-          setSearchResults({ status: 'rejected' });
+          setSearchResults({ status: "rejected" });
           setFormattedResults([]);
 
           break;
@@ -146,14 +139,14 @@ const Home = () => {
       getTrending()
         .then((data) => {
           if (!isCancelled) {
-            setSearchResults({ status: 'resolved', data });
+            setSearchResults({ status: "resolved", data });
             setFormattedResults(formatSearchAll(data));
           }
         })
         .catch((error: ApiError) => {
           if (!isCancelled) {
             // TODO: Handle error
-            setSearchResults({ status: 'rejected', error });
+            setSearchResults({ status: "rejected", error });
             setFormattedResults([]);
           }
         });
@@ -164,25 +157,23 @@ const Home = () => {
     };
   }, [search, page, tab]);
 
-  // Handlers
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
 
-    searchParams.set('search', formData.get('search') as string);
+    searchParams.set("search", formData.get("search") as string);
 
     setSearchParams(searchParams);
   };
 
   const changeTab = (tab: Tab) => {
-    searchParams.set('tab', tab);
-    searchParams.set('page', '1');
+    searchParams.set("tab", tab);
+    searchParams.set("page", "1");
 
     setSearchParams(searchParams);
   };
 
-  // Render
   return (
     <>
       <Helmet>
@@ -198,8 +189,8 @@ const Home = () => {
             className="font-semibold hover:text-indigo-600"
           >
             Cloudflare workers
-          </a>{' '}
-          hosted API, connecting to a{' '}
+          </a>{" "}
+          hosted API, connecting to a{" "}
           <a
             href="https://www.prisma.io/"
             rel="nofollow noreferrer"
@@ -207,14 +198,14 @@ const Home = () => {
           >
             Prisma
           </a>
-          -managed database and interacting with{' '}
+          -managed database and interacting with{" "}
           <a
             href="https://developers.themoviedb.org/"
             rel="nofollow noreferrer"
             className="font-semibold hover:text-indigo-600"
           >
             The Movie Database
-          </a>{' '}
+          </a>{" "}
           external API.
         </p>
 
@@ -229,7 +220,7 @@ const Home = () => {
             <input
               id="search"
               name="search"
-              defaultValue={search || ''}
+              defaultValue={search || ""}
               type="search"
               className="block w-full rounded-md border border-transparent px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
               placeholder="Search for a movie, tv show or person..."
@@ -249,7 +240,9 @@ const Home = () => {
           <div className="mt-16" ref={tabRef}>
             {!search ? (
               <div className="border-b border-gray-200 pb-5">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">Trending today</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  Trending today
+                </h3>
               </div>
             ) : (
               <>
@@ -263,7 +256,7 @@ const Home = () => {
                     className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                     value={tab}
                     onChange={(event) => {
-                      searchParams.set('tab', event.target.value);
+                      searchParams.set("tab", event.target.value);
 
                       setSearchParams(searchParams);
                     }}
@@ -277,19 +270,31 @@ const Home = () => {
                 <div className="hidden sm:block">
                   <div className="border-b border-gray-200">
                     <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                      <TabButton current={tab === 'all'} onClick={() => changeTab('all')}>
+                      <TabButton
+                        current={tab === "all"}
+                        onClick={() => changeTab("all")}
+                      >
                         All
                       </TabButton>
 
-                      <TabButton current={tab === 'movie'} onClick={() => changeTab('movie')}>
+                      <TabButton
+                        current={tab === "movie"}
+                        onClick={() => changeTab("movie")}
+                      >
                         Movie
                       </TabButton>
 
-                      <TabButton current={tab === 'tv'} onClick={() => changeTab('tv')}>
+                      <TabButton
+                        current={tab === "tv"}
+                        onClick={() => changeTab("tv")}
+                      >
                         TV Show
                       </TabButton>
 
-                      <TabButton current={tab === 'person'} onClick={() => changeTab('person')}>
+                      <TabButton
+                        current={tab === "person"}
+                        onClick={() => changeTab("person")}
+                      >
                         Person
                       </TabButton>
                     </nav>
@@ -298,10 +303,10 @@ const Home = () => {
               </>
             )}
 
-            {searchResults.status !== 'rejected' ? (
+            {searchResults.status !== "rejected" ? (
               <>
                 <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-6 lg:grid-cols-5 lg:gap-x-8 xl:gap-x-12">
-                  {searchResults.status === 'pending' ? (
+                  {searchResults.status === "pending" ? (
                     <>
                       {Array(20)
                         .fill(null)
@@ -325,14 +330,14 @@ const Home = () => {
                 </ul>
 
                 {search &&
-                searchResults.status === 'resolved' &&
+                searchResults.status === "resolved" &&
                 searchResults.data.total_pages &&
                 searchResults.data.total_pages > 1 ? (
                   <Pagination
                     currentPage={page}
                     totalPages={searchResults.data.total_pages}
                     onChange={(newPage) => {
-                      searchParams.set('page', newPage.toString());
+                      searchParams.set("page", newPage.toString());
 
                       setSearchParams(searchParams);
                     }}

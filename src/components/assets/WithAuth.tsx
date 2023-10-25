@@ -1,30 +1,30 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
-import Loading from './Loading';
+import Loading from "./Loading";
 
-import { useUserState } from '../../hooks/useUser';
+import { useUserState } from "../../hooks/useUser";
 
-// Types
-type WithAuthProps = {
+const WithAuth = ({
+  restricted = true,
+  children,
+}: {
+  children: React.ReactNode;
   restricted?: boolean;
-};
-
-// Component
-const WithAuth: React.FC<WithAuthProps> = ({ restricted = true, children }) => {
-  // Hooks
+}) => {
   const userState = useUserState();
 
-  // Derived state
-  const authedUser = userState.status === 'resolved' && userState.data.auth;
+  const authedUser = userState.status === "resolved" && userState.data.auth;
 
   // Render
-  return userState.status === 'pending' ? (
-    <Loading />
-  ) : (restricted && !authedUser) || (!restricted && authedUser) ? (
-    <Navigate to="/" replace={true} />
-  ) : (
-    <>{children}</>
-  );
+  if (userState.status === "pending") {
+    return <Loading />;
+  }
+
+  if ((restricted && !authedUser) || (!restricted && authedUser)) {
+    return <Navigate to="/" replace={true} />;
+  }
+
+  return children;
 };
 
 export default WithAuth;

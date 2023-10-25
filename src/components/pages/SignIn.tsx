@@ -1,28 +1,25 @@
-import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
-import { LockClosedIcon } from '@heroicons/react/solid';
+import { useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link, useNavigate } from "react-router-dom";
+import { LockClosedIcon } from "@heroicons/react/24/solid";
 
-import Alert from '../assets/Alert';
+import Alert from "../assets/Alert";
 
-import { useUserDispatch } from '../../hooks/useUser';
+import { useUserDispatch } from "../../hooks/useUser";
 
-import { signIn } from '../../lib/api/auth';
-import { ApiError } from '../../lib/api';
+import { signIn } from "../../lib/api/auth";
+import { ApiError } from "../../lib/api";
 
 const SignIn = () => {
-  // Hooks
   const navigate = useNavigate();
   const userDispatch = useUserDispatch();
 
-  // Local state
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
-  // Handlers
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -32,7 +29,7 @@ const SignIn = () => {
     signIn({ email, password })
       .then((user) => {
         userDispatch({
-          type: 'SET_USER',
+          type: "SET_USER",
           user: {
             auth: true,
             user: {
@@ -44,7 +41,7 @@ const SignIn = () => {
         });
 
         // Bounce home
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       })
       .catch((error: ApiError) => {
         setSubmitLoading(false);
@@ -65,14 +62,23 @@ const SignIn = () => {
             Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+            Or{" "}
+            <Link
+              to="/register"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
               create a new account
             </Link>
           </p>
         </div>
 
-        {error ? <Alert type="error" message={error} onClose={() => setError(undefined)} /> : null}
+        {error ? (
+          <Alert
+            type="error"
+            message={error}
+            onClose={() => setError(undefined)}
+          />
+        ) : null}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="-space-y-px rounded-md shadow-sm">

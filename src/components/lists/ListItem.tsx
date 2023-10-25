@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
-import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/solid';
+import { Link } from "react-router-dom";
+import { PlusSmallIcon, MinusSmallIcon } from "@heroicons/react/24/solid";
 
-import type { ListItem as ListItemType } from '../../lib/format';
-import type { List } from '../../lib/api/types';
-import { useListModalDispatch } from '../../hooks/useListModal';
+import type { ListItem as ListItemType } from "../../lib/format";
+import type { List } from "../../lib/api/types";
+import { useListModalDispatch } from "../../hooks/useListModal";
 
 // Types
 type ListItemBase = {
@@ -16,11 +16,11 @@ interface ListItemNoAction extends ListItemBase {
 }
 
 interface ListItemAdd extends ListItemBase {
-  action: 'add';
+  action: "add";
 }
 
 interface ListItemRemove extends ListItemBase {
-  action: 'remove';
+  action: "remove";
   list: List;
 }
 
@@ -28,82 +28,79 @@ type ListItemProps = ListItemNoAction | ListItemAdd | ListItemRemove;
 
 // Component
 const ListItem = ({ showType = true, ...rest }: ListItemProps) => {
-  // Hooks
   const listModalDispatch = useListModalDispatch();
 
-  // Derived state
   const { tmdbId, type, poster, title, subTitle } = rest.item;
 
-  // Render
   return (
     <div className="relative">
       {showType ? (
         <span
           className={
             `pointer-events-none absolute top-2 left-2 z-10 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium text-white shadow` +
-            (type === 'movie'
+            (type === "movie"
               ? ` bg-blue-600`
-              : type === 'tv'
+              : type === "tv"
               ? ` bg-fuchsia-600`
-              : type === 'person'
+              : type === "person"
               ? ` bg-green-600`
               : ``)
           }
         >
-          {type === 'movie'
-            ? 'Movie'
-            : type === 'tv'
-            ? 'TV Show'
-            : type === 'person'
-            ? 'Person'
-            : ''}
+          {type === "movie"
+            ? "Movie"
+            : type === "tv"
+            ? "TV Show"
+            : type === "person"
+            ? "Person"
+            : ""}
         </span>
       ) : null}
 
-      {rest.action === 'add' ? (
+      {rest.action === "add" ? (
         <button
           type="button"
           className={
             `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
-            (type === 'movie'
+            (type === "movie"
               ? ` bg-blue-100 text-blue-800 hover:bg-blue-200 focus:ring-blue-500`
-              : type === 'tv'
+              : type === "tv"
               ? ` bg-fuchsia-100 text-fuchsia-800 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
-              : type === 'person'
+              : type === "person"
               ? ` bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500`
               : ``)
           }
           onClick={() =>
             listModalDispatch({
-              type: 'SHOW_ADD_MODAL',
+              type: "SHOW_ADD_MODAL",
               item: rest.item,
             })
           }
         >
-          <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
+          <PlusSmallIcon className="h-5 w-5" aria-hidden="true" />
         </button>
-      ) : rest.action === 'remove' ? (
+      ) : rest.action === "remove" ? (
         <button
           type="button"
           className={
             `absolute -top-3 -right-3 z-10 inline-flex items-center rounded-full border border-transparent p-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2` +
-            (type === 'movie'
+            (type === "movie"
               ? ` bg-blue-100 text-blue-800 hover:bg-blue-200 focus:ring-blue-500`
-              : type === 'tv'
+              : type === "tv"
               ? ` bg-fuchsia-100 text-fuchsia-800 hover:bg-fuchsia-200 focus:ring-fuchsia-500`
-              : type === 'person'
+              : type === "person"
               ? ` bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500`
               : ``)
           }
           onClick={() =>
             listModalDispatch({
-              type: 'SHOW_REMOVE_MODAL',
+              type: "SHOW_REMOVE_MODAL",
               list: rest.list,
               item: rest.item,
             })
           }
         >
-          <MinusSmIcon className="h-5 w-5" aria-hidden="true" />
+          <MinusSmallIcon className="h-5 w-5" aria-hidden="true" />
         </button>
       ) : null}
 
@@ -127,7 +124,9 @@ const ListItem = ({ showType = true, ...rest }: ListItemProps) => {
       <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">
         {title}
       </p>
-      <p className="pointer-events-none block text-sm font-medium text-gray-500">{subTitle}</p>
+      <p className="pointer-events-none block text-sm font-medium text-gray-500">
+        {subTitle}
+      </p>
     </div>
   );
 };

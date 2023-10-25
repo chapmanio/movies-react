@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
-import { SearchIcon } from '@heroicons/react/solid';
-import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import md5 from 'md5';
+import { useEffect, useRef, useState } from "react";
+import { Link, Outlet } from "react-router-dom";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import md5 from "md5";
 
-import NavLink from '../assets/links/NavLink';
-import MobileLink from '../assets/links/MobileLink';
-import Footer from './Footer';
+import NavLink from "../assets/links/NavLink";
+import MobileLink from "../assets/links/MobileLink";
+import Footer from "./Footer";
 
-import { useUserState, useUserDispatch } from '../../hooks/useUser';
+import { useUserState, useUserDispatch } from "../../hooks/useUser";
 
-import { signOut } from '../../lib/api/auth';
-import { ApiError } from '../../lib/api';
+import { signOut } from "../../lib/api/auth";
+import { ApiError } from "../../lib/api";
 
 const DetailsLayout = () => {
   // Hooks
@@ -43,10 +43,10 @@ const DetailsLayout = () => {
       }
     };
 
-    document.addEventListener('click', outsideClickListener);
+    document.addEventListener("click", outsideClickListener);
 
     return () => {
-      document.removeEventListener('click', outsideClickListener);
+      document.removeEventListener("click", outsideClickListener);
     };
   }, []);
 
@@ -70,10 +70,10 @@ const DetailsLayout = () => {
   const handleSignOut = () => {
     signOut()
       .then(() => {
-        userDispatch({ type: 'SET_USER', user: { auth: false } });
+        userDispatch({ type: "SET_USER", user: { auth: false } });
       })
       .catch((error: ApiError) => {
-        userDispatch({ type: 'ERROR', error });
+        userDispatch({ type: "ERROR", error });
       });
   };
 
@@ -93,9 +93,9 @@ const DetailsLayout = () => {
                 </Link>
               </div>
               <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:items-center sm:space-x-8">
-                {userState.status === 'pending' ? (
+                {userState.status === "pending" ? (
                   <div className="h-4 w-14 animate-pulse rounded-md bg-gray-100" />
-                ) : userState.status === 'resolved' && userState.data.auth ? (
+                ) : userState.status === "resolved" && userState.data.auth ? (
                   <NavLink to="/lists">My lists</NavLink>
                 ) : (
                   <>
@@ -115,7 +115,7 @@ const DetailsLayout = () => {
               </label>
               <div className="relative rounded-md text-gray-400 focus-within:text-gray-600">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <SearchIcon className="h-5 w-5" />
+                  <MagnifyingGlassIcon className="h-5 w-5" />
                 </div>
                 <input
                   id="search"
@@ -129,7 +129,7 @@ const DetailsLayout = () => {
 
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
               <div className="relative ml-3">
-                {userState.status === 'resolved' && userState.data.auth ? (
+                {userState.status === "resolved" && userState.data.auth ? (
                   <>
                     <div>
                       <button
@@ -146,7 +146,7 @@ const DetailsLayout = () => {
                         <img
                           className="h-8 w-8 rounded-full"
                           src={`https://www.gravatar.com/avatar/${md5(
-                            userState.data.user.email
+                            userState.data.user.email,
                           )}?s=56&r=pg`}
                           alt=""
                         />
@@ -202,8 +202,12 @@ const DetailsLayout = () => {
               >
                 <span className="sr-only">Open main menu</span>
 
-                <MenuIcon className={`h-6 w-6` + (showMobileNav ? ` hidden` : ` block`)} />
-                <XIcon className={`h-6 w-6` + (showMobileNav ? ` block` : ` hidden`)} />
+                <Bars3Icon
+                  className={`h-6 w-6` + (showMobileNav ? ` hidden` : ` block`)}
+                />
+                <XMarkIcon
+                  className={`h-6 w-6` + (showMobileNav ? ` block` : ` hidden`)}
+                />
               </button>
             </div>
           </div>
@@ -212,7 +216,7 @@ const DetailsLayout = () => {
         {showMobileNav ? (
           <div className="sm:hidden" id="mobile-menu">
             <div className="space-y-1 pt-2 pb-3">
-              {userState.status === 'resolved' && userState.data.auth ? (
+              {userState.status === "resolved" && userState.data.auth ? (
                 <MobileLink to="/lists">My lists</MobileLink>
               ) : (
                 <>
@@ -222,14 +226,14 @@ const DetailsLayout = () => {
               )}
             </div>
 
-            {userState.status === 'resolved' && userState.data.auth ? (
+            {userState.status === "resolved" && userState.data.auth ? (
               <div className="border-t border-gray-200 pt-4 pb-3">
                 <div className="flex items-center px-4">
                   <div className="flex-shrink-0">
                     <img
                       className="h-10 w-10 rounded-full"
                       src={`https://www.gravatar.com/avatar/${md5(
-                        userState.data.user.email
+                        userState.data.user.email,
                       )}?s=64&r=pg`}
                       alt=""
                     />

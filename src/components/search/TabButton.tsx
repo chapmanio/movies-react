@@ -1,12 +1,14 @@
-// Types
 type TabButtonProps = {
+  children: React.ReactNode;
   current: boolean;
   onClick: () => void;
 };
 
-// Component
-const TabButton: React.FC<TabButtonProps> = ({ current, onClick, children }) => {
-  // Render
+const TabButton: React.FC<TabButtonProps> = ({
+  current,
+  onClick,
+  children,
+}) => {
   return (
     <button
       type="button"
