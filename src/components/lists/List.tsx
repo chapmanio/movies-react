@@ -1,16 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { DotsVerticalIcon, PencilAltIcon } from '@heroicons/react/solid';
-import { PlusCircleIcon, TrashIcon } from '@heroicons/react/outline';
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  EllipsisVerticalIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/24/solid";
+import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-import ListItem from '../lists/ListItem';
+import ListItem from "../lists/ListItem";
 
-import { useListDispatch } from '../../hooks/useList';
+import { useListDispatch } from "../../hooks/useList";
 
-import type { List as ListType } from '../../lib/api/types';
-import type { ListItem as ListItemType } from '../../lib/format';
+import type { List as ListType } from "../../lib/api/types";
+import type { ListItem as ListItemType } from "../../lib/format";
 
-// Types
 type ListProps = {
   list: ListType;
   onEdit: () => void;
@@ -44,16 +46,16 @@ const List = ({ list, onEdit, onDelete }: ListProps) => {
       }
     };
 
-    document.addEventListener('click', outsideClickListener);
+    document.addEventListener("click", outsideClickListener);
 
     return () => {
-      document.removeEventListener('click', outsideClickListener);
+      document.removeEventListener("click", outsideClickListener);
     };
   }, []);
 
   useEffect(() => {
     // Clear current list on load
-    listDispatch({ type: 'CLEAR_SELECTED_LIST' });
+    listDispatch({ type: "CLEAR_SELECTED_LIST" });
   }, [listDispatch]);
 
   // Handlers
@@ -71,7 +73,7 @@ const List = ({ list, onEdit, onDelete }: ListProps) => {
 
   const handleAddToList = () => {
     // Set global state
-    listDispatch({ type: 'SET_SELECTED_LIST', slug });
+    listDispatch({ type: "SET_SELECTED_LIST", slug });
 
     // Redirect home
     navigate(`/`);
@@ -93,7 +95,7 @@ const List = ({ list, onEdit, onDelete }: ListProps) => {
               onClick={() => setShowMenu(!showMenu)}
             >
               <span className="sr-only">Open options</span>
-              <DotsVerticalIcon className="h-5 w-5" />
+              <EllipsisVerticalIcon className="h-5 w-5" />
             </button>
           </div>
 
@@ -118,7 +120,7 @@ const List = ({ list, onEdit, onDelete }: ListProps) => {
                 id="menu-item-1"
                 onClick={handleEdit}
               >
-                <PencilAltIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
+                <PencilSquareIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
                 Edit
               </button>
 
@@ -163,7 +165,7 @@ const List = ({ list, onEdit, onDelete }: ListProps) => {
                   item={{
                     dbId: item.id,
                     tmdbId: item.tmdbId,
-                    type: item.mediaType.toLowerCase() as ListItemType['type'],
+                    type: item.mediaType.toLowerCase() as ListItemType["type"],
                     title: item.title,
                     subTitle: item.subtitle,
                     poster: item.posterUrl,

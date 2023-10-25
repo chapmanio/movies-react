@@ -1,12 +1,14 @@
-// Types
 type PaginationButtonProps = {
+  children: React.ReactNode;
   current: boolean;
   onClick: () => void;
 };
 
-// Component
-const PaginationButton: React.FC<PaginationButtonProps> = ({ current, onClick, children }) => {
-  // Render
+const PaginationButton: React.FC<PaginationButtonProps> = ({
+  current,
+  onClick,
+  children,
+}) => {
   return (
     <button
       type="button"

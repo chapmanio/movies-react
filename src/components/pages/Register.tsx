@@ -1,34 +1,31 @@
-import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link, useNavigate } from "react-router-dom";
 
-import Alert from '../assets/Alert';
+import Alert from "../assets/Alert";
 
-import { useUserDispatch } from '../../hooks/useUser';
+import { useUserDispatch } from "../../hooks/useUser";
 
-import { registerUser } from '../../lib/api/auth';
-import { ApiError } from '../../lib/api';
+import { registerUser } from "../../lib/api/auth";
+import { ApiError } from "../../lib/api";
 
 const Register = () => {
-  // Hooks
   const navigate = useNavigate();
   const userDispatch = useUserDispatch();
 
-  // Local state
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
 
   const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
-  // Handlers
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (password !== confirm) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
     } else {
       setError(undefined);
       setSubmitLoading(true);
@@ -36,7 +33,7 @@ const Register = () => {
       registerUser({ name, email, password })
         .then((user) => {
           userDispatch({
-            type: 'SET_USER',
+            type: "SET_USER",
             user: {
               auth: true,
               user: {
@@ -48,7 +45,7 @@ const Register = () => {
           });
 
           // Bounce home
-          navigate('/', { replace: true });
+          navigate("/", { replace: true });
         })
         .catch((error: ApiError) => {
           setSubmitLoading(false);
@@ -57,7 +54,6 @@ const Register = () => {
     }
   };
 
-  // Render
   return (
     <>
       <Helmet>
@@ -70,14 +66,23 @@ const Register = () => {
             Create a new account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link to="/sign-in" className="font-medium text-indigo-600 hover:text-indigo-500">
+            Or{" "}
+            <Link
+              to="/sign-in"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
               sign-in to an existing account
             </Link>
           </p>
         </div>
 
-        {error ? <Alert type="error" message={error} onClose={() => setError(undefined)} /> : null}
+        {error ? (
+          <Alert
+            type="error"
+            message={error}
+            onClose={() => setError(undefined)}
+          />
+        ) : null}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>

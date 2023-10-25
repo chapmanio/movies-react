@@ -1,10 +1,10 @@
-import { HelmetProvider } from 'react-helmet-async';
+import { HelmetProvider } from "react-helmet-async";
 
-import { UserProvider } from '../hooks/useUser';
-import { ListProvider } from '../hooks/useList';
-import { ListModalProvider } from '../hooks/useListModal';
+import { UserProvider } from "../hooks/useUser";
+import { ListProvider } from "../hooks/useList";
+import { ListModalProvider } from "../hooks/useListModal";
 
-const Providers: React.FC = ({ children }) => {
+const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <HelmetProvider>
       <UserProvider>

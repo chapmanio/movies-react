@@ -1,28 +1,26 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
-import Alert from '../assets/Alert';
-import Notification from '../assets/Notification';
-import Modal from '../assets/Modal';
+import Alert from "../assets/Alert";
+import Notification from "../assets/Notification";
+import Modal from "../assets/Modal";
 
-import { useUserDispatch, useUserState } from '../../hooks/useUser';
+import { useUserDispatch, useUserState } from "../../hooks/useUser";
 
-import { deleteUser, updateUser } from '../../lib/api/auth';
-import { ApiError } from '../../lib/api';
+import { deleteUser, updateUser } from "../../lib/api/auth";
+import { ApiError } from "../../lib/api";
 
 const MyAccount = () => {
-  // Hooks
   const navigate = useNavigate();
   const userState = useUserState();
   const userDispatch = useUserDispatch();
 
-  // Local state
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
 
   const [submitLoading, setSubmitLoading] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
@@ -32,21 +30,19 @@ const MyAccount = () => {
 
   const [error, setError] = useState<string | undefined>(undefined);
 
-  // Effects
   useEffect(() => {
-    if (userState.status === 'resolved' && userState.data.auth) {
+    if (userState.status === "resolved" && userState.data.auth) {
       setName(userState.data.user.name);
       setEmail(userState.data.user.email);
     }
   }, [userState]);
 
-  // Handlers
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (userState.status === 'resolved' && userState.data.auth) {
+    if (userState.status === "resolved" && userState.data.auth) {
       if (password !== confirm) {
-        setError('Passwords do not match');
+        setError("Passwords do not match");
       } else {
         setError(undefined);
         setSubmitLoading(true);
@@ -60,7 +56,7 @@ const MyAccount = () => {
         })
           .then((user) => {
             userDispatch({
-              type: 'SET_USER',
+              type: "SET_USER",
               user: {
                 auth: true,
                 user: {
@@ -91,20 +87,18 @@ const MyAccount = () => {
     deleteUser(email)
       .then(() => {
         userDispatch({
-          type: 'SET_USER',
+          type: "SET_USER",
           user: { auth: false },
         });
 
         // Bounce home
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       })
       .catch((error: ApiError) => {
         setDeleteLoading(false);
         setError(error.message);
       });
   };
-
-  // Render
   return (
     <>
       <Helmet>
@@ -112,9 +106,17 @@ const MyAccount = () => {
       </Helmet>
 
       <div className="mx-auto mt-8 max-w-md space-y-6 px-4 sm:mt-16 sm:px-6">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">My account</h2>
+        <h2 className="text-center text-3xl font-extrabold text-gray-900">
+          My account
+        </h2>
 
-        {error ? <Alert type="error" message={error} onClose={() => setError(undefined)} /> : null}
+        {error ? (
+          <Alert
+            type="error"
+            message={error}
+            onClose={() => setError(undefined)}
+          />
+        ) : null}
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
@@ -189,7 +191,9 @@ const MyAccount = () => {
               type="submit"
               className={
                 `group w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
-                (submitLoading || deleteLoading ? ` opacity-75` : ` hover:bg-indigo-700`)
+                (submitLoading || deleteLoading
+                  ? ` opacity-75`
+                  : ` hover:bg-indigo-700`)
               }
               disabled={submitLoading || deleteLoading}
             >
@@ -202,7 +206,9 @@ const MyAccount = () => {
               type="button"
               className={
                 `group w-full rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` +
-                (submitLoading || deleteLoading ? ` opacity-75` : ` hover:bg-gray-50`)
+                (submitLoading || deleteLoading
+                  ? ` opacity-75`
+                  : ` hover:bg-gray-50`)
               }
               disabled={submitLoading || deleteLoading}
               onClick={() => setShowConfirm(true)}
@@ -220,19 +226,27 @@ const MyAccount = () => {
         onClose={() => setShowComplete(false)}
       />
 
-      <Modal title="remove-account-modal" visible={showConfirm} canClose={false}>
+      <Modal
+        title="remove-account-modal"
+        visible={showConfirm}
+        canClose={false}
+      >
         <div className="sm:flex sm:items-start">
           <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
             <ExclamationCircleIcon className="h-6 w-6 text-red-600" />
           </div>
           <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-            <h3 className="text-lg font-medium leading-6 text-gray-900" id="modal-title">
+            <h3
+              className="text-lg font-medium leading-6 text-gray-900"
+              id="modal-title"
+            >
               Remove account
             </h3>
             <div className="mt-2">
               <p className="text-sm text-gray-500">
-                Are you sure you want to remove your account? All of your data will be permanently
-                removed from our servers forever. This action cannot be undone.
+                Are you sure you want to remove your account? All of your data
+                will be permanently removed from our servers forever. This
+                action cannot be undone.
               </p>
             </div>
           </div>

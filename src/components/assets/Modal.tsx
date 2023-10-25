@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { XIcon } from '@heroicons/react/outline';
+import { useCallback, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
-// Types
 type BaseModalProps = {
   title: string;
   visible: boolean;
+  children: React.ReactNode;
 };
 
 interface CloseableModal extends BaseModalProps {
@@ -19,47 +19,42 @@ interface UncloseableModal extends BaseModalProps {
 
 type ModalProps = CloseableModal | UncloseableModal;
 
-// Component
-const Modal: React.FC<ModalProps> = (props) => {
-  // Refs
+const Modal = (props: ModalProps) => {
   const isActiveRef = useRef(false);
 
-  // Callbacks
   const escape = useCallback(
-    (event) => {
-      if (event.key === 'Escape') {
+    (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
         props.canClose && props.onClose();
       }
     },
-    [props]
+    [props],
   );
 
-  // Effects
   useEffect(() => {
     if (props.visible && !isActiveRef.current) {
       isActiveRef.current = true;
 
       const scrollY = window.scrollY;
 
-      document.body.classList.add('fixed', 'w-full');
+      document.body.classList.add("fixed", "w-full");
       document.body.style.top = `-${scrollY}px`;
 
-      document.addEventListener('keydown', escape);
+      document.addEventListener("keydown", escape);
     } else if (!props.visible && isActiveRef.current) {
       isActiveRef.current = false;
 
       const scrollY = document.body.style.top;
 
-      document.body.classList.remove('fixed', 'w-full');
-      document.body.style.top = '';
+      document.body.classList.remove("fixed", "w-full");
+      document.body.style.top = "";
 
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
 
-      document.removeEventListener('keydown', escape);
+      document.removeEventListener("keydown", escape);
     }
   }, [props, escape]);
 
-  // Render
   return createPortal(
     <div
       className={
@@ -81,8 +76,11 @@ const Modal: React.FC<ModalProps> = (props) => {
           aria-hidden={!props.visible}
         />
 
-        {/* <!-- This element is to trick the browser into centering the modal contents. --> */}
-        <span className="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">
+        {/* This element is to trick the browser into centering the modal contents. */}
+        <span
+          className="hidden sm:inline-block sm:h-screen sm:align-middle"
+          aria-hidden="true"
+        >
           &#8203;
         </span>
 
@@ -102,7 +100,7 @@ const Modal: React.FC<ModalProps> = (props) => {
                 onClick={props.onClose}
               >
                 <span className="sr-only">Close</span>
-                <XIcon className="h-6 w-6" />
+                <XMarkIcon className="h-6 w-6" />
               </button>
             </div>
           ) : null}
@@ -111,7 +109,7 @@ const Modal: React.FC<ModalProps> = (props) => {
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

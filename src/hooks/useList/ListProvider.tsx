@@ -1,60 +1,62 @@
-import { createContext, useReducer, useContext } from 'react';
-import type { ApiError, ApiResponse } from '../lib/api';
-import type { List, ListItem } from '../lib/api/types';
+import { createContext, useReducer } from "react";
+import type { ApiError, ApiResponse } from "../../lib/api";
+import type { List, ListItem } from "../../lib/api/types";
 
 // Types
 type ListAction =
-  | { type: 'SET_LISTS'; lists: List[] }
-  | { type: 'LISTS_ERROR'; error?: ApiError }
-  | { type: 'ADD_LIST'; list: List }
-  | { type: 'UPDATE_LIST'; slug: string; list: List }
-  | { type: 'REMOVE_LIST'; slug: string }
-  | { type: 'ADD_LIST_ITEM'; slug: string; item: ListItem }
-  | { type: 'REMOVE_LIST_ITEM'; slug: string; itemId: string }
-  | { type: 'SET_SELECTED_LIST'; slug: string }
-  | { type: 'CLEAR_SELECTED_LIST' };
+  | { type: "SET_LISTS"; lists: List[] }
+  | { type: "LISTS_ERROR"; error?: ApiError }
+  | { type: "ADD_LIST"; list: List }
+  | { type: "UPDATE_LIST"; slug: string; list: List }
+  | { type: "REMOVE_LIST"; slug: string }
+  | { type: "ADD_LIST_ITEM"; slug: string; item: ListItem }
+  | { type: "REMOVE_LIST_ITEM"; slug: string; itemId: string }
+  | { type: "SET_SELECTED_LIST"; slug: string }
+  | { type: "CLEAR_SELECTED_LIST" };
 
 type ListState = { lists: ApiResponse<List[]>; selectedSlug?: string };
 type ListDispatch = (action: ListAction) => void;
 
 // Initial state
 const defaultInitialState: ListState = {
-  lists: { status: 'pending' },
+  lists: { status: "pending" },
   selectedSlug: undefined,
 };
 
 // Context
-const ListStateContext = createContext<ListState | undefined>(undefined);
-const ListDispatchContext = createContext<ListDispatch | undefined>(undefined);
+export const ListStateContext = createContext<ListState | undefined>(undefined);
+export const ListDispatchContext = createContext<ListDispatch | undefined>(
+  undefined,
+);
 
 // Reducer
 const listReducer = (state: ListState, action: ListAction): ListState => {
   switch (action.type) {
-    case 'SET_LISTS': {
+    case "SET_LISTS": {
       return {
         ...state,
         lists: {
-          status: 'resolved',
+          status: "resolved",
           data: action.lists,
         },
       };
     }
-    case 'LISTS_ERROR': {
+    case "LISTS_ERROR": {
       return {
         ...state,
         lists: {
-          status: 'rejected',
+          status: "rejected",
           error: action.error,
         },
       };
     }
-    case 'ADD_LIST': {
-      if (state.lists.status !== 'resolved') {
+    case "ADD_LIST": {
+      if (state.lists.status !== "resolved") {
         throw new Error(`User lists not yet loaded`);
       }
 
       const newLists = [...state.lists.data, action.list].sort((a, b) =>
-        a.name.localeCompare(b.name)
+        a.name.localeCompare(b.name),
       );
 
       return {
@@ -65,8 +67,8 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
         },
       };
     }
-    case 'UPDATE_LIST': {
-      if (state.lists.status !== 'resolved') {
+    case "UPDATE_LIST": {
+      if (state.lists.status !== "resolved") {
         throw new Error(`User lists not yet loaded`);
       }
 
@@ -86,12 +88,14 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
         },
       };
     }
-    case 'REMOVE_LIST': {
-      if (state.lists.status !== 'resolved') {
+    case "REMOVE_LIST": {
+      if (state.lists.status !== "resolved") {
         throw new Error(`User lists not yet loaded`);
       }
 
-      const newLists = state.lists.data.filter((list) => list.slug !== action.slug);
+      const newLists = state.lists.data.filter(
+        (list) => list.slug !== action.slug,
+      );
 
       return {
         ...state,
@@ -101,8 +105,8 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
         },
       };
     }
-    case 'ADD_LIST_ITEM': {
-      if (state.lists.status !== 'resolved') {
+    case "ADD_LIST_ITEM": {
+      if (state.lists.status !== "resolved") {
         throw new Error(`User lists not yet loaded`);
       }
 
@@ -110,7 +114,7 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
         if (list.slug === action.slug) {
           const currentItems = list.items || [];
           const updatedItems = [...currentItems, action.item].sort((a, b) =>
-            a.title.localeCompare(b.title)
+            a.title.localeCompare(b.title),
           );
 
           return {
@@ -130,15 +134,17 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
         },
       };
     }
-    case 'REMOVE_LIST_ITEM': {
-      if (state.lists.status !== 'resolved') {
+    case "REMOVE_LIST_ITEM": {
+      if (state.lists.status !== "resolved") {
         throw new Error(`User lists not yet loaded`);
       }
 
       const updatedLists = state.lists.data.map((list) => {
         if (list.slug === action.slug) {
           const currentItems = list.items || [];
-          const updatedItems = currentItems.filter((item) => item.id !== action.itemId);
+          const updatedItems = currentItems.filter(
+            (item) => item.id !== action.itemId,
+          );
 
           return {
             ...list,
@@ -157,13 +163,13 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
         },
       };
     }
-    case 'SET_SELECTED_LIST': {
+    case "SET_SELECTED_LIST": {
       return {
         ...state,
         selectedSlug: action.slug,
       };
     }
-    case 'CLEAR_SELECTED_LIST': {
+    case "CLEAR_SELECTED_LIST": {
       return {
         ...state,
         selectedSlug: undefined,
@@ -175,37 +181,25 @@ const listReducer = (state: ListState, action: ListAction): ListState => {
 };
 
 // Provider
-const ListProvider: React.FC<{ initialState?: ListState }> = ({ children, initialState }) => {
+export const ListProvider = ({
+  children,
+  initialState,
+}: {
+  children: React.ReactNode;
+  initialState?: ListState;
+}) => {
   // Reducer
-  const [state, dispatch] = useReducer(listReducer, initialState ?? defaultInitialState);
+  const [state, dispatch] = useReducer(
+    listReducer,
+    initialState ?? defaultInitialState,
+  );
 
   // Render
   return (
     <ListStateContext.Provider value={state}>
-      <ListDispatchContext.Provider value={dispatch}>{children}</ListDispatchContext.Provider>
+      <ListDispatchContext.Provider value={dispatch}>
+        {children}
+      </ListDispatchContext.Provider>
     </ListStateContext.Provider>
   );
 };
-
-// Hook
-const useListState = () => {
-  const state = useContext(ListStateContext);
-
-  if (typeof state === 'undefined') {
-    throw new Error('useListState must be used within a ListStateContext');
-  }
-
-  return state;
-};
-
-const useListDispatch = () => {
-  const dispatch = useContext(ListDispatchContext);
-
-  if (typeof dispatch === 'undefined') {
-    throw new Error('useListDispatch must be used within a ListDispatchContext');
-  }
-
-  return dispatch;
-};
-
-export { ListProvider, useListState, useListDispatch };

@@ -1,12 +1,10 @@
-import { useResolvedPath, useMatch, Link } from 'react-router-dom';
-import type { LinkProps } from 'react-router-dom';
+import { useResolvedPath, useMatch, Link } from "react-router-dom";
+import type { LinkProps } from "react-router-dom";
 
 const MobileLink = ({ children, to, ...props }: LinkProps) => {
-  // Hooks
   const resolved = useResolvedPath(to);
   const match = useMatch({ path: resolved.pathname, end: true });
 
-  // Render
   return (
     <Link
       to={to}
@@ -16,7 +14,7 @@ const MobileLink = ({ children, to, ...props }: LinkProps) => {
           ? ` border-indigo-500 bg-indigo-50 text-indigo-700`
           : ` border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800`)
       }
-      aria-current={match ? 'page' : undefined}
+      aria-current={match ? "page" : undefined}
       {...props}
     >
       {children}
