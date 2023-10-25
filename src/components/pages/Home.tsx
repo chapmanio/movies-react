@@ -1,161 +1,48 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams } from "react-router-dom";
-import type { SearchMultiResponse } from "moviedb-promise/dist/request-types";
 
 import Pagination from "../search/Pagination";
 import TabButton from "../search/TabButton";
 import ListItem from "../lists/ListItem";
 
-import {
-  formatSearchAll,
-  formatSearchMovie,
-  formatSearchPerson,
-  formatSearchTvShow,
-  ListItem as ListItemType,
-} from "../../lib/format";
-import type { ApiError, ApiResponse } from "../../lib/api";
-import { searchMovie } from "../../lib/api/movie";
-import { searchPerson } from "../../lib/api/person";
-import { searchAll, getTrending } from "../../lib/api/search";
-import { searchTv } from "../../lib/api/tvShow";
+import { useGetListing } from "../../hooks/useGetListing";
 
 type Tab = "all" | "movie" | "tv" | "person";
 
 const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [searchResults, setSearchResults] = useState<
-    ApiResponse<SearchMultiResponse> | undefined
-  >(undefined);
-  const [formattedResults, setFormattedResults] = useState<ListItemType[]>([]);
-
   const tabRef = useRef<HTMLDivElement>(null);
 
-  const search = searchParams.get("search") || "";
-  const tab = (searchParams.get("tab") || "all") as Tab;
-  const page = parseInt(searchParams.get("page") || "1");
+  const { page, search, tab } = useMemo(() => {
+    const search = searchParams.get("search") || "";
+    const tab = (searchParams.get("tab") || "all") as Tab;
+    const page = parseInt(searchParams.get("page") || "1");
+
+    return {
+      search,
+      tab,
+      page,
+    };
+  }, [searchParams]);
+
+  const hasSearchTerm = search.trim() !== "";
+
+  const { isLoading, results } = useGetListing({
+    type: hasSearchTerm ? tab : "trending",
+    args: {
+      page,
+      query: search,
+    },
+  });
 
   useEffect(() => {
-    let isCancelled = false;
-
-    setSearchResults({ status: "pending" });
-
-    if (search && search.trim() !== "") {
-      if (tabRef.current) {
-        tabRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-
-      switch (tab) {
-        case "all":
-          searchAll({
-            query: search,
-            page,
-          })
-            .then((data) => {
-              if (!isCancelled) {
-                setSearchResults({ status: "resolved", data });
-                setFormattedResults(formatSearchAll(data));
-              }
-            })
-            .catch((error: ApiError) => {
-              if (!isCancelled) {
-                // TODO: Handle error
-                setSearchResults({ status: "rejected", error });
-                setFormattedResults([]);
-              }
-            });
-
-          break;
-        case "movie":
-          searchMovie({
-            query: search,
-            page,
-          })
-            .then((data) => {
-              if (!isCancelled) {
-                setSearchResults({ status: "resolved", data });
-                setFormattedResults(formatSearchMovie(data));
-              }
-            })
-            .catch((error: ApiError) => {
-              if (!isCancelled) {
-                // TODO: Handle error
-                setSearchResults({ status: "rejected", error });
-                setFormattedResults([]);
-              }
-            });
-
-          break;
-        case "tv":
-          searchTv({
-            query: search,
-            page,
-          })
-            .then((data) => {
-              if (!isCancelled) {
-                setSearchResults({ status: "resolved", data });
-                setFormattedResults(formatSearchTvShow(data));
-              }
-            })
-            .catch((error: ApiError) => {
-              if (!isCancelled) {
-                // TODO: Handle error
-                setSearchResults({ status: "rejected", error });
-                setFormattedResults([]);
-              }
-            });
-
-          break;
-        case "person":
-          searchPerson({
-            query: search,
-            page,
-          })
-            .then((data) => {
-              if (!isCancelled) {
-                setSearchResults({ status: "resolved", data });
-                setFormattedResults(formatSearchPerson(data));
-              }
-            })
-            .catch((error: ApiError) => {
-              if (!isCancelled) {
-                // TODO: Handle error
-                setSearchResults({ status: "rejected", error });
-                setFormattedResults([]);
-              }
-            });
-
-          break;
-        default:
-          // Something went wrong!
-          setSearchResults({ status: "rejected" });
-          setFormattedResults([]);
-
-          break;
-      }
-    } else {
-      // Default to trending today
-      getTrending()
-        .then((data) => {
-          if (!isCancelled) {
-            setSearchResults({ status: "resolved", data });
-            setFormattedResults(formatSearchAll(data));
-          }
-        })
-        .catch((error: ApiError) => {
-          if (!isCancelled) {
-            // TODO: Handle error
-            setSearchResults({ status: "rejected", error });
-            setFormattedResults([]);
-          }
-        });
+    // Scroll back to the top on page or query change
+    if (hasSearchTerm && tabRef.current) {
+      tabRef.current.scrollIntoView({ behavior: "smooth" });
     }
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [search, page, tab]);
+  }, [hasSearchTerm, page, tab]);
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -236,9 +123,9 @@ const Home = () => {
           </div>
         </form>
 
-        {searchResults ? (
+        {results ? (
           <div className="mt-16" ref={tabRef}>
-            {!search ? (
+            {!hasSearchTerm ? (
               <div className="border-b border-gray-200 pb-5">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
                   Trending today
@@ -303,47 +190,40 @@ const Home = () => {
               </>
             )}
 
-            {searchResults.status !== "rejected" ? (
-              <>
-                <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-6 lg:grid-cols-5 lg:gap-x-8 xl:gap-x-12">
-                  {searchResults.status === "pending" ? (
-                    <>
-                      {Array(20)
-                        .fill(null)
-                        .map((_, index) => (
-                          <li key={index} className="animate-pulse">
-                            <div className="group aspect-w-2 aspect-h-3 block w-full overflow-hidden rounded-lg bg-gray-100" />
-                            <div className="mt-2 h-4 w-3/4 rounded bg-gray-100" />
-                            <div className="mt-1 h-4 w-1/2 rounded bg-gray-100" />
-                          </li>
-                        ))}
-                    </>
-                  ) : (
-                    <>
-                      {formattedResults.map((result) => (
-                        <li key={result.tmdbId} className="relative">
-                          <ListItem item={result} action="add" />
-                        </li>
-                      ))}
-                    </>
-                  )}
-                </ul>
+            <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-6 lg:grid-cols-5 lg:gap-x-8 xl:gap-x-12">
+              {isLoading ? (
+                <>
+                  {Array(20)
+                    .fill(null)
+                    .map((_, index) => (
+                      <li key={index} className="animate-pulse">
+                        <div className="group aspect-w-2 aspect-h-3 block w-full overflow-hidden rounded-lg bg-gray-100" />
+                        <div className="mt-2 h-4 w-3/4 rounded bg-gray-100" />
+                        <div className="mt-1 h-4 w-1/2 rounded bg-gray-100" />
+                      </li>
+                    ))}
+                </>
+              ) : (
+                <>
+                  {results.items.map((item) => (
+                    <li key={item.tmdbId} className="relative">
+                      <ListItem item={item} action="add" />
+                    </li>
+                  ))}
+                </>
+              )}
+            </ul>
 
-                {search &&
-                searchResults.status === "resolved" &&
-                searchResults.data.total_pages &&
-                searchResults.data.total_pages > 1 ? (
-                  <Pagination
-                    currentPage={page}
-                    totalPages={searchResults.data.total_pages}
-                    onChange={(newPage) => {
-                      searchParams.set("page", newPage.toString());
+            {results.total > 1 ? (
+              <Pagination
+                currentPage={page}
+                totalPages={results.total}
+                onChange={(newPage) => {
+                  searchParams.set("page", newPage.toString());
 
-                      setSearchParams(searchParams);
-                    }}
-                  />
-                ) : null}
-              </>
+                  setSearchParams(searchParams);
+                }}
+              />
             ) : null}
           </div>
         ) : null}
