@@ -4,7 +4,7 @@ import { TrendingResponse } from "moviedb-promise/dist/request-types";
 import { formatSearchAll } from "../../../lib/format";
 import { ListingResponse } from "../types";
 
-export const useGetTrending = (enabled = true) => {
+export const useTrending = (enabled = true) => {
   const queryFn: QueryFunction<ListingResponse> = async () => {
     const data = await apiFetch<TrendingResponse>(`/trending`);
 

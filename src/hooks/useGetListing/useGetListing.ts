@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useGetTrending } from "./useGetTrending";
+import { useTrending } from "./useTrending";
 import { SearchArgs, SearchType } from "./types";
 import { useSearchAll } from "./useSearchAll";
 import { useSearchMovies } from "./useSearchMovies";
@@ -45,7 +45,7 @@ export const useGetListing = (props: SearchProps) => {
   const args = type !== "trending" ? props.args : FALLBACK_ARGS;
 
   const { isLoading: isTrendingLoading, data: trendingData } =
-    useGetTrending(isTrending);
+    useTrending(isTrending);
 
   const { isLoading: isSearchAllLoading, data: searchAllData } = useSearchAll(
     args,
