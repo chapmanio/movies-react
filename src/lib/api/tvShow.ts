@@ -1,20 +1,9 @@
-import type { CreditsResponse, TvResultsResponse } from 'moviedb-promise/dist/request-types';
+import type { CreditsResponse } from "moviedb-promise/dist/request-types";
 
-import { apiFetch, ExtShowResponse } from '../api';
-
-// Types
-type SearchArgs = {
-  query: string;
-  page: number;
-};
+import { apiFetch, ExtShowResponse } from "../api";
 
 type GetArgs = {
   id: number;
-};
-
-// Exports
-export const searchTv = async ({ query, page }: SearchArgs) => {
-  return apiFetch<TvResultsResponse>(`/tv/search?query=${query}&page=${page}`);
 };
 
 export const getTvShow = async ({ id }: GetArgs) => {
